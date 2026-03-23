@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công Chúa Phân Số - Học Toán Lớp 4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+            overflow-x: hidden;
+            user-select: none;
+        }
+        .item-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+        .avatar-float {
+            animation: avatarFloat 4s ease-in-out infinite;
+        }
+        @keyframes avatarFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .fraction-bar {
+            height: 4px;
+            background-color: #333;
+            width: 100%;
+            margin: 4px 0;
+        }
+        .level-up-anim {
+            animation: levelUp 1s ease-out;
+        }
+        @keyframes levelUp {
+            0% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px rgba(255,255,255,0)); }
+            50% { transform: scale(1.15); filter: brightness(1.2) drop-shadow(0 0 30px rgba(255,255,255,1)); }
+            100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px rgba(255,255,255,0)); }
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .magic-shadow {
+            box-shadow: 0 0 40px rgba(255, 105, 180, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div id="game-container" class="bg-white/90 backdrop-blur-md rounded-[2rem] shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col md:flex-row border-4 border-pink-300">
+        
+        <!-- Left Side: Princess Character Area -->
+        <div class="w-full md:w-1/3 bg-gradient-to-b from-pink-50 via-purple-100 to-pink-200 p-6 flex flex-col items-center border-r-4 border-pink-200 relative overflow-hidden">
+            <!-- Magic sparkles background -->
+            <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(#d8b4fe 2px, transparent 2px); background-size: 30px 30px;"></div>
+
+            <div class="absolute top-4 left-4 bg-white/90 px-4 py-2 rounded-full font-bold text-pink-600 shadow-sm z-10 border-2 border-pink-100">
+                Cửa: <span id="level-num">1</span>/5
+            </div>
+
+            <!-- Princess Visual -->
+            <div id="princess-stage" class="relative mt-12 w-64 h-80 flex items-center justify-center z-10">
+                <!-- Glowing base -->
+                <div class="absolute bottom-4 w-48 h-12 bg-pink-400 rounded-[100%] blur-xl opacity-40"></div>
+                
+                <!-- Vector SVG Princess -->
+                <div id="princess-avatar" class="w-full h-full avatar-float transition-all duration-700 relative z-10"></div>
+                
+                <!-- Accessory Slots (Dynamic Orbiting Items) -->
+                <div id="accessory-container" class="absolute inset-0 pointer-events-none z-20"></div>
+            </div>
+
+            <div class="mt-4 text-center z-10 bg-white/60 px-6 py-2 rounded-2xl backdrop-blur-sm border border-white">
+                <h3 id="princess-rank" class="text-xl font-bold text-purple-700 drop-shadow-sm">Công chúa Tập sự</h3>
+            </div>
+
+            <!-- Message Bubble -->
+            <div id="speech-bubble" class="mt-6 bg-white p-4 rounded-2xl relative shadow-lg text-sm italic text-purple-900 font-semibold hidden z-20 border-2 border-pink-100">
+                "Cảm ơn em đã giúp chị!"
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-5 h-5 bg-white border-l-2 border-t-2 border-pink-100 rotate-45"></div>
+            </div>
+        </div>
+
+        <!-- Right Side: Game Content -->
+        <div class="w-full md:w-2/3 p-8 flex flex-col relative bg-white">
+            <div class="flex justify-between items-center mb-8">
+                <div class="bg-pink-50 px-6 py-2 rounded-2xl border-2 border-pink-100">
+                    <span class="text-pink-400 font-bold text-sm block">ĐIỂM SỐ</span>
+                    <div id="score" class="text-4xl font-extrabold text-pink-600">0</div>
+                </div>
+                <div class="text-right bg-purple-50 px-6 py-2 rounded-2xl border-2 border-purple-100">
+                    <span class="text-purple-400 font-bold text-sm block">TIẾN TRÌNH CỬA</span>
+                    <div class="flex gap-2 mt-2" id="level-dots">
+                        <!-- Dots for questions in level -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="game-view" class="flex-grow flex flex-col items-center justify-center">
+                <!-- Start Screen -->
+                <div id="screen-start" class="text-center space-y-6 max-w-md">
+                    <div class="text-7xl mb-4">✨🏰✨</div>
+                    <h1 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600 pb-2">Vương Quốc Phân Số</h1>
+                    <p class="text-lg text-gray-600 font-medium leading-relaxed">Hãy giúp Công chúa thu thập phép thuật và nâng cấp trang phục bằng cách trả lời đúng các câu đố nhé!</p>
+                    <button onclick="initGame()" class="mt-4 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white text-xl px-12 py-4 rounded-full shadow-xl transform transition hover:scale-105 active:scale-95 font-bold magic-shadow">
+                        BẮT ĐẦU HÀNH TRÌNH
+                    </button>
+                </div>
+
+                <!-- Question Screen -->
+                <div id="screen-question" class="hidden w-full space-y-8">
+                    <div class="text-center bg-gray-50 p-6 rounded-3xl border-2 border-gray-100">
+                        <h2 id="question-text" class="text-2xl font-bold text-gray-800 leading-tight"></h2>
+                    </div>
+
+                    <!-- Visual Aid Area -->
+                    <div id="math-visual" class="flex justify-center items-center h-48 bg-purple-50 rounded-3xl p-4 shadow-inner border-2 border-purple-100">
+                        <!-- Canvas or SVG goes here -->
+                    </div>
+
+                    <!-- Answer Options -->
+                    <div id="options-grid" class="grid grid-cols-2 gap-4">
+                        <!-- Option buttons -->
+                    </div>
+                </div>
+
+                <!-- Win Screen -->
+                <div id="screen-win" class="hidden text-center space-y-6">
+                    <div class="text-8xl">👑</div>
+                    <h2 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600">NỮ HOÀNG TOÁN HỌC!</h2>
+                    <p class="text-xl text-gray-700 font-medium">Em thật xuất sắc! Công chúa đã trở nên lộng lẫy nhất vương quốc nhờ kiến thức của em!</p>
+                    <button onclick="location.reload()" class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-10 py-4 rounded-full font-bold text-xl shadow-lg hover:scale-105 transition-transform">Chơi lại từ đầu</button>
+                </div>
+            </div>
+
+            <!-- Feedback Message -->
+            <div id="feedback" class="h-14 mt-4 flex items-center justify-center font-bold text-2xl transition-all opacity-0 rounded-2xl"></div>
+        </div>
+    </div>
+
+    <script>
+        const state = {
+            level: 1,
+            questionInLevel: 1,
+            totalLevels: 5,
+            questionsPerLevel: 3,
+            score: 0,
+            items: [],
+            currentQuestion: null,
+            princessItemsPool: ["💍", "💎", "🌸", "🦋", "✨", "🎀", "🍭", "🧸", "🪄", "🌟", "🔥", "💖"],
+            ranks: ["Công chúa Tập sự", "Công chúa Dễ thương", "Công chúa Quý phái", "Công chúa Quyền năng", "Nữ hoàng Phân số"]
+        };
+
+        // Hàm vẽ Công chúa bằng SVG (Thay đổi theo Level)
+        function getPrincessSVG(level) {
+            const skin = "#ffe0bd";
+            let hc = "#8D6E63", hcDark = "#6D4C41";
+            let aura = '', hairBack = '', wings = '', accessories = '', dress = '';
+
+            switch(level) {
+                case 1: // Tập sự: Tóc nâu buộc hai bên, váy hồng đơn giản
+                    hc = "#8D6E63"; hcDark = "#6D4C41";
+                    hairBack = `<path d="M50,80 Q20,160 40,200 Q55,140 65,90 Z" fill="${hc}"/><path d="M150,80 Q180,160 160,200 Q145,140 135,90 Z" fill="${hc}"/>`;
+                    dress = `<path d="M80,120 L120,120 L135,220 Q100,230 65,220 Z" fill="#F48FB1"/><path d="M80,120 L120,120 L110,140 L90,140 Z" fill="#F06292"/>`;
+                    break;
+                case 2: // Dễ thương: Tóc vàng xõa, váy xanh lam ruy băng
+                    hc = "#FFD54F"; hcDark = "#FFCA28";
+                    hairBack = `<path d="M55,80 Q30,170 60,220 Q100,230 140,220 Q170,170 145,80 Z" fill="${hc}"/>`;
+                    dress = `<path d="M80,120 L120,120 L145,230 Q100,245 55,230 Z" fill="#4FC3F7"/><path d="M80,120 L120,120 L115,150 L85,150 Z" fill="#29B6F6"/>`;
+                    accessories = `<path d="M115,65 L120,55 L125,65 L135,70 L125,75 L120,85 L115,75 L105,70 Z" fill="#FFF59D"/>`;
+                    break;
+                case 3: // Quý phái: Tóc búi cao tím, váy tím bồng, vương miện nhỏ
+                    hc = "#7E57C2"; hcDark = "#5E35B1";
+                    hairBack = `<circle cx="100" cy="35" r="30" fill="${hc}"/>`;
+                    dress = `<path d="M75,120 L125,120 L150,240 Q100,255 50,240 Z" fill="#AB47BC"/><path d="M80,120 L120,120 L115,160 L85,160 Z" fill="#8E24AA"/>`;
+                    accessories = `<path d="M80,55 L85,40 L100,30 L115,40 L120,55 Z" fill="url(#gold)"/>`;
+                    break;
+                case 4: // Quyền năng: Tóc bạc dài, váy vàng kim, vương miện lớn có ngọc
+                    hc = "#F5F5F5"; hcDark = "#E0E0E0";
+                    aura = `<circle cx="100" cy="150" r="110" fill="#FFF9C4" opacity="0.6" filter="url(#glow)"/>`;
+                    hairBack = `<path d="M40,80 Q10,190 50,270 Q100,285 150,270 Q190,190 160,80 Z" fill="${hc}"/>`;
+                    dress = `<path d="M70,120 L130,120 L160,260 Q100,275 40,260 Z" fill="url(#gold)"/><path d="M80,120 L120,120 L115,170 L85,170 Z" fill="#FFB300"/><path d="M70,120 L50,170 L65,170 Z" fill="#FFE082"/><path d="M130,120 L150,170 L135,170 Z" fill="#FFE082"/>`;
+                    accessories = `<path d="M70,50 L85,20 L100,10 L115,20 L130,50 Z" fill="url(#gold)"/><circle cx="100" cy="35" r="7" fill="#E53935"/>`;
+                    break;
+                case 5: // Nữ hoàng: Váy cầu vồng, cánh phép thuật, quyền trượng, vương miện siêu to
+                    hc = "#FF8A65"; hcDark = "#FF7043";
+                    aura = `<circle cx="100" cy="150" r="130" fill="url(#rainbow)" opacity="0.5" filter="url(#glow)"/>`;
+                    wings = `<path d="M100,130 Q10,30 0,140 Q40,210 100,160 Z" fill="#E1BEE7" opacity="0.8"/><path d="M100,130 Q190,30 200,140 Q160,210 100,160 Z" fill="#E1BEE7" opacity="0.8"/>`;
+                    hairBack = `<path d="M30,80 Q-10,210 40,290 Q100,310 160,290 Q210,210 170,80 Z" fill="${hc}"/>`;
+                    dress = `<path d="M65,120 L135,120 L170,280 Q100,300 30,280 Z" fill="url(#rainbow)"/><path d="M80,120 L120,120 L110,180 L90,180 Z" fill="#FFF"/>`;
+                    accessories = `<path d="M60,45 L80,5 L100,-15 L120,5 L140,45 Z" fill="url(#gold)"/><circle cx="100" cy="15" r="10" fill="#00BCD4"/><path d="M145,160 L160,40 L165,40 L150,160 Z" fill="url(#gold)"/><circle cx="162.5" cy="30" r="12" fill="#FF4081"/>`;
+                    break;
+            }
+
+            return `
+            <svg viewBox="0 0 200 320" class="w-full h-full drop-shadow-xl" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ff9a9e" />
+                        <stop offset="50%" style="stop-color:#fecfef" />
+                        <stop offset="100%" style="stop-color:#a1c4fd" />
+                    </linearGradient>
+                    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FFDF00" />
+                        <stop offset="100%" style="stop-color:#D4AF37" />
+                    </linearGradient>
+                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="8" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                </defs>
+                
+                ${aura}
+                ${wings}
+                ${hairBack}
+                
+                <!-- Cổ -->
+                <rect x="92" y="110" width="16" height="15" fill="${skin}"/>
+                
+                <!-- Váy -->
+                ${dress}
+                
+                <!-- Khối đầu phía sau -->
+                <circle cx="100" cy="75" r="42" fill="${hc}"/>
+                
+                <!-- Khuôn mặt -->
+                <circle cx="100" cy="80" r="40" fill="${skin}"/>
+                
+                <!-- Tóc mái -->
+                <path d="M55,75 Q100,45 145,75 Q125,55 100,60 Q75,55 55,75 Z" fill="${hcDark}"/>
+                
+                <!-- Mắt -->
+                <circle cx="84" cy="82" r="5" fill="#333"/>
+                <circle cx="116" cy="82" r="5" fill="#333"/>
+                <circle cx="85" cy="80" r="2" fill="#fff"/>
+                <circle cx="117" cy="80" r="2" fill="#fff"/>
+                
+                <!-- Má hồng -->
+                <ellipse cx="74" cy="92" rx="7" ry="3.5" fill="#ff8a80" opacity="0.6"/>
+                <ellipse cx="126" cy="92" rx="7" ry="3.5" fill="#ff8a80" opacity="0.6"/>
+                
+                <!-- Miệng cười -->
+                <path d="M 94 98 Q 100 106 106 98" stroke="#d84315" stroke-width="2" fill="none" stroke-linecap="round"/>
+                
+                <!-- Phụ kiện (Vương miện, gậy...) -->
+                ${accessories}
+            </svg>
+            `;
+        }
+
+        function initGame() {
+            document.getElementById('screen-start').classList.add('hidden');
+            document.getElementById('screen-question').classList.remove('hidden');
+            updateUI();
+            generateQuestion();
+        }
+
+        function updateUI() {
+            document.getElementById('level-num').innerText = state.level;
+            document.getElementById('score').innerText = state.score;
+            document.getElementById('princess-rank').innerText = state.ranks[state.level - 1];
+            
+            // Cập nhật giao diện SVG Công chúa
+            document.getElementById('princess-avatar').innerHTML = getPrincessSVG(state.level);
+            
+            // Render level progress dots
+            const dots = document.getElementById('level-dots');
+            dots.innerHTML = '';
+            for(let i=1; i<=state.questionsPerLevel; i++) {
+                const dot = document.createElement('div');
+                dot.className = `w-5 h-5 rounded-full border-2 border-purple-300 transition-all duration-300 ${i < state.questionInLevel ? 'bg-purple-500 scale-110 shadow-md' : 'bg-white'}`;
+                dots.appendChild(dot);
+            }
+
+            // Render items lơ lửng xung quanh công chúa
+            const container = document.getElementById('accessory-container');
+            container.innerHTML = '';
+            state.items.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = "absolute text-3xl item-float drop-shadow-md";
+                el.innerText = item;
+                // Tính toán vị trí bay lơ lửng theo hình tròn xung quanh công chúa
+                const angle = (index / state.items.length) * Math.PI * 2;
+                const radius = 110; 
+                el.style.left = `calc(50% + ${Math.cos(angle) * radius}px - 15px)`;
+                el.style.top = `calc(50% + ${Math.sin(angle) * radius}px - 15px)`;
+                // Delay animation để các item nổi xen kẽ nhau
+                el.style.animationDelay = `${index * 0.4}s`;
+                container.appendChild(el);
+            });
+        }
+
+        function generateQuestion() {
+            let q = { text: "", visualType: "", options: [], correct: "" };
+            
+            const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+            const shuffle = (arr) => arr.sort(() => Math.random() - 0.5);
+
+            if (state.level === 1) {
+                const type = Math.random() > 0.5 ? 'pie' : 'group';
+                if (type === 'pie') {
+                    const den = pick([3, 4, 5, 6]);
+                    const num = Math.floor(Math.random() * (den - 1)) + 1;
+                    q.text = `Công chúa chia chiếc bánh thành ${den} phần bằng nhau và ăn ${num} phần. Phân số biểu thị số bánh đã ăn là:`;
+                    q.visualType = "pie";
+                    q.data = { n: num, d: den };
+                    q.correct = `${num}/${den}`;
+                    q.options = generateFractionOptions(num, den);
+                } else {
+                    const total = pick([5, 6, 7, 8]);
+                    const target = pick([2, 3, 4]);
+                    q.text = `Trong vườn có ${total} bông hoa, trong đó có ${target} bông màu đỏ. Phân số chỉ số hoa đỏ là:`;
+                    q.visualType = "group";
+                    q.data = { total: total, target: target, icon1: '🌺', icon2: '🌼' };
+                    q.correct = `${target}/${total}`;
+                    q.options = generateFractionOptions(target, total);
+                }
+            } 
+            else if (state.level === 2) {
+                const type = Math.random() > 0.5 ? 'equal' : 'missing';
+                if (type === 'equal') {
+                    const baseN = pick([1, 2]);
+                    const baseD = pick([3, 4, 5]);
+                    const multiplier = pick([2, 3]);
+                    q.text = `Phân số nào dưới đây bằng với phân số ${baseN}/${baseD}?`;
+                    q.visualType = "equation";
+                    q.data = { expr: `${baseN}/${baseD} = ?` };
+                    q.correct = `${baseN * multiplier}/${baseD * multiplier}`;
+                    q.options = generateFractionOptions(baseN * multiplier, baseD * multiplier);
+                } else {
+                    const baseN = pick([1, 2, 3]);
+                    const baseD = baseN + pick([1, 2]);
+                    const k = pick([2, 3]);
+                    q.text = `Tìm số còn thiếu thay vào dấu "?" để được hai phân số bằng nhau:`;
+                    q.visualType = "equation";
+                    q.data = { expr: `${baseN}/${baseD} = ?/${baseD * k}` };
+                    q.correct = `${baseN * k}`;
+                    q.options = shuffle([`${baseN * k}`, `${baseN * k + 1}`, `${Math.max(1, baseN * k - 1)}`, `${baseN * k + 2}`]);
+                }
+            }
+            else if (state.level === 3) {
+                const type = pick(['sameDenom', 'sameNum', 'withOne']);
+                if (type === 'sameDenom') {
+                    const den = pick([5, 7, 9]);
+                    const n1 = pick([2, 3]);
+                    const n2 = n1 + pick([1, 2]);
+                    q.text = `So sánh hai phần của dải băng: ${n1}/${den} và ${n2}/${den}`;
+                    q.visualType = "compare";
+                    q.data = { f1: {n: n1, d: den}, f2: {n: n2, d: den} };
+                    q.correct = "<";
+                    q.options = ["<", ">", "="];
+                } else if (type === 'sameNum') {
+                    const num = pick([2, 3, 4]);
+                    const d1 = pick([3, 5]);
+                    const d2 = d1 + pick([2, 4]);
+                    q.text = `Cửa 1 mở ${num}/${d1}, cửa 2 mở ${num}/${d2}. Cửa nào mở rộng hơn?`;
+                    q.visualType = "compare";
+                    q.data = { f1: {n: num, d: d1}, f2: {n: num, d: d2} };
+                    q.correct = ">";
+                    q.options = [">", "<", "="];
+                } else {
+                    q.text = `Phân số nào dưới đây BÉ HƠN 1 (Tử số bé hơn mẫu số)?`;
+                    q.visualType = "text-only";
+                    const num = pick([2, 3]);
+                    const den = num + pick([1, 2]);
+                    q.correct = `${num}/${den}`;
+                    q.options = shuffle([q.correct, `${den}/${num}`, `${den}/${den}`, `${den+1}/${num}`]);
+                }
+            }
+            else if (state.level === 4) {
+                const type = pick(['add', 'sub', 'word']);
+                const den = pick([5, 6, 7, 8]);
+                if (type === 'add') {
+                    const n1 = pick([1, 2]);
+                    const n2 = pick([1, 2]);
+                    q.text = `Tính tổng hai phân số có cùng mẫu số:`;
+                    q.visualType = "equation";
+                    q.data = { expr: `${n1}/${den} + ${n2}/${den} = ?` };
+                    q.correct = `${n1 + n2}/${den}`;
+                    q.options = generateFractionOptions(n1 + n2, den);
+                } else if (type === 'sub') {
+                    const n1 = pick([4, 5, 6]);
+                    const n2 = pick([1, 2, 3]);
+                    q.text = `Thực hiện phép trừ phân số:`;
+                    q.visualType = "equation";
+                    q.data = { expr: `${n1}/${den} - ${n2}/${den} = ?` };
+                    q.correct = `${n1 - n2}/${den}`;
+                    q.options = generateFractionOptions(n1 - n2, den);
+                } else {
+                    const n1 = pick([1, 2]);
+                    const n2 = pick([1, 2]);
+                    q.text = `Sáng công chúa uống ${n1}/${den} bình sữa, chiều uống thêm ${n2}/${den} bình. Hỏi đã uống tổng cộng bao nhiêu phần bình sữa?`;
+                    q.visualType = "text-only";
+                    q.correct = `${n1 + n2}/${den}`;
+                    q.options = generateFractionOptions(n1 + n2, den);
+                }
+            }
+            else if (state.level === 5) {
+                const type = pick(['simplify', 'quantity']);
+                if (type === 'simplify') {
+                    const n = pick([2, 3]);
+                    const d = pick([4, 5]);
+                    const k = pick([2, 3, 4]);
+                    q.text = `Rút gọn phân số sau để mở rương kho báu:`;
+                    q.visualType = "equation";
+                    q.data = { expr: `${n*k}/${d*k} = ?` };
+                    q.correct = `${n}/${d}`;
+                    q.options = generateFractionOptions(n, d);
+                } else {
+                    const total = pick([10, 15, 20]);
+                    const fractionD = 5;
+                    const fractionN = pick([2, 3]);
+                    q.text = `Có ${total} viên kim cương. Phép thuật yêu cầu lấy ${fractionN}/${fractionD} số kim cương đó. Hỏi phải lấy mấy viên?`;
+                    q.visualType = "text-only";
+                    const ans = (total / fractionD) * fractionN;
+                    q.correct = `${ans}`;
+                    q.options = shuffle([`${ans}`, `${ans+1}`, `${ans-1}`, `${ans+2}`]);
+                }
+            }
+
+            state.currentQuestion = q;
+            renderQuestion(q);
+        }
+
+        function renderQuestion(q) {
+            document.getElementById('question-text').innerText = q.text;
+            const visual = document.getElementById('math-visual');
+            visual.innerHTML = '';
+
+            if (q.visualType === "pie") {
+                visual.innerHTML = drawPie(q.data.n, q.data.d);
+            } else if (q.visualType === "compare") {
+                visual.innerHTML = drawCompare(q.data.f1, q.data.f2);
+            } else if (q.visualType === "equal") {
+                visual.innerHTML = `<div class="text-4xl font-bold text-purple-600">1/2 = ?</div>`;
+            } else if (q.visualType === "group") {
+                visual.innerHTML = drawGroup(q.data.total, q.data.target, q.data.icon1, q.data.icon2);
+            } else if (q.visualType === "equation") {
+                visual.innerHTML = drawEquation(q.data.expr);
+            } else {
+                visual.innerHTML = `<div class="text-6xl drop-shadow-lg">💎❓💎</div>`;
+            }
+
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white border-4 border-purple-200 hover:border-pink-400 hover:bg-pink-50 p-6 rounded-2xl text-3xl font-bold transition transform active:scale-90 shadow-md flex items-center justify-center text-purple-800";
+                if (opt.includes('/')) {
+                    const [n, d] = opt.split('/');
+                    btn.innerHTML = `<div class="flex flex-col items-center leading-none"><span>${n}</span><div class="fraction-bar w-10 my-1 bg-purple-600"></div><span>${d}</span></div>`;
+                } else {
+                    btn.innerText = opt;
+                }
+                btn.onclick = () => handleAnswer(opt);
+                grid.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(selected) {
+            const isCorrect = selected === state.currentQuestion.correct;
+            const feedback = document.getElementById('feedback');
+            const container = document.getElementById('game-container');
+            const bubble = document.getElementById('speech-bubble');
+
+            feedback.style.opacity = "1";
+            if (isCorrect) {
+                state.score += 10;
+                feedback.innerText = "Chính xác! +1 Phép Thuật ✨";
+                feedback.className = "h-14 mt-4 flex items-center justify-center font-bold text-2xl text-green-600 bg-green-100 rounded-2xl transition-all opacity-100";
+                
+                // Add item
+                const newItem = state.princessItemsPool[Math.floor(Math.random() * state.princessItemsPool.length)];
+                state.items.push(newItem);
+                
+                bubble.innerText = "Tuyệt vời quá! Chị đã mạnh hơn rồi!";
+                bubble.classList.remove('hidden');
+
+                state.questionInLevel++;
+                if (state.questionInLevel > state.questionsPerLevel) {
+                    levelUp();
+                }
+            } else {
+                feedback.innerText = "Cố gắng lên! Bị mất 1 phép thuật rồi 😢";
+                feedback.className = "h-14 mt-4 flex items-center justify-center font-bold text-2xl text-red-600 bg-red-100 rounded-2xl transition-all opacity-100";
+                container.classList.add('shake');
+                setTimeout(() => container.classList.remove('shake'), 500);
+                
+                if (state.items.length > 0) state.items.pop();
+                bubble.innerText = "Ôi không... em đừng bỏ cuộc nhé!";
+                bubble.classList.remove('hidden');
+            }
+
+            // Vô hiệu hóa nút nhấn trong lúc chờ
+            const buttons = document.querySelectorAll('#options-grid button');
+            buttons.forEach(b => b.disabled = true);
+
+            setTimeout(() => {
+                feedback.style.opacity = "0";
+                if (state.level <= state.totalLevels) {
+                    updateUI();
+                    generateQuestion();
+                }
+            }, 1800);
+        }
+
+        function levelUp() {
+            if (state.level < state.totalLevels) {
+                state.level++;
+                state.questionInLevel = 1;
+                const stage = document.getElementById('princess-stage');
+                stage.classList.add('level-up-anim');
+                
+                // Hiệu ứng pháo hoa bằng bong bóng thoại
+                const bubble = document.getElementById('speech-bubble');
+                bubble.innerText = "Tadaa! Trang phục mới đẹp không em? 💖";
+                
+                setTimeout(() => stage.classList.remove('level-up-anim'), 1000);
+            } else {
+                showWin();
+            }
+        }
+
+        function showWin() {
+            document.getElementById('screen-question').classList.add('hidden');
+            document.getElementById('screen-win').classList.remove('hidden');
+            document.getElementById('level-num').innerText = "V";
+            // Lần update cuối cùng để hiển thị Nữ Hoàng
+            document.getElementById('princess-avatar').innerHTML = getPrincessSVG(5);
+        }
+
+        function generateFractionOptions(correctN, correctD) {
+            const correct = `${correctN}/${correctD}`;
+            const opts = [correct];
+            while(opts.length < 4) {
+                const n = Math.floor(Math.random() * 9) + 1;
+                const d = Math.floor(Math.random() * 8) + 2;
+                const f = `${n}/${d}`;
+                if (!opts.includes(f)) opts.push(f);
+            }
+            return opts.sort(() => Math.random() - 0.5);
+        }
+
+        // --- Helper Drawing Functions ---
+        function drawPie(n, d) {
+            let svg = `<svg width="140" height="140" viewBox="0 0 100 100" class="drop-shadow-md">
+                <circle cx="50" cy="50" r="45" fill="#fff" stroke="#d8b4fe" stroke-width="3"/>`;
+            for (let i = 0; i < d; i++) {
+                const angle = (i * 360) / d;
+                const x = 50 + 45 * Math.cos(Math.PI * angle / 180);
+                const y = 50 + 45 * Math.sin(Math.PI * angle / 180);
+                svg += `<line x1="50" y1="50" x2="${x}" y2="${y}" stroke="#d8b4fe" stroke-width="2"/>`;
+                if (i < n) {
+                    const startAngle = angle;
+                    const endAngle = angle + (360 / d);
+                    const x1 = 50 + 45 * Math.cos(Math.PI * startAngle / 180);
+                    const y1 = 50 + 45 * Math.sin(Math.PI * startAngle / 180);
+                    const x2 = 50 + 45 * Math.cos(Math.PI * endAngle / 180);
+                    const y2 = 50 + 45 * Math.sin(Math.PI * endAngle / 180);
+                    const laf = (360/d) > 180 ? 1 : 0;
+                    svg += `<path d="M 50 50 L ${x1} ${y1} A 45 45 0 ${laf} 1 ${x2} ${y2} Z" fill="#f472b6" opacity="0.8"/>`;
+                }
+            }
+            return svg + `</svg>`;
+        }
+
+        function drawCompare(f1, f2) {
+            const bar = (f, color) => {
+                let h = `<div class="flex flex-col items-center gap-3">
+                    <div class="w-16 h-32 border-4 border-${color}-300 relative bg-white overflow-hidden rounded-xl shadow-inner">`;
+                const step = 100/f.d;
+                for(let i=0; i<f.n; i++) h += `<div class="absolute bottom-0 left-0 w-full bg-${color}-400 border-t-2 border-white opacity-80" style="height:${step*(i+1)}%"></div>`;
+                h += `</div><div class="font-extrabold text-2xl text-${color}-600">${f.n}/${f.d}</div></div>`;
+                return h;
+            };
+            return `<div class="flex items-center gap-8">${bar(f1, 'pink')} <div class="text-4xl font-extrabold text-purple-600">?</div> ${bar(f2, 'purple')}</div>`;
+        }
+
+        function drawGroup(total, target, icon1, icon2) {
+            let html = '<div class="flex flex-wrap gap-3 justify-center text-5xl drop-shadow-md">';
+            for(let i=0; i<total; i++) {
+                html += `<span class="m-1 hover:scale-110 transition-transform">${i < target ? icon1 : icon2}</span>`;
+            }
+            html += '</div>';
+            return html;
+        }
+
+        function drawEquation(expr) {
+            let html = '<div class="flex items-center gap-5 text-4xl font-extrabold text-purple-700">';
+            const parts = expr.split(' ');
+            parts.forEach(p => {
+                if (p.includes('/')) {
+                    const [n, d] = p.split('/');
+                    html += `<div class="flex flex-col items-center leading-none bg-white px-3 py-2 rounded-xl shadow-sm border border-purple-100"><span>${n}</span><div class="fraction-bar w-10 my-2 bg-purple-700"></div><span>${d}</span></div>`;
+                } else {
+                    html += `<div>${p}</div>`;
+                }
+            });
+            html += '</div>';
+            return html;
+        }
+
+    </script>
+</body>
+</html>
