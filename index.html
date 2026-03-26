@@ -3,1862 +3,1782 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌊 Vương Quốc San Hô – Bí Mật Phân Số Đại Dương</title>
-<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<title>🚀 Phi Hành Gia Nhỏ – Phân Số Vũ Trụ</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ======================================================
-   ROOT & RESET
-====================================================== */
+/* ═══════════════════════════ ROOT ═══════════════════════════ */
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --ocean-deep:#03045e;--ocean-mid:#0077b6;--ocean-bright:#00b4d8;
-  --ocean-light:#90e0ef;--ocean-pale:#caf0f8;
-  --coral:#ff6b6b;--coral-light:#ff9a9a;
-  --gold:#ffd60a;--gold-dark:#e6b800;
-  --pearl:#f8f9fa;--pearl-warm:#fff3e0;
-  --teal:#2ec4b6;--mint:#a8dadc;
-  --sand:#f4a261;--sand-light:#fde8c8;
-  --purple:#7b2d8b;--magic:#c77dff;
-  --text-dark:#02213a;--text-mid:#0c3d6b;
-  --shadow:rgba(0,60,120,0.25);
-  --glow-teal:rgba(46,196,182,0.5);--glow-gold:rgba(255,214,10,0.6);
+  --space:#020818;--nebula1:#0f0c29;--nebula2:#302b63;--nebula3:#24243e;
+  --nova:#7c3aed;--nova-l:#a78bfa;--nova-ll:#ede9fe;
+  --cyan:#06b6d4;--cyan-l:#67e8f9;
+  --gold:#fbbf24;--gold-l:#fde68a;
+  --rose:#f43f5e;--rose-l:#fda4af;
+  --green:#10b981;--green-l:#6ee7b7;
+  --orange:#f97316;
+  --text:#e2e8f0;--text-dim:rgba(226,232,240,0.55);
+  --card:rgba(255,255,255,0.04);--card-b:rgba(255,255,255,0.1);
+  --glow-v:rgba(124,58,237,0.5);--glow-c:rgba(6,182,212,0.5);
+  --glow-g:rgba(251,191,36,0.6);
 }
+html{height:100%}
 body{
-  font-family:'Nunito',sans-serif;
-  background:var(--ocean-deep);
-  min-height:100vh;overflow-x:hidden;
-  cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Ctext y='22' font-size='22'%3E🐠%3C/text%3E%3C/svg%3E") 14 14, auto;
+  font-family:'Nunito',sans-serif;background:var(--space);
+  min-height:100vh;overflow-x:hidden;color:var(--text);
+  cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ctext y='20' font-size='18'%3E🚀%3C/text%3E%3C/svg%3E") 8 20, auto;
 }
 
-/* ======================================================
-   ANIMATED OCEAN BACKGROUND
-====================================================== */
-.ocean-bg{
-  position:fixed;inset:0;z-index:0;overflow:hidden;
-  background:linear-gradient(180deg,
-    #010e2a 0%,#01204e 15%,#023e7d 35%,
-    #0353a4 55%,#0466c8 75%,#0582e0 100%);
-}
-/* Caustic light shafts */
-.caustic{
-  position:absolute;top:-20%;width:3px;
-  background:linear-gradient(180deg,transparent,rgba(144,224,239,0.15),transparent);
-  animation:causticDrift linear infinite;border-radius:2px;
-  transform-origin:top center;
-}
-@keyframes causticDrift{0%{transform:translateX(0) rotate(var(--r,3deg)) scaleX(1)}
-  50%{transform:translateX(var(--dx,20px)) rotate(calc(var(--r,3deg)*-1)) scaleX(1.5)}
-  100%{transform:translateX(0) rotate(var(--r,3deg)) scaleX(1)}}
+/* ═══════════════ STARFIELD CANVAS ═══════════════ */
+#starCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-/* Bubble particles */
-.bubble{
-  position:absolute;border-radius:50%;
-  background:radial-gradient(circle at 35% 35%,rgba(255,255,255,0.6),rgba(144,224,239,0.1));
-  border:1px solid rgba(144,224,239,0.3);
-  animation:bubbleRise linear infinite;
-}
-@keyframes bubbleRise{
-  0%{transform:translateY(0) translateX(0);opacity:0}
-  10%{opacity:0.7}
-  90%{opacity:0.5}
-  100%{transform:translateY(-100vh) translateX(var(--bx,10px));opacity:0}
+/* ═══════════════ NEBULA BG ═══════════════ */
+.nebula-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 20% 30%,rgba(124,58,237,0.18) 0%,transparent 55%),
+    radial-gradient(ellipse at 80% 70%,rgba(6,182,212,0.12) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 100%,rgba(244,63,94,0.08) 0%,transparent 40%),
+    linear-gradient(160deg,#020818 0%,#0f0c29 40%,#302b63 100%);
 }
 
-/* Floating sea creatures */
-.sea-creature{
-  position:absolute;font-size:var(--sz,1.5rem);
-  animation:seaFloat linear infinite;pointer-events:none;opacity:0.4;
-}
-@keyframes seaFloat{
-  0%{transform:translateY(0) translateX(0) scaleX(1)}
-  25%{transform:translateY(-15px) translateX(8px) scaleX(1)}
-  50%{transform:translateY(-5px) translateX(15px) scaleX(1)}
-  75%{transform:translateY(-20px) translateX(5px) scaleX(-1)}
-  100%{transform:translateY(0) translateX(0) scaleX(1)}
-}
+/* ═══════════════ WRAPPER ═══════════════ */
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:14px;min-height:100vh}
 
-/* Seaweed sway */
-.seaweed{
-  position:absolute;bottom:0;font-size:2rem;
-  animation:seaweedSway ease-in-out infinite alternate;transform-origin:bottom center;
-}
-@keyframes seaweedSway{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
-
-/* ======================================================
-   GAME CONTAINER
-====================================================== */
-.game-wrap{
-  position:relative;z-index:1;
-  max-width:980px;margin:0 auto;padding:14px;
-  min-height:100vh;
-}
-
-/* ======================================================
-   TOP HUD
-====================================================== */
-.top-hud{
+/* ═══════════════ HUD ═══════════════ */
+.hud{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  background:rgba(0,60,120,0.55);
-  backdrop-filter:blur(16px);
-  border:1px solid rgba(144,224,239,0.25);
-  border-radius:20px;padding:10px 16px;
-  box-shadow:0 4px 24px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.1);
-  margin-bottom:12px;
+  background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.1);border-radius:18px;
+  padding:10px 18px;margin-bottom:12px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.07);
 }
-.game-title{
-  font-family:'Bubblegum Sans',cursive;font-size:1.4rem;
-  background:linear-gradient(135deg,#90e0ef,#00b4d8,#ffd60a);
+.hud-title{
+  font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;
+  background:linear-gradient(135deg,#a78bfa,#67e8f9,#fbbf24);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;white-space:nowrap;flex-shrink:0;
-  filter:drop-shadow(0 0 8px rgba(0,180,216,0.4));
+  filter:drop-shadow(0 0 8px rgba(167,139,250,0.4));
 }
-.hud-lives{display:flex;gap:3px;align-items:center}
-.hud-heart{font-size:1.3rem;transition:all 0.3s;display:inline-block}
-.hud-heart.lost{filter:grayscale(1);opacity:0.3;transform:scale(0.8)}
-.hud-score{
-  background:linear-gradient(135deg,rgba(255,214,10,0.2),rgba(255,214,10,0.1));
-  border:1px solid rgba(255,214,10,0.4);
-  border-radius:14px;padding:5px 14px;
-  font-weight:900;font-size:0.95rem;color:var(--gold);
-  white-space:nowrap;text-shadow:0 0 10px var(--glow-gold);
+.hud-lives{display:flex;gap:2px}
+.hud-heart{font-size:1.2rem;transition:all 0.3s}
+.hud-heart.lost{filter:grayscale(1);opacity:0.25;transform:scale(0.8)}
+.hud-score-box{
+  background:linear-gradient(135deg,rgba(251,191,36,0.15),rgba(251,191,36,0.05));
+  border:1px solid rgba(251,191,36,0.35);border-radius:12px;
+  padding:4px 14px;font-weight:900;font-size:0.95rem;color:var(--gold);
+  text-shadow:0 0 10px var(--glow-g);white-space:nowrap;
 }
-.combo-pill{
-  background:linear-gradient(135deg,rgba(199,125,255,0.3),rgba(123,45,139,0.4));
-  border:1px solid rgba(199,125,255,0.4);
-  border-radius:12px;padding:4px 12px;
-  font-weight:900;font-size:0.82rem;color:var(--magic);
-  display:none;animation:comboBob 0.7s ease-in-out infinite alternate;
+.hud-zone{
+  background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.3);
+  border-radius:12px;padding:4px 12px;font-size:0.8rem;font-weight:800;
+  color:var(--cyan-l);white-space:nowrap;
 }
-.combo-pill.show{display:block}
-@keyframes comboBob{from{transform:scale(1)}to{transform:scale(1.08)}}
-.gem-bar{display:flex;gap:5px;align-items:center;margin-left:auto}
-.gem-orb{
-  width:26px;height:26px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1rem;border:2px solid rgba(255,255,255,0.2);
-  background:rgba(255,255,255,0.05);transition:all 0.4s;
+.combo-tag{
+  background:linear-gradient(135deg,rgba(244,63,94,0.25),rgba(251,191,36,0.15));
+  border:1px solid rgba(244,63,94,0.4);border-radius:12px;
+  padding:4px 12px;font-weight:900;font-size:0.82rem;color:#fda4af;
+  display:none;animation:comboFlash 0.5s ease-in-out infinite alternate;
 }
-.gem-orb.lit{
-  background:radial-gradient(circle,var(--gc,#ffd60a),transparent);
-  border-color:var(--gc,#ffd60a);
-  box-shadow:0 0 12px var(--gc,#ffd60a);
-  animation:gemPulse 2s ease-in-out infinite;
+.combo-tag.show{display:block}
+@keyframes comboFlash{from{box-shadow:none}to{box-shadow:0 0 12px rgba(244,63,94,0.5)}}
+.sound-btn{
+  width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.15);font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all 0.2s;
+  flex-shrink:0;margin-left:auto;color:var(--text);
 }
-@keyframes gemPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.sound-btn:hover{background:rgba(255,255,255,0.12);transform:scale(1.1)}
 
-/* ======================================================
-   WORLD MAP STRIP
-====================================================== */
-.world-map{
-  background:rgba(0,40,90,0.5);backdrop-filter:blur(12px);
-  border:1px solid rgba(144,224,239,0.2);border-radius:18px;
-  padding:12px 16px;margin-bottom:12px;overflow-x:auto;
-  box-shadow:0 4px 20px rgba(0,0,0,0.25);
+/* ═══════════════ PLANET MAP ═══════════════ */
+.planet-map{
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;padding:10px 16px;margin-bottom:12px;
+  overflow-x:auto;flex-wrap:nowrap;
 }
-.map-scroll{display:flex;align-items:center;gap:6px;min-width:max-content}
-.map-zone{
-  display:flex;flex-direction:column;align-items:center;
-  gap:3px;cursor:pointer;transition:all 0.3s;
-  padding:6px 8px;border-radius:12px;
-  border:2px solid transparent;position:relative;
+.planet-node{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:6px 8px;border-radius:12px;border:2px solid transparent;
+  transition:all 0.3s;cursor:default;flex-shrink:0;
 }
-.map-zone.done{border-color:rgba(255,214,10,0.4);background:rgba(255,214,10,0.1)}
-.map-zone.active{
-  border-color:rgba(0,180,216,0.6);background:rgba(0,180,216,0.15);
-  animation:zoneGlow 2s ease-in-out infinite;
-}
-.map-zone.locked{opacity:0.4;cursor:not-allowed;filter:grayscale(0.6)}
-@keyframes zoneGlow{0%,100%{box-shadow:0 0 0 0 rgba(0,180,216,0.3)}50%{box-shadow:0 0 0 6px rgba(0,180,216,0.1)}}
-.map-zone-emoji{font-size:1.5rem;transition:transform 0.3s}
-.map-zone.active .map-zone-emoji{animation:zoneFloat 2s ease-in-out infinite}
-@keyframes zoneFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.map-zone-name{font-size:0.62rem;font-weight:800;color:rgba(144,224,239,0.8);white-space:nowrap;text-align:center}
-.map-zone.done .map-zone-name{color:var(--gold)}
-.map-connector{width:20px;height:2px;background:linear-gradient(90deg,rgba(144,224,239,0.3),rgba(144,224,239,0.1));border-radius:1px}
-.map-zone-gem{
-  position:absolute;top:-6px;right:-4px;font-size:0.7rem;
-  background:var(--gold);border-radius:50%;width:16px;height:16px;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 6px var(--glow-gold);display:none;
-}
-.map-zone.done .map-zone-gem{display:flex}
+.planet-node.done{border-color:rgba(251,191,36,0.4);background:rgba(251,191,36,0.08)}
+.planet-node.active{border-color:rgba(167,139,250,0.6);background:rgba(124,58,237,0.15);animation:planetPulse 2s infinite}
+.planet-node.locked{opacity:0.3;filter:grayscale(0.7)}
+@keyframes planetPulse{0%,100%{box-shadow:0 0 0 0 rgba(124,58,237,0.3)}50%{box-shadow:0 0 0 6px rgba(124,58,237,0.08)}}
+.planet-emoji{font-size:1.6rem;transition:transform 0.3s}
+.planet-node.active .planet-emoji{animation:planetFloat 2s ease-in-out infinite}
+@keyframes planetFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.planet-name{font-size:0.58rem;font-weight:800;color:var(--text-dim);text-align:center;max-width:56px}
+.planet-node.done .planet-name{color:var(--gold-l)}
+.planet-conn{flex-shrink:0;display:flex;align-items:center}
+.planet-conn::after{content:'·····';color:rgba(255,255,255,0.15);font-size:0.7rem;letter-spacing:2px}
 
-/* ======================================================
-   MAIN LAYOUT
-====================================================== */
-.main-layout{
-  display:grid;grid-template-columns:1fr 280px;gap:12px;
-  align-items:start;
-}
+/* ═══════════════ MAIN GRID ═══════════════ */
+.main-grid{display:grid;grid-template-columns:1fr 270px;gap:12px;align-items:start}
 
-/* ======================================================
-   QUEST PANEL (left)
-====================================================== */
-.quest-panel{
-  background:rgba(1,30,70,0.65);backdrop-filter:blur(18px);
-  border:1px solid rgba(144,224,239,0.2);border-radius:24px;
-  padding:20px;box-shadow:0 8px 32px rgba(0,0,0,0.35),
-    inset 0 1px 0 rgba(144,224,239,0.1);
+/* ═══════════════ QUESTION PANEL ═══════════════ */
+.q-panel{
+  background:rgba(255,255,255,0.04);backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.1);border-radius:22px;
+  padding:20px;box-shadow:0 8px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.07);
   display:flex;flex-direction:column;gap:14px;
 }
-.zone-header{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.zone-title{
-  font-family:'Bubblegum Sans',cursive;font-size:1.2rem;
-  color:var(--ocean-light);text-shadow:0 0 12px rgba(144,224,239,0.5);
+
+/* TIMER ARC */
+.timer-wrap{display:flex;align-items:center;gap:12px}
+.timer-arc-box{position:relative;width:64px;height:64px;flex-shrink:0}
+.timer-arc-box svg{transform:rotate(-90deg)}
+.timer-bg{fill:none;stroke:rgba(255,255,255,0.08);stroke-width:5}
+.timer-fill{
+  fill:none;stroke-width:5;stroke-linecap:round;
+  transition:stroke-dashoffset 1s linear, stroke 0.5s;
 }
-.zone-theme{
-  font-size:0.8rem;font-weight:800;color:var(--teal);
-  background:rgba(46,196,182,0.15);border:1px solid rgba(46,196,182,0.3);
-  border-radius:10px;padding:3px 10px;
+.timer-num{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;
+  transition:color 0.3s;
 }
-.progress-track{
-  background:rgba(255,255,255,0.08);border-radius:8px;height:8px;
-  overflow:hidden;border:1px solid rgba(255,255,255,0.05);
+.timer-right{flex:1}
+.planet-badge{
+  font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;
+  color:var(--nova-l);background:rgba(124,58,237,0.15);
+  border:1px solid rgba(124,58,237,0.3);border-radius:8px;
+  padding:3px 10px;display:inline-block;margin-bottom:4px;
 }
-.progress-fill{
-  height:100%;border-radius:8px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);
-  background:linear-gradient(90deg,#2ec4b6,#00b4d8,#90e0ef);
-  box-shadow:0 0 8px rgba(46,196,182,0.6);
+.q-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.q-progress-track{flex:1;height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;min-width:60px}
+.q-progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--nova-l),var(--cyan-l));transition:width 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+.q-count{font-size:0.78rem;font-weight:800;color:var(--text-dim);white-space:nowrap}
+.difficulty-badge{
+  font-size:0.7rem;font-weight:800;padding:2px 8px;border-radius:6px;white-space:nowrap;
+}
+.diff-easy{background:rgba(16,185,129,0.2);color:var(--green-l);border:1px solid rgba(16,185,129,0.3)}
+.diff-med{background:rgba(251,191,36,0.15);color:var(--gold-l);border:1px solid rgba(251,191,36,0.3)}
+.diff-hard{background:rgba(244,63,94,0.15);color:var(--rose-l);border:1px solid rgba(244,63,94,0.3)}
+.diff-boss{background:rgba(124,58,237,0.2);color:var(--nova-ll);border:1px solid rgba(124,58,237,0.4);animation:bossBadge 1s infinite alternate}
+@keyframes bossBadge{from{box-shadow:none}to{box-shadow:0 0 8px rgba(124,58,237,0.5)}}
+
+/* TOPIC CHIP */
+.topic-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.25);
+  border-radius:8px;padding:2px 10px;font-size:0.72rem;font-weight:800;color:var(--cyan-l);
 }
 
-/* ======================================================
-   LETTER / DIALOGUE
-====================================================== */
-.letter-box{
-  background:linear-gradient(135deg,rgba(244,162,97,0.12),rgba(253,232,200,0.08));
-  border:1px solid rgba(244,162,97,0.3);border-radius:16px;
-  padding:14px 16px;display:flex;gap:12px;align-items:flex-start;
-  position:relative;
-}
-.letter-box::before{
-  content:'📜';position:absolute;top:-10px;right:12px;font-size:1.2rem;
-}
-.letter-avatar{font-size:2rem;flex-shrink:0;margin-top:2px;
-  animation:avatarBob 3s ease-in-out infinite;}
-@keyframes avatarBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.letter-body{flex:1}
-.letter-sender{
-  font-family:'Bubblegum Sans',cursive;font-size:0.85rem;
-  color:var(--sand);margin-bottom:3px;
-}
-.letter-text{
-  font-size:0.88rem;font-weight:700;
-  color:rgba(202,240,248,0.9);line-height:1.65;
-}
-
-/* ======================================================
-   QUESTION CARD
-====================================================== */
-.q-card{
-  background:linear-gradient(160deg,rgba(0,50,110,0.7),rgba(0,30,80,0.8));
-  border:1px solid rgba(0,180,216,0.3);border-radius:20px;padding:18px;
-  box-shadow:0 4px 20px rgba(0,0,0,0.3),inset 0 1px 0 rgba(144,224,239,0.1);
-}
+/* QUESTION TEXT */
 .q-text{
-  font-size:0.95rem;font-weight:800;color:var(--ocean-pale);
-  line-height:1.65;margin-bottom:12px;
+  font-size:1rem;font-weight:800;color:var(--text);line-height:1.65;
 }
+.q-story{
+  background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(6,182,212,0.07));
+  border:1px solid rgba(167,139,250,0.2);border-radius:14px;
+  padding:12px 16px;font-size:0.88rem;font-weight:700;
+  color:rgba(226,232,240,0.85);line-height:1.7;margin-bottom:2px;
+}
+
+/* VISUAL AREA */
 .q-visual{
   display:flex;align-items:center;justify-content:center;
-  flex-wrap:wrap;gap:12px;min-height:80px;margin:12px 0;
+  flex-wrap:wrap;gap:12px;min-height:72px;
 }
 
-/* Fraction display */
-.frac{
-  display:inline-flex;flex-direction:column;align-items:center;
-  font-family:'Bubblegum Sans',cursive;line-height:1;padding:2px 10px;
-}
-.frac-n{font-size:1.9rem;color:#90e0ef}
-.frac-bar{width:110%;height:3px;background:rgba(255,255,255,0.7);border-radius:2px;margin:3px 0}
-.frac-d{font-size:1.9rem;color:#ffd60a}
-.frac.sm .frac-n,.frac.sm .frac-d{font-size:1.25rem}
-.frac.ans-display .frac-n{color:#2ec4b6}.frac.ans-display .frac-d{color:#ffd60a}
+/* FRACTION */
+.frac{display:inline-flex;flex-direction:column;align-items:center;font-family:'Orbitron',monospace;line-height:1;padding:2px 8px}
+.fn{font-size:1.7rem;font-weight:900;color:var(--cyan-l)}
+.fb{width:110%;height:2.5px;background:rgba(255,255,255,0.6);margin:3px 0;border-radius:2px}
+.fd{font-size:1.7rem;font-weight:900;color:var(--gold)}
+.frac.sm .fn,.frac.sm .fd{font-size:1.15rem}
+.frac.q-mark .fn,.frac.q-mark .fd{color:var(--nova-l)}
 
-/* Options */
-.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.opt{
-  background:rgba(0,60,120,0.5);border:2px solid rgba(144,224,239,0.25);
-  border-radius:15px;padding:12px 10px;
-  font-family:'Bubblegum Sans',cursive;font-size:1rem;color:var(--ocean-pale);
-  cursor:pointer;transition:all 0.2s;min-height:58px;
-  display:flex;align-items:center;justify-content:center;gap:4px;
-  box-shadow:0 3px 12px rgba(0,0,0,0.2);
+/* OPTIONS */
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt-btn{
+  background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.12);
+  border-radius:14px;padding:13px 10px;
+  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
+  color:var(--text);cursor:pointer;transition:all 0.18s;min-height:58px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  box-shadow:0 3px 12px rgba(0,0,0,0.25);position:relative;overflow:hidden;
 }
-.opt:hover:not(:disabled){
-  border-color:var(--ocean-bright);
-  background:rgba(0,180,216,0.2);transform:translateY(-3px);
-  box-shadow:0 8px 20px rgba(0,180,216,0.25);
+.opt-btn::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.2s;
+  background:radial-gradient(circle at center,rgba(167,139,250,0.15),transparent 70%);
 }
-.opt.correct{
-  background:linear-gradient(135deg,rgba(46,196,182,0.3),rgba(110,231,183,0.2));
-  border-color:#2ec4b6;color:#a7f3d0;
-  box-shadow:0 0 16px rgba(46,196,182,0.4);
-  animation:correctPop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+.opt-btn:hover:not(:disabled)::before{opacity:1}
+.opt-btn:hover:not(:disabled){
+  border-color:var(--nova-l);transform:translateY(-3px);
+  box-shadow:0 8px 20px rgba(124,58,237,0.3);
 }
-.opt.wrong{
-  background:linear-gradient(135deg,rgba(255,107,107,0.25),rgba(255,80,80,0.15));
-  border-color:#ff6b6b;color:#fca5a5;
-  animation:wrongShake 0.4s ease;
+.opt-btn.correct{
+  background:linear-gradient(135deg,rgba(16,185,129,0.25),rgba(6,182,212,0.15));
+  border-color:var(--green);color:var(--green-l);
+  animation:correctBurst 0.45s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow:0 0 20px rgba(16,185,129,0.4);
 }
-@keyframes correctPop{0%{transform:scale(1)}50%{transform:scale(1.09)}100%{transform:scale(1)}}
-@keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.opt-btn.wrong{
+  background:rgba(244,63,94,0.15);border-color:var(--rose);color:var(--rose-l);
+  animation:wrongShake 0.35s ease;
+}
+@keyframes correctBurst{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}60%{transform:translateX(8px)}}
+/* Keyboard hint labels */
+.opt-btn .key-hint{
+  position:absolute;top:5px;right:7px;font-size:0.6rem;font-weight:900;
+  color:rgba(255,255,255,0.3);font-family:'Orbitron',monospace;
+}
 
-/* Feedback */
+/* FEEDBACK */
 .feedback{
-  border-radius:14px;padding:10px 14px;font-weight:800;font-size:0.88rem;
+  border-radius:12px;padding:10px 14px;font-weight:800;font-size:0.88rem;
   line-height:1.55;display:none;border:1px solid transparent;
 }
 .feedback.show{display:block}
-.feedback.ok{
-  background:rgba(46,196,182,0.15);border-color:rgba(46,196,182,0.4);
-  color:#a7f3d0;
-}
-.feedback.no{
-  background:rgba(255,107,107,0.13);border-color:rgba(255,107,107,0.35);
-  color:#fca5a5;
-}
+.feedback.ok{background:rgba(16,185,129,0.12);border-color:rgba(16,185,129,0.35);color:var(--green-l)}
+.feedback.no{background:rgba(244,63,94,0.1);border-color:rgba(244,63,94,0.3);color:var(--rose-l)}
 
-/* Next btn */
+/* TIME BONUS FLASH */
+.time-bonus{
+  position:fixed;z-index:300;font-family:'Orbitron',monospace;
+  font-size:1.4rem;font-weight:900;color:var(--gold);
+  text-shadow:0 0 16px var(--glow-g);pointer-events:none;
+  animation:timeBonusFly 1.2s ease-out forwards;
+}
+@keyframes timeBonusFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(1.4)}}
+
+/* NEXT BUTTON */
 .next-btn{
-  width:100%;padding:14px;border:none;border-radius:16px;
-  font-family:'Bubblegum Sans',cursive;font-size:1.1rem;color:#fff;
-  cursor:pointer;transition:all 0.2s;display:none;letter-spacing:0.3px;
-  background:linear-gradient(135deg,#0077b6,#00b4d8,#2ec4b6);
-  box-shadow:0 5px 20px rgba(0,180,216,0.4);
+  width:100%;padding:13px;border:none;border-radius:14px;
+  font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:700;
+  color:#fff;cursor:pointer;display:none;transition:all 0.2s;letter-spacing:0.5px;
+  background:linear-gradient(135deg,var(--nova),var(--cyan),#2563eb);
+  box-shadow:0 5px 20px rgba(124,58,237,0.4);
 }
-.next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,180,216,0.6)}
+.next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,0.6)}
+.next-btn kbd{
+  font-size:0.7rem;background:rgba(255,255,255,0.15);border-radius:4px;
+  padding:1px 5px;margin-left:6px;
+}
 
-/* ======================================================
-   RIGHT PANEL – characters + pet + map
-====================================================== */
+/* ═══════════════ RIGHT PANEL ═══════════════ */
 .right-panel{display:flex;flex-direction:column;gap:10px}
 
-/* Marina evolution card */
-.marina-card{
-  background:linear-gradient(160deg,rgba(0,20,60,0.75),rgba(0,40,100,0.65));
-  border:1px solid rgba(144,224,239,0.25);border-radius:22px;
-  padding:16px;text-align:center;
-  box-shadow:0 6px 24px rgba(0,0,0,0.3),inset 0 1px 0 rgba(144,224,239,0.1);
-  position:relative;overflow:hidden;
+/* CHARACTER CARD */
+.char-card{
+  background:rgba(255,255,255,0.04);backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,0.1);border-radius:20px;
+  padding:16px;box-shadow:0 6px 24px rgba(0,0,0,0.35);
+  text-align:center;position:relative;overflow:hidden;
 }
-.marina-card::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 0%,rgba(144,224,239,0.06) 0%,transparent 65%);
-  pointer-events:none;
+.char-card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,0.07) 0%,transparent 60%);
 }
-.marina-label{
-  font-family:'Bubblegum Sans',cursive;font-size:0.85rem;
-  color:var(--ocean-light);margin-bottom:10px;
-  text-shadow:0 0 8px rgba(144,224,239,0.3);
+.char-label{
+  font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;
+  color:var(--nova-l);margin-bottom:8px;letter-spacing:1px;
 }
-.marina-stage{
-  position:relative;width:160px;height:200px;
-  margin:0 auto 10px;
-}
-.marina-aura{
-  position:absolute;inset:-12px;border-radius:50%;
-  background:radial-gradient(circle,rgba(144,224,239,0.12) 0%,transparent 70%);
+.char-stage{position:relative;width:150px;height:180px;margin:0 auto 8px}
+.char-aura{
+  position:absolute;inset:-10px;border-radius:50%;
   animation:auraBreath 3s ease-in-out infinite alternate;
 }
-@keyframes auraBreath{from{transform:scale(0.95);opacity:0.5}to{transform:scale(1.08);opacity:1}}
-.marina-svg{width:100%;height:100%;filter:drop-shadow(0 0 12px rgba(0,180,216,0.35));transition:all 0.6s ease}
-.marina-rank{
-  font-family:'Bubblegum Sans',cursive;font-size:1rem;
-  background:linear-gradient(135deg,#90e0ef,#ffd60a);
+@keyframes auraBreath{from{transform:scale(0.9);opacity:0.4}to{transform:scale(1.1);opacity:0.9}}
+.char-svg{width:100%;height:100%;transition:all 0.5s;filter:drop-shadow(0 0 10px rgba(124,58,237,0.35))}
+.char-rank{
+  font-family:'Orbitron',monospace;font-size:0.78rem;font-weight:700;
+  background:linear-gradient(135deg,var(--nova-l),var(--cyan-l));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;margin-bottom:6px;
 }
-.gem-collection{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;min-height:34px}
-.gem-item{
-  font-size:1.3rem;animation:gemCollect 0.5s cubic-bezier(0.34,1.56,0.64,1);
-  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-}
-@keyframes gemCollect{from{transform:scale(0) rotate(-180deg)}to{transform:scale(1) rotate(0)}}
+.oxygen-bar-wrap{margin-bottom:8px}
+.oxygen-label{font-size:0.68rem;font-weight:800;color:var(--cyan-l);margin-bottom:3px;display:flex;justify-content:space-between}
+.oxygen-track{background:rgba(255,255,255,0.07);border-radius:6px;height:8px;overflow:hidden;border:1px solid rgba(6,182,212,0.2)}
+.oxygen-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--cyan),#818cf8);transition:width 0.6s ease;box-shadow:0 0 8px rgba(6,182,212,0.4)}
+.inventory{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;min-height:30px;margin-bottom:4px}
+.inv-item{font-size:1.2rem;animation:invPop 0.4s cubic-bezier(0.34,1.56,0.64,1);filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4))}
+@keyframes invPop{from{transform:scale(0) rotate(-180deg)}to{transform:scale(1) rotate(0)}}
+.inv-item.removing{animation:invRemove 0.3s ease forwards}
+@keyframes invRemove{to{transform:scale(0) rotate(180deg);opacity:0}}
 
-/* Coral pet card */
-.pet-card{
-  background:rgba(0,30,80,0.5);border:1px solid rgba(255,107,107,0.25);
-  border-radius:18px;padding:12px;
-  box-shadow:0 4px 16px rgba(0,0,0,0.2);
+/* BOT CARD */
+.bot-card{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(6,182,212,0.2);
+  border-radius:16px;padding:12px;display:flex;gap:10px;align-items:flex-start;
 }
-.pet-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.pet-avatar{
-  width:52px;height:52px;border-radius:50%;
-  background:linear-gradient(135deg,rgba(255,107,107,0.3),rgba(255,154,154,0.2));
-  border:2px solid rgba(255,107,107,0.4);
+.bot-avatar{
+  width:50px;height:50px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;font-size:1.8rem;
-  flex-shrink:0;transition:all 0.3s;
+  background:radial-gradient(circle,rgba(6,182,212,0.2),rgba(6,182,212,0.05));
+  border:2px solid rgba(6,182,212,0.3);transition:all 0.3s;
 }
-.pet-avatar.bounce{animation:petBounce 0.6s cubic-bezier(0.34,1.56,0.64,1)}
-@keyframes petBounce{0%{transform:scale(1)}50%{transform:scale(1.25) rotate(10deg)}100%{transform:scale(1)}}
-.pet-info{flex:1}
-.pet-name{font-family:'Bubblegum Sans',cursive;font-size:0.95rem;color:#ff9a9a}
-.pet-mood{font-size:0.75rem;color:rgba(144,224,239,0.7);font-weight:700;margin-top:1px}
-.pet-speech{
-  font-size:0.78rem;font-weight:700;color:rgba(202,240,248,0.8);
-  background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.2);
-  border-radius:10px;padding:6px 10px;line-height:1.45;font-style:italic;
+.bot-avatar.react{animation:botReact 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes botReact{0%,100%{transform:scale(1)}50%{transform:scale(1.2) rotate(8deg)}}
+.bot-info{flex:1}
+.bot-name{font-family:'Orbitron',monospace;font-size:0.78rem;color:var(--cyan-l);font-weight:700}
+.bot-mood{font-size:0.72rem;color:var(--text-dim);font-weight:700;margin-top:1px}
+.bot-say{
+  font-size:0.76rem;font-weight:700;color:var(--text-dim);
+  background:rgba(6,182,212,0.07);border:1px solid rgba(6,182,212,0.15);
+  border-radius:8px;padding:5px 9px;margin-top:4px;line-height:1.45;font-style:italic;
 }
 
-/* Triton letter mini */
-.triton-mini{
-  background:rgba(0,30,80,0.5);border:1px solid rgba(244,162,97,0.25);
-  border-radius:16px;padding:10px 12px;
-  display:flex;align-items:flex-start;gap:8px;
+/* PILOT CARD */
+.pilot-card{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(251,191,36,0.2);
+  border-radius:16px;padding:12px;display:flex;gap:10px;align-items:flex-start;
 }
-.triton-mini-avatar{font-size:1.6rem;flex-shrink:0}
-.triton-mini-text{font-size:0.78rem;font-weight:700;color:rgba(253,232,200,0.85);line-height:1.5}
-.triton-mini-name{font-family:'Bubblegum Sans',cursive;font-size:0.75rem;color:var(--sand);margin-bottom:2px}
+.pilot-avatar{font-size:1.5rem;flex-shrink:0;margin-top:2px;animation:pilotBob 3s ease-in-out infinite}
+@keyframes pilotBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.pilot-say{font-size:0.76rem;font-weight:700;color:rgba(253,230,138,0.85);line-height:1.5}
+.pilot-name{font-family:'Orbitron',monospace;font-size:0.72rem;color:var(--gold-l);margin-bottom:2px;font-weight:700}
 
-/* Stats row */
-.stats-row{display:flex;gap:8px}
-.stat-chip{
-  flex:1;background:rgba(0,30,80,0.5);border:1px solid rgba(144,224,239,0.15);
-  border-radius:12px;padding:8px 6px;text-align:center;
-}
-.stat-num{font-family:'Bubblegum Sans',cursive;font-size:1.3rem}
-.stat-num.correct{color:#2ec4b6}.stat-num.wrong{color:#ff6b6b}.stat-num.score{color:var(--gold)}
-.stat-lbl{font-size:0.62rem;color:rgba(144,224,239,0.5);margin-top:1px;font-weight:700}
+/* STATS MINI */
+.stats-mini{display:flex;gap:6px}
+.stat-m{flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:7px 5px;text-align:center}
+.stat-m-num{font-family:'Orbitron',monospace;font-size:1.15rem;font-weight:900}
+.stat-m-num.c{color:var(--green-l)}.stat-m-num.w{color:var(--rose-l)}.stat-m-num.s{color:var(--gold)}
+.stat-m-lbl{font-size:0.6rem;color:var(--text-dim);font-weight:700;margin-top:1px}
 
-/* ======================================================
-   OVERLAY SCREENS
-====================================================== */
-.overlay{
-  position:fixed;inset:0;z-index:200;
-  display:none;align-items:center;justify-content:center;padding:20px;
-  background:rgba(0,10,30,0.85);backdrop-filter:blur(14px);
+/* ADAPTIVE WEAKNESS */
+.weak-bar{
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;padding:8px 12px;
 }
+.weak-title{font-size:0.7rem;font-weight:800;color:var(--rose-l);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.weak-item{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.weak-label{font-size:0.68rem;font-weight:700;color:var(--text-dim);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.weak-track{flex:2;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.weak-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--rose),var(--orange));transition:width 0.5s ease}
+
+/* ═══════════════ OVERLAYS ═══════════════ */
+.overlay{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,8,24,0.88);backdrop-filter:blur(16px)}
 .overlay.show{display:flex}
 .ov-card{
-  background:linear-gradient(160deg,#010e2a,#01204e,#023e7d);
-  border:2px solid rgba(144,224,239,0.3);border-radius:28px;
-  padding:34px 28px;max-width:460px;width:100%;text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 40px rgba(0,180,216,0.15),
-    inset 0 1px 0 rgba(144,224,239,0.1);
-  animation:cardPop 0.45s cubic-bezier(0.34,1.56,0.64,1);
-  position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#0f0c29,#302b63,#1e1b4b);
+  border:1px solid rgba(167,139,250,0.3);border-radius:26px;
+  padding:32px 26px;max-width:500px;width:100%;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6),0 0 40px rgba(124,58,237,0.12),inset 0 1px 0 rgba(255,255,255,0.07);
+  animation:cardIn 0.4s cubic-bezier(0.34,1.56,0.64,1);position:relative;overflow:hidden;
 }
-.ov-card::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 0%,rgba(0,180,216,0.08) 0%,transparent 60%);
-  pointer-events:none;
+.ov-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,0.08) 0%,transparent 60%);pointer-events:none}
+@keyframes cardIn{from{transform:scale(0.7) translateY(30px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.ov-emoji{font-size:3.5rem;display:block;margin-bottom:10px;animation:ovFloat 2s ease-in-out infinite}
+@keyframes ovFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.ov-title{font-family:'Orbitron',monospace;font-size:1.7rem;font-weight:900;margin-bottom:8px}
+.ov-title.win{background:linear-gradient(135deg,#a78bfa,#67e8f9,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ov-title.lose{color:var(--rose-l)}
+.ov-desc{font-size:0.9rem;font-weight:700;color:var(--text-dim);line-height:1.7;margin-bottom:16px}
+.ov-chars{font-size:3rem;margin:10px 0;letter-spacing:8px}
+.ov-stars{display:flex;justify-content:center;gap:6px;font-size:1.8rem;margin:8px 0}
+.ov-report{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;padding:12px 16px;margin:12px 0;text-align:left;
 }
-@keyframes cardPop{from{transform:scale(0.65) translateY(40px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
-.ov-emoji{font-size:4rem;display:block;margin-bottom:8px;animation:ovEmojiFloat 2s ease-in-out infinite}
-@keyframes ovEmojiFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.ov-title{font-family:'Bubblegum Sans',cursive;font-size:1.9rem;margin-bottom:8px}
-.ov-title.win{background:linear-gradient(135deg,#90e0ef,#2ec4b6,#ffd60a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.ov-title.lose{color:#ff6b6b}
-.ov-desc{font-size:0.9rem;font-weight:700;color:rgba(202,240,248,0.85);line-height:1.7;margin-bottom:18px}
-.ov-chars{display:flex;justify-content:center;gap:10px;font-size:2.6rem;margin:12px 0}
-.ov-stars{display:flex;justify-content:center;gap:6px;margin:10px 0;font-size:1.8rem}
+.ov-report-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:0.85rem;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.05)}
+.ov-report-row:last-child{border-bottom:none}
+.ov-report-row span:first-child{color:var(--text-dim)}
+.ov-report-row span:last-child{color:var(--text)}
 .ov-btn{
-  padding:14px 32px;border:none;border-radius:16px;color:#fff;
-  font-family:'Bubblegum Sans',cursive;font-size:1.15rem;cursor:pointer;
-  transition:all 0.2s;margin:4px;
-  background:linear-gradient(135deg,#0077b6,#00b4d8,#2ec4b6);
-  box-shadow:0 5px 20px rgba(0,180,216,0.4);
+  padding:13px 30px;border:none;border-radius:14px;color:#fff;
+  font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:700;
+  cursor:pointer;transition:all 0.2s;margin:4px;
+  background:linear-gradient(135deg,var(--nova),var(--cyan));
+  box-shadow:0 5px 20px rgba(124,58,237,0.4);letter-spacing:0.5px;
 }
-.ov-btn:hover{transform:translateY(-3px);box-shadow:0 9px 28px rgba(0,180,216,0.6)}
-.ov-btn.warn{background:linear-gradient(135deg,#f4a261,#e76f51);box-shadow:0 5px 20px rgba(244,162,97,0.4)}
+.ov-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,0.6)}
+.ov-btn.sec{background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.06));box-shadow:none;border:1px solid rgba(255,255,255,0.15)}
 
-/* ======================================================
-   START SCREEN
-====================================================== */
+/* ═══════════════ START SCREEN ═══════════════ */
 .start-screen{
-  position:fixed;inset:0;z-index:300;
-  background:linear-gradient(180deg,#010e2a 0%,#01204e 30%,#023e7d 70%,#0353a4 100%);
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;padding:24px;text-align:center;
+  position:fixed;inset:0;z-index:300;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:20px;text-align:center;
+  background:radial-gradient(ellipse at 30% 40%,rgba(124,58,237,0.2) 0%,transparent 50%),
+    radial-gradient(ellipse at 70% 60%,rgba(6,182,212,0.12) 0%,transparent 50%),
+    linear-gradient(160deg,#020818,#0f0c29,#1e1b4b);
   overflow-y:auto;
 }
-.start-title{
-  font-family:'Bubblegum Sans',cursive;font-size:2.6rem;
-  background:linear-gradient(135deg,#90e0ef,#00b4d8,#2ec4b6,#ffd60a);
+.ss-title{font-family:'Orbitron',monospace;font-size:2.2rem;font-weight:900;
+  background:linear-gradient(135deg,#a78bfa,#67e8f9,#fbbf24);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;margin-bottom:6px;
-  filter:drop-shadow(0 0 20px rgba(0,180,216,0.5));
-  line-height:1.2;
+  background-clip:text;margin-bottom:6px;line-height:1.2;
+  filter:drop-shadow(0 0 24px rgba(124,58,237,0.4));}
+.ss-sub{color:var(--text-dim);font-size:0.88rem;font-weight:700;margin-bottom:18px}
+.ss-chars{display:flex;justify-content:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.ss-char-pick{
+  background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.12);
+  border-radius:18px;padding:14px 16px;cursor:pointer;transition:all 0.25s;
+  display:flex;flex-direction:column;align-items:center;gap:6px;min-width:110px;
 }
-.start-subtitle{
-  color:rgba(144,224,239,0.7);font-size:0.9rem;font-weight:700;
-  margin-bottom:16px;
+.ss-char-pick:hover{transform:translateY(-4px);border-color:rgba(167,139,250,0.5);background:rgba(124,58,237,0.12);box-shadow:0 8px 24px rgba(124,58,237,0.3)}
+.ss-char-pick.selected{border-color:var(--gold);background:rgba(251,191,36,0.1);box-shadow:0 0 20px rgba(251,191,36,0.3)}
+.ss-char-emoji{font-size:2.8rem;transition:transform 0.3s}
+.ss-char-pick:hover .ss-char-emoji,.ss-char-pick.selected .ss-char-emoji{transform:scale(1.15)}
+.ss-char-name{font-family:'Orbitron',monospace;font-size:0.72rem;font-weight:700;color:var(--text);white-space:nowrap}
+.ss-char-desc{font-size:0.65rem;color:var(--text-dim);font-weight:700;text-align:center;max-width:90px}
+.ss-story{
+  max-width:500px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);
+  border-radius:18px;padding:16px 20px;font-size:0.88rem;font-weight:700;
+  color:var(--text-dim);line-height:1.75;margin-bottom:18px;
 }
-.start-cast-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
-.cast-bubble{
-  background:rgba(0,60,120,0.6);border:1px solid rgba(144,224,239,0.25);
-  border-radius:16px;padding:10px 14px;font-size:0.85rem;font-weight:800;
-  color:rgba(202,240,248,0.9);display:flex;align-items:center;gap:6px;
-  transition:all 0.3s;
+.ss-story strong{color:var(--cyan-l)}
+.ss-features{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.ss-feat{background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);border-radius:10px;padding:5px 12px;font-size:0.75rem;font-weight:800;color:var(--nova-l)}
+.ss-btn{
+  padding:16px 48px;border:none;border-radius:18px;color:#fff;
+  font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:900;cursor:pointer;
+  background:linear-gradient(135deg,var(--nova),var(--cyan),#2563eb);
+  box-shadow:0 8px 30px rgba(124,58,237,0.5);transition:all 0.2s;
+  animation:ssBtnPulse 2.5s ease-in-out infinite;letter-spacing:1px;
 }
-.cast-bubble:hover{background:rgba(0,100,160,0.7);border-color:rgba(144,224,239,0.45);transform:translateY(-3px)}
-.start-story{
-  max-width:480px;background:rgba(0,30,80,0.6);
-  border:1px solid rgba(144,224,239,0.2);border-radius:20px;
-  padding:16px 20px;font-size:0.9rem;font-weight:700;
-  color:rgba(202,240,248,0.85);line-height:1.75;margin-bottom:22px;
-}
-.start-story strong{color:var(--gold)}
-.start-features{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:22px}
-.feat-tag{
-  background:rgba(46,196,182,0.15);border:1px solid rgba(46,196,182,0.3);
-  border-radius:12px;padding:5px 12px;font-size:0.8rem;font-weight:800;
-  color:var(--teal);
-}
-.start-btn{
-  padding:18px 52px;border:none;border-radius:20px;
-  font-family:'Bubblegum Sans',cursive;font-size:1.5rem;color:#fff;cursor:pointer;
-  background:linear-gradient(135deg,#0466c8,#0582e0,#00b4d8,#2ec4b6);
-  box-shadow:0 8px 30px rgba(0,180,216,0.5);
-  transition:all 0.2s;
-  animation:startPulse 2.5s ease-in-out infinite;
-}
-@keyframes startPulse{0%,100%{box-shadow:0 8px 30px rgba(0,180,216,0.5)}
-  50%{box-shadow:0 12px 40px rgba(0,180,216,0.8),0 0 0 10px rgba(0,180,216,0.08)}}
-.start-btn:hover{transform:translateY(-4px) scale(1.03)}
-.start-chars-display{display:flex;justify-content:center;gap:6px;margin-bottom:22px}
-.sc-char{
-  font-size:3rem;animation:scFloat var(--d,2s) ease-in-out infinite;
-  animation-delay:var(--dd,0s);
-}
-@keyframes scFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes ssBtnPulse{0%,100%{box-shadow:0 8px 30px rgba(124,58,237,0.5)}50%{box-shadow:0 12px 40px rgba(124,58,237,0.8),0 0 0 8px rgba(124,58,237,0.08)}}
+.ss-btn:hover{transform:translateY(-4px) scale(1.03)}
+.ss-btn:disabled{opacity:0.4;cursor:not-allowed;animation:none}
+.ss-select-hint{font-size:0.8rem;color:var(--rose-l);font-weight:700;margin-bottom:12px;display:none}
+.ss-select-hint.show{display:block}
 
-/* ======================================================
-   SOUND BUTTON
-====================================================== */
-.sound-btn{
-  width:38px;height:38px;border-radius:50%;background:rgba(0,60,120,0.6);
-  border:1px solid rgba(144,224,239,0.3);font-size:1.1rem;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:all 0.2s;
-  flex-shrink:0;
+/* ═══════════════ FX ═══════════════ */
+.spark-el{position:fixed;pointer-events:none;z-index:250;font-size:var(--sz,1.4rem);animation:sparkOut 1s ease-out forwards}
+@keyframes sparkOut{0%{transform:scale(0) translateY(0) translateX(0);opacity:1}100%{transform:scale(1.2) translateY(var(--ty,-80px)) translateX(var(--tx,0px));opacity:0}}
+.ring-el{position:fixed;pointer-events:none;z-index:249;border-radius:50%;border:2px solid rgba(16,185,129,0.5);animation:ringPop 0.6s ease-out forwards}
+@keyframes ringPop{0%{transform:scale(0);opacity:1}100%{transform:scale(2.5);opacity:0}}
+.confetti-p{position:fixed;pointer-events:none;z-index:250;animation:confFall linear forwards}
+@keyframes confFall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(600deg);opacity:0}}
+.planet-unlocked{
+  position:fixed;bottom:24px;right:20px;z-index:160;
+  background:linear-gradient(135deg,rgba(15,12,41,0.95),rgba(48,43,99,0.95));
+  border:2px solid rgba(251,191,36,0.4);border-radius:18px;
+  padding:12px 16px;max-width:220px;
+  box-shadow:0 8px 24px rgba(251,191,36,0.2);
+  transform:translateX(260px);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
 }
-.sound-btn:hover{background:rgba(0,100,160,0.7);transform:scale(1.1)}
+.planet-unlocked.show{transform:translateX(0)}
+.planet-unlocked-inner{display:flex;align-items:center;gap:10px;font-size:0.82rem;font-weight:800;color:var(--gold-l)}
 
-/* ======================================================
-   SPECIAL FX
-====================================================== */
-.bubble-pop{
-  position:fixed;pointer-events:none;z-index:250;
-  border-radius:50%;border:2px solid rgba(144,224,239,0.6);
-  background:rgba(144,224,239,0.15);
-  animation:bubblePop 0.6s ease-out forwards;
-}
-@keyframes bubblePop{0%{transform:scale(0);opacity:1}60%{transform:scale(1.2);opacity:0.8}100%{transform:scale(1.8);opacity:0}}
-
-.spark{
-  position:fixed;pointer-events:none;z-index:250;
-  font-size:var(--sz,1.5rem);
-  animation:sparkFly 1s ease-out forwards;
-}
-@keyframes sparkFly{0%{transform:scale(0) translateY(0);opacity:1}
-  60%{opacity:1}100%{transform:scale(1) translateY(var(--ty,-80px)) translateX(var(--tx,0px));opacity:0}}
-
-.confetti-p{
-  position:fixed;pointer-events:none;z-index:250;border-radius:50%;
-  animation:cFall linear forwards;
-}
-@keyframes cFall{0%{transform:translateY(-10px) rotate(0);opacity:1}
-  100%{transform:translateY(105vh) rotate(600deg);opacity:0}}
-
-/* Pearl whale popup */
-.whale-popup{
-  position:fixed;bottom:22px;left:20px;z-index:160;
-  background:rgba(1,30,80,0.9);border:2px solid rgba(144,224,239,0.35);
-  border-radius:20px;padding:12px 16px;max-width:220px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.4);
-  transform:translateX(-260px);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-}
-.whale-popup.show{transform:translateX(0)}
-.whale-inner{display:flex;align-items:center;gap:8px;font-size:0.82rem;font-weight:800;color:rgba(202,240,248,0.9)}
-
-/* Kiki crab bubble */
-.kiki-bubble{
-  position:fixed;top:70px;right:16px;z-index:160;
-  background:rgba(1,30,80,0.9);border:2px solid rgba(244,162,97,0.35);
-  border-radius:16px;padding:10px 14px;max-width:200px;
-  font-size:0.8rem;font-weight:800;color:rgba(253,232,200,0.9);
-  transform:translateX(240px);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  display:flex;gap:8px;align-items:center;
-}
-.kiki-bubble.show{transform:translateX(0)}
-
-/* ======================================================
-   RESPONSIVE
-====================================================== */
+/* ═══════════════ RESPONSIVE ═══════════════ */
 @media(max-width:700px){
-  .main-layout{grid-template-columns:1fr}
+  .main-grid{grid-template-columns:1fr}
   .right-panel{flex-direction:row;flex-wrap:wrap}
-  .marina-card{flex:1;min-width:240px}
-  .start-title{font-size:1.9rem}
-  .game-title{font-size:1.1rem}
-  .stat-chip{padding:6px 4px}
+  .char-card{flex:1;min-width:230px}
+  .ss-title{font-size:1.6rem}
+  .hud-title{font-size:0.88rem}
+  .planet-map{justify-content:flex-start}
 }
 </style>
 </head>
 <body>
+<canvas id="starCanvas"></canvas>
+<div class="nebula-bg"></div>
 
-<!-- ===== OCEAN BACKGROUND ===== -->
-<div class="ocean-bg" id="oceanBg"></div>
-
-<!-- ===== START SCREEN ===== -->
-<div class="start-screen" id="startScreen">
-  <div class="start-chars-display">
-    <div class="sc-char" style="--d:2s;--dd:0s">🧜‍♀️</div>
-    <div class="sc-char" style="--d:2.4s;--dd:0.2s">🐠</div>
-    <div class="sc-char" style="--d:1.8s;--dd:0.4s">🐢</div>
-    <div class="sc-char" style="--d:2.2s;--dd:0.1s">🦀</div>
-    <div class="sc-char" style="--d:2s;--dd:0.6s">🐙</div>
-    <div class="sc-char" style="--d:2.6s;--dd:0.3s">🐳</div>
+<!-- ═══ PLANET UNLOCK TOAST ═══ -->
+<div class="planet-unlocked" id="planetToast">
+  <div class="planet-unlocked-inner">
+    <span id="toastEmoji" style="font-size:2rem">🪐</span>
+    <div><div style="font-size:0.7rem;color:var(--gold);margin-bottom:1px">HÀNH TINH MỚI!</div><span id="toastText">Mở khoá thành công!</span></div>
   </div>
-  <h1 class="start-title">🌊 Vương Quốc San Hô</h1>
-  <p class="start-subtitle">Bí Mật Phân Số Đại Dương – Lớp 4 Nâng Cao ✨</p>
-  <div class="start-story">
-    Phù thủy <strong>Bạch Tuộc Malvora</strong> đã đánh cắp <strong>7 Viên Ngọc Phân Số</strong> — nguồn năng lượng giữ đại dương cân bằng! 🌊<br><br>
-    Công chúa tiên cá <strong>Marina</strong> cùng chú cá hề <strong>Coral</strong>, rùa già <strong>Triton</strong>, và cua nhỏ <strong>Kiki</strong> cần bạn giải các câu đố phân số để lấy lại từng viên ngọc! 💎
-  </div>
-  <div class="start-cast-row">
-    <div class="cast-bubble">🧜‍♀️ Marina — Công chúa tiến hóa</div>
-    <div class="cast-bubble">🐠 Coral — Thú cưng đồng hành</div>
-    <div class="cast-bubble">🐢 Triton — Gửi thư gợi ý</div>
-    <div class="cast-bubble">🦀 Kiki — Giữ bản đồ thế giới</div>
-    <div class="cast-bubble">🐳 Pearl — Xuất hiện khi combo!</div>
-    <div class="cast-bubble">🐙 Malvora — Boss cuối!</div>
-  </div>
-  <div class="start-features">
-    <div class="feat-tag">🗺️ 7 vùng biển</div>
-    <div class="feat-tag">💎 7 Viên ngọc</div>
-    <div class="feat-tag">🐠 Thú cưng phản ứng</div>
-    <div class="feat-tag">🎵 Âm thanh Web Audio</div>
-    <div class="feat-tag">💌 Thư từ Triton</div>
-    <div class="feat-tag">🧜‍♀️ Marina 5 cấp</div>
-  </div>
-  <button class="start-btn" onclick="startGame()">🌊 Lặn xuống đại dương!</button>
 </div>
 
-<!-- ===== OVERLAYS ===== -->
+<!-- ═══ START SCREEN ═══ -->
+<div class="start-screen" id="startScreen">
+  <div style="font-size:3.5rem;margin-bottom:14px;letter-spacing:4px;animation:ovFloat 2s ease-in-out infinite">🚀✨🌌</div>
+  <h1 class="ss-title">PHI HÀNH GIA NHỎ</h1>
+  <p class="ss-sub">Phân Số Vũ Trụ · Lớp 4 · Hệ thống thích nghi thông minh</p>
+  <div class="ss-story">
+    Tàu vũ trụ <strong>Starlight-7</strong> bị hỏng hệ thống điều hướng khi đang khám phá dải Ngân Hà! Robot trợ lý <strong>Bot-9</strong> và phi công <strong>Captain Orion</strong> cần bạn giải các <strong>câu đố phân số</strong> để sửa từng module — vượt qua <strong>7 hành tinh</strong> để trở về Trái Đất! 🌍
+  </div>
+  <p style="font-size:0.82rem;font-weight:800;color:var(--nova-l);margin-bottom:10px">👩‍🚀 Chọn phi hành gia của bạn:</p>
+  <div class="ss-chars" id="charPicker">
+    <div class="ss-char-pick" data-char="0" onclick="pickChar(0)">
+      <span class="ss-char-emoji">👩‍🚀</span>
+      <span class="ss-char-name">NOVA</span>
+      <span class="ss-char-desc">Nhanh nhẹn · Chuyên gia phân số</span>
+    </div>
+    <div class="ss-char-pick" data-char="1" onclick="pickChar(1)">
+      <span class="ss-char-emoji">🧑‍🚀</span>
+      <span class="ss-char-name">ATLAS</span>
+      <span class="ss-char-desc">Mạnh mẽ · Thích thử thách</span>
+    </div>
+    <div class="ss-char-pick" data-char="2" onclick="pickChar(2)">
+      <span class="ss-char-emoji">👸</span>
+      <span class="ss-char-name">STELLA</span>
+      <span class="ss-char-desc">Thông minh · Giải nhanh</span>
+    </div>
+    <div class="ss-char-pick" data-char="3" onclick="pickChar(3)">
+      <span class="ss-char-emoji">🦸‍♀️</span>
+      <span class="ss-char-name">LUNA</span>
+      <span class="ss-char-desc">Siêu anh hùng toán học</span>
+    </div>
+  </div>
+  <div class="ss-select-hint" id="ssHint">⬆️ Chọn nhân vật trước nhé!</div>
+  <div class="ss-features">
+    <div class="ss-feat">🪐 7 hành tinh</div>
+    <div class="ss-feat">⏱️ Đếm ngược mỗi câu</div>
+    <div class="ss-feat">🎲 80+ câu random</div>
+    <div class="ss-feat">🧠 Thích nghi điểm yếu</div>
+    <div class="ss-feat">🔥 Combo bonus</div>
+    <div class="ss-feat">🎵 Âm thanh</div>
+  </div>
+  <button class="ss-btn" id="ssBtn" onclick="startGame()">🚀 PHÓNG TÀU!</button>
+</div>
+
+<!-- ═══ GAME OVERLAY ═══ -->
 <div class="overlay" id="gameOverlay">
   <div class="ov-card">
     <span class="ov-emoji" id="ovEmoji">🎉</span>
-    <h2 class="ov-title win" id="ovTitle">Tuyệt vời!</h2>
+    <h2 class="ov-title" id="ovTitle">Tuyệt vời!</h2>
     <div class="ov-chars" id="ovChars"></div>
     <p class="ov-desc" id="ovDesc"></p>
     <div class="ov-stars" id="ovStars"></div>
+    <div class="ov-report" id="ovReport"></div>
     <button class="ov-btn" id="ovPrimary" onclick="overlayPrimary()">Tiếp tục →</button>
-    <br>
-    <button class="ov-btn warn" id="ovSecond" onclick="overlaySecond()" style="margin-top:8px">🔄 Thử lại</button>
+    <button class="ov-btn sec" id="ovSecond" onclick="overlaySecond()" style="margin-top:6px">🔄 Thử lại</button>
   </div>
 </div>
 
-<!-- ===== WHALE POPUP ===== -->
-<div class="whale-popup" id="whalePopup">
-  <div class="whale-inner"><span style="font-size:2rem">🐳</span><span id="whaleText">Combo tuyệt vời!</span></div>
-</div>
-
-<!-- ===== KIKI BUBBLE ===== -->
-<div class="kiki-bubble" id="kikiMsg">
-  <span style="font-size:1.5rem">🦀</span><span id="kikiText">Bản đồ cập nhật!</span>
-</div>
-
-<!-- ===== MAIN GAME ===== -->
-<div class="game-wrap">
-
-  <!-- TOP HUD -->
-  <div class="top-hud">
-    <span class="game-title">🌊 Vương Quốc San Hô</span>
+<!-- ═══ MAIN GAME ═══ -->
+<div class="wrap">
+  <!-- HUD -->
+  <div class="hud">
+    <span class="hud-title">🚀 STARLIGHT-7</span>
     <div class="hud-lives" id="livesEl"></div>
-    <div class="combo-pill" id="comboPill">🔥 ×<span id="comboNum">2</span></div>
-    <div class="hud-score">💎 <span id="scoreEl">0</span></div>
-    <div class="gem-bar" id="gemBar"></div>
-    <button class="sound-btn" id="soundBtn" onclick="toggleSound()" title="Bật/Tắt âm thanh">🔊</button>
+    <div class="hud-zone" id="hudZone">🪐 Hành tinh 1</div>
+    <div class="combo-tag" id="comboTag">⚡ ×<span id="comboNum">2</span></div>
+    <div class="hud-score-box">⭐ <span id="scoreEl">0</span></div>
+    <button class="sound-btn" id="sndBtn" onclick="toggleSound()">🔊</button>
   </div>
 
-  <!-- WORLD MAP -->
-  <div class="world-map">
-    <div class="map-scroll" id="mapScroll"></div>
-  </div>
+  <!-- PLANET MAP -->
+  <div class="planet-map" id="planetMap"></div>
 
-  <!-- STAGE AREA -->
-  <div class="main-layout">
-
-    <!-- LEFT: QUEST -->
-    <div class="quest-panel">
-      <div class="zone-header">
-        <div>
-          <div class="zone-title" id="zoneTitleEl">🪸 Vùng San Hô</div>
-          <div class="zone-theme" id="zoneThemeEl">Nhận biết phân số</div>
+  <!-- MAIN CONTENT -->
+  <div class="main-grid">
+    <!-- LEFT: QUESTION -->
+    <div class="q-panel">
+      <!-- Timer + meta -->
+      <div class="timer-wrap">
+        <div class="timer-arc-box">
+          <svg width="64" height="64" viewBox="0 0 64 64">
+            <circle class="timer-bg" cx="32" cy="32" r="27"/>
+            <circle class="timer-fill" id="timerArc" cx="32" cy="32" r="27"/>
+          </svg>
+          <div class="timer-num" id="timerNum">20</div>
         </div>
-        <div class="progress-track" style="flex:1;max-width:140px">
-          <div class="progress-fill" id="progFill" style="width:0%"></div>
-        </div>
-      </div>
-
-      <!-- Letter from character -->
-      <div class="letter-box" id="letterBox">
-        <div class="letter-avatar" id="letterAvatar">🐢</div>
-        <div class="letter-body">
-          <div class="letter-sender" id="letterSender">Rùa Triton</div>
-          <div class="letter-text" id="letterText">Xin chào! Ta là Triton, rùa già nhất đại dương. Hãy để ta dạy con về phân số!</div>
+        <div class="timer-right">
+          <div class="planet-badge" id="planetBadge">🪐 Hành tinh 1</div>
+          <div class="q-meta">
+            <div class="q-progress-track"><div class="q-progress-fill" id="qProgFill" style="width:0%"></div></div>
+            <div class="q-count" id="qCount">0/5</div>
+            <div class="difficulty-badge diff-easy" id="diffBadge">⭐ Dễ</div>
+            <div class="topic-chip" id="topicChip">📐 Nhận biết</div>
+          </div>
         </div>
       </div>
 
-      <!-- Question card -->
-      <div class="q-card">
-        <div class="q-text" id="qText">Đang tải câu hỏi...</div>
-        <div class="q-visual" id="qVisual"></div>
-        <div class="opts-grid" id="optsGrid"></div>
-        <div class="feedback" id="feedbackEl"></div>
-      </div>
+      <!-- Story context -->
+      <div class="q-story" id="qStory">Hãy chuẩn bị khởi động!</div>
 
-      <button class="next-btn" id="nextBtn" onclick="handleNext()">Tiếp tục 🌊</button>
+      <!-- Question -->
+      <div class="q-text" id="qText">Đang tải câu hỏi...</div>
+      <div class="q-visual" id="qVisual"></div>
+      <div class="opts" id="optsEl"></div>
+      <div class="feedback" id="feedbackEl"></div>
+      <button class="next-btn" id="nextBtn" onclick="handleNext()">Tiếp tục <kbd>Enter</kbd></button>
     </div>
 
     <!-- RIGHT -->
     <div class="right-panel">
-
-      <!-- Marina card -->
-      <div class="marina-card">
-        <div class="marina-label">🧜‍♀️ Công chúa Marina</div>
-        <div class="marina-stage">
-          <div class="marina-aura" id="marinaAura"></div>
-          <svg class="marina-svg" id="marinaSvg" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg"></svg>
+      <!-- Character -->
+      <div class="char-card">
+        <div class="char-label" id="charLabel">NOVA – PHI HÀNH GIA</div>
+        <div class="char-stage">
+          <div class="char-aura" id="charAura"></div>
+          <svg class="char-svg" id="charSvg" viewBox="0 0 150 180" xmlns="http://www.w3.org/2000/svg"></svg>
         </div>
-        <div class="marina-rank" id="marinaRank">🌱 Tiên cá nhỏ</div>
-        <div class="gem-collection" id="gemCollection"></div>
-        <div class="stats-row" style="margin-top:8px">
-          <div class="stat-chip"><div class="stat-num correct" id="stCorrect">0</div><div class="stat-lbl">✅ Đúng</div></div>
-          <div class="stat-chip"><div class="stat-num wrong" id="stWrong">0</div><div class="stat-lbl">❌ Sai</div></div>
-          <div class="stat-chip"><div class="stat-num score" id="stScore">0</div><div class="stat-lbl">⭐ Điểm</div></div>
+        <div class="char-rank" id="charRank">🌱 Phi hành gia tập sự</div>
+        <div class="oxygen-bar-wrap">
+          <div class="oxygen-label"><span>🫁 Oxy còn lại</span><span id="oxyPct">100%</span></div>
+          <div class="oxygen-track"><div class="oxygen-fill" id="oxyFill" style="width:100%"></div></div>
+        </div>
+        <div class="inventory" id="inventory"></div>
+        <div class="stats-mini">
+          <div class="stat-m"><div class="stat-m-num c" id="stC">0</div><div class="stat-m-lbl">✅ Đúng</div></div>
+          <div class="stat-m"><div class="stat-m-num w" id="stW">0</div><div class="stat-m-lbl">❌ Sai</div></div>
+          <div class="stat-m"><div class="stat-m-num s" id="stS">0</div><div class="stat-m-lbl">⭐ Điểm</div></div>
         </div>
       </div>
 
-      <!-- Coral pet -->
-      <div class="pet-card">
-        <div class="pet-header">
-          <div class="pet-avatar" id="coralAvatar">🐠</div>
-          <div class="pet-info">
-            <div class="pet-name">Coral – Cá hề đồng hành</div>
-            <div class="pet-mood" id="coralMood">😊 Vui vẻ bơi lội</div>
-          </div>
+      <!-- Bot-9 -->
+      <div class="bot-card">
+        <div class="bot-avatar" id="botAvatar">🤖</div>
+        <div class="bot-info">
+          <div class="bot-name">BOT-9</div>
+          <div class="bot-mood" id="botMood">⚙️ Hệ thống sẵn sàng</div>
+          <div class="bot-say" id="botSay">Beep boop! Hãy giải câu đố để sửa tàu! 🔧</div>
         </div>
-        <div class="pet-speech" id="coralSpeech">Bloop bloop! Cùng Marina giải câu đố nào! 🐠</div>
       </div>
 
-      <!-- Triton hint -->
-      <div class="triton-mini">
-        <div class="triton-mini-avatar">🐢</div>
+      <!-- Captain Orion -->
+      <div class="pilot-card">
+        <div class="pilot-avatar" id="pilotAvatar">👨‍✈️</div>
         <div>
-          <div class="triton-mini-name">📜 Triton nhắn:</div>
-          <div class="triton-mini-text" id="tritonHint">Hãy đọc kỹ câu hỏi trước khi trả lời!</div>
+          <div class="pilot-name">CAPTAIN ORION</div>
+          <div class="pilot-say" id="pilotSay">Hệ thống điều hướng chờ lệnh! Hãy giải phân số để đi tiếp nhé!</div>
         </div>
       </div>
 
+      <!-- Adaptive weakness -->
+      <div class="weak-bar" id="weakBar">
+        <div class="weak-title">🎯 Điểm yếu cần luyện</div>
+        <div id="weakList"></div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-//  AUDIO ENGINE (Web Audio API)
-// ═══════════════════════════════════════════════════════
-let AudioCtx = null, soundOn = true;
-function getACtx(){ if(!AudioCtx) AudioCtx = new (window.AudioContext||window.webkitAudioContext)(); return AudioCtx; }
-function playTone(freq, dur=0.12, type='sine', vol=0.12, delay=0){
-  if(!soundOn) return;
-  try{
-    const a = getACtx(), osc = a.createOscillator(), g = a.createGain();
-    osc.type=type; osc.frequency.setValueAtTime(freq,a.currentTime+delay);
-    g.gain.setValueAtTime(vol,a.currentTime+delay);
-    g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+delay+dur);
-    osc.connect(g); g.connect(a.destination);
-    osc.start(a.currentTime+delay); osc.stop(a.currentTime+delay+dur+0.01);
-  }catch(e){}
-}
-function playCorrect(){
-  [523,659,784,1047].forEach((f,i)=>playTone(f,0.12,'sine',0.1,i*0.07));
-}
-function playWrong(){
-  playTone(220,0.2,'sawtooth',0.08);
-  setTimeout(()=>playTone(180,0.2,'sawtooth',0.07),120);
-}
-function playBubble(){ [600,800,1000].forEach((f,i)=>playTone(f,0.06,'sine',0.06,i*0.04)); }
-function playLevelUp(){
-  [523,659,784,1047,1319,1568].forEach((f,i)=>playTone(f,0.15,'triangle',0.1,i*0.09));
-}
-function playClick(){ playTone(440,0.06,'sine',0.08); }
-function toggleSound(){
-  soundOn = !soundOn;
-  document.getElementById('soundBtn').textContent = soundOn ? '🔊' : '🔇';
-  if(soundOn) playBubble();
+// ═══════════════════════════════════════════════════
+//  STARFIELD
+// ═══════════════════════════════════════════════════
+(function(){
+  const c=document.getElementById('starCanvas');
+  const ctx=c.getContext('2d');
+  let W,H,stars=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;init()}
+  function init(){
+    stars=[];
+    for(let i=0;i<260;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+0.2,a:Math.random(),da:(Math.random()-0.5)*0.008,col:Math.random()>0.85?`hsl(${200+Math.random()*60},80%,80%)`:'white'});
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      s.a=Math.max(0.05,Math.min(1,s.a+s.da));
+      if(s.a<=0.05||s.a>=1)s.da*=-1;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${s.col==='white'?'255,255,255':s.col.match(/\d+/g).map(Number).join(',')},${s.a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',resize);resize();draw();
+})();
+
+// ═══════════════════════════════════════════════════
+//  AUDIO
+// ═══════════════════════════════════════════════════
+let AC=null,soundOn=true;
+function ac(){if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();return AC}
+function tone(f,d=0.12,t='sine',v=0.1,dl=0){
+  if(!soundOn)return;
+  try{const a=ac(),o=a.createOscillator(),g=a.createGain();
+    o.type=t;o.frequency.setValueAtTime(f,a.currentTime+dl);
+    g.gain.setValueAtTime(v,a.currentTime+dl);
+    g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+dl+d);
+    o.connect(g);g.connect(a.destination);o.start(a.currentTime+dl);o.stop(a.currentTime+dl+d+0.01);
+  }catch(e){}}
+function playOk(){[523,659,784,1047].forEach((f,i)=>tone(f,0.1,'sine',0.09,i*0.07))}
+function playBad(){tone(280,0.18,'sawtooth',0.08);setTimeout(()=>tone(220,0.18,'sawtooth',0.07),130)}
+function playTick(){tone(880,0.05,'sine',0.05)}
+function playUrgent(){tone(440,0.08,'square',0.06);setTimeout(()=>tone(400,0.08,'square',0.06),90)}
+function playLevelUp(){[523,659,784,1047,1319,1568,2093].forEach((f,i)=>tone(f,0.13,'triangle',0.09,i*0.08))}
+function playClick(){tone(440,0.05,'sine',0.07)}
+function toggleSound(){soundOn=!soundOn;document.getElementById('sndBtn').textContent=soundOn?'🔊':'🔇';if(soundOn)tone(660,0.1)}
+
+// ═══════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════
+function gcd(a,b){return b===0?a:gcd(b,a%b)}
+function lcm(a,b){return a*b/gcd(a,b)}
+function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+
+// ═══════════════════════════════════════════════════
+//  QUESTION POOL — 80+ questions, tagged by topic & difficulty
+// ═══════════════════════════════════════════════════
+// Topics: 'recognize','reallife','equal','simplify','compare','add_same','sub_same','add_diff','sub_diff','multiply','divide','mixed'
+// Difficulty: 1=easy, 2=medium, 3=hard, 4=boss
+// Each question is generated dynamically via factory functions for infinite variety
+
+function makeRecognizeQ(){
+  const templates=[
+    ()=>{const d=rnd(3,10),n=rnd(1,d-1);return{
+      story:`🪐 Trạm vũ trụ có ${d} khoang bằng nhau. Khoang màu xanh có ${n} khoang.`,
+      q:`Phần khoang màu xanh chiếm bao nhiêu?`,
+      vis:()=>vBlocks(n,d,'#67e8f9'),
+      ans:`${n}/${d}`,
+      opts:shuffle([`${n}/${d}`,`${d}/${n}`,`${d-n}/${d}`,`${n}/${d-n}`]).slice(0,4),
+      ex:`${d} khoang tổng → mẫu số ${d}. ${n} khoang xanh → tử số ${n}. Phân số: ${n}/${d}`
+    }},
+    ()=>{const d=rnd(4,12),n=rnd(1,d-1);return{
+      story:`🌟 Chùm sao có ${d} ngôi. ${n} ngôi đang sáng.`,
+      q:`Phần sao đang sáng là?`,
+      vis:()=>vStars(n,d),
+      ans:`${n}/${d}`,
+      opts:shuffle([`${n}/${d}`,`${d-n}/${d}`,`${d}/${n}`,`1/${d}`]).slice(0,4),
+      ex:`Tổng ${d} sao, ${n} sao sáng → phân số ${n}/${d}`
+    }},
+    ()=>{const d=rnd(3,8),n=rnd(1,d-1);return{
+      story:`🔧 Robot sửa ${d} module tàu. Đã sửa xong ${n} module.`,
+      q:`Phần module đã sửa là?`,
+      vis:()=>vPie(n,d,'#a78bfa'),
+      ans:`${n}/${d}`,
+      opts:shuffle([`${n}/${d}`,`${d-n}/${d}`,`${n}/${d-n}`,`${d}/${n}`]).slice(0,4),
+      ex:`Sửa ${n} trong ${d} module → phân số ${n}/${d}`
+    }},
+    ()=>{const n=rnd(1,4),d=rnd(n+1,8);return{
+      story:`🚀 Tàu cần ${d} viên năng lượng. Đã nạp ${n} viên.`,
+      q:`Phần năng lượng đã nạp là?`,
+      vis:()=>vSegments(n,d,'#fbbf24'),
+      ans:`${n}/${d}`,
+      opts:shuffle([`${n}/${d}`,`${d}/${n}`,`${d-n}/${d}`,`${n+1}/${d}`]).slice(0,4),
+      ex:`Nạp ${n} trong ${d} viên → phân số ${n}/${d}`
+    }},
+  ];
+  const q=pick(templates)();
+  q.topic='recognize';q.diff=1;q.time=20;
+  q.diffLabel='⭐ Dễ';q.diffClass='diff-easy';
+  return q;
 }
 
-// ═══════════════════════════════════════════════════════
-//  OCEAN BACKGROUND BUILDER
-// ═══════════════════════════════════════════════════════
-function buildOceanBg(){
-  const bg = document.getElementById('oceanBg');
-  // Caustic shafts
-  for(let i=0;i<12;i++){
-    const d=document.createElement('div');
-    d.className='caustic';
-    d.style.cssText=`left:${5+i*8}%;height:${60+Math.random()*40}%;
-      width:${2+Math.random()*4}px;
-      animation-duration:${4+Math.random()*6}s;
-      animation-delay:${Math.random()*4}s;
-      --r:${2+Math.random()*6}deg;--dx:${15+Math.random()*25}px;
-      opacity:${0.3+Math.random()*0.4};`;
-    bg.appendChild(d);
-  }
-  // Bubbles
-  for(let i=0;i<30;i++){
-    const b=document.createElement('div');
-    b.className='bubble';
-    const sz=4+Math.random()*10;
-    b.style.cssText=`width:${sz}px;height:${sz}px;
-      left:${Math.random()*100}%;bottom:${Math.random()*20}%;
-      animation-duration:${6+Math.random()*12}s;
-      animation-delay:${Math.random()*10}s;
-      --bx:${-15+Math.random()*30}px;`;
-    bg.appendChild(b);
-  }
-  // Sea creatures (subtle)
-  const creatures=['🐟','🐡','🐠','⭐','🦐'];
-  for(let i=0;i<8;i++){
-    const c=document.createElement('div');
-    c.className='sea-creature';
-    c.textContent=creatures[i%creatures.length];
-    c.style.cssText=`left:${5+Math.random()*90}%;top:${20+Math.random()*60}%;
-      --sz:${0.9+Math.random()*0.8}rem;
-      animation-duration:${8+Math.random()*12}s;
-      animation-delay:${Math.random()*8}s;`;
-    bg.appendChild(c);
-  }
-  // Seaweed
-  const swEmojis=['🌿','🪸','🌾'];
-  for(let i=0;i<7;i++){
-    const sw=document.createElement('div');
-    sw.className='seaweed';
-    sw.textContent=swEmojis[i%swEmojis.length];
-    sw.style.cssText=`left:${3+i*14}%;
-      animation-duration:${2+Math.random()*2}s;
-      animation-delay:${Math.random()*2}s;
-      font-size:${1.5+Math.random()}rem;opacity:0.3;`;
-    bg.appendChild(sw);
-  }
+function makeRealLifeQ(){
+  const templates=[
+    ()=>{const total=rnd(8,20),used=rnd(1,total-1);return{
+      story:`⛽ Bình nhiên liệu tàu chứa ${total} lít. Đã dùng ${used} lít.`,
+      q:`Phần nhiên liệu đã dùng là?`,
+      vis:()=>vRuler(used,total,'#f97316'),
+      ans:`${used}/${total}`,
+      opts:shuffle([`${used}/${total}`,`${total-used}/${total}`,`${used}/${total-used}`,`1/${used}`]).slice(0,4),
+      ex:`Dùng ${used} lít trong ${total} lít → phân số ${used}/${total}`
+    }},
+    ()=>{const total=rnd(10,24),eaten=rnd(1,total-1);return{
+      story:`🍕 Pizza không gian có ${total} miếng. Phi hành đoàn ăn ${eaten} miếng.`,
+      q:`Phần pizza đã ăn là?`,
+      vis:()=>vPie(eaten,total,'#f43f5e'),
+      ans:`${eaten}/${total}`,
+      opts:shuffle([`${eaten}/${total}`,`${total-eaten}/${total}`,`${eaten}/${total+eaten}`,`${total}/${eaten}`]).slice(0,4),
+      ex:`Ăn ${eaten} trong ${total} miếng → phân số ${eaten}/${total}`
+    }},
+    ()=>{const d=rnd(6,15),n=rnd(1,d-1);const left=d-n;return{
+      story:`🌍 Hành trình ${d} ngày. Tàu đã bay được ${n} ngày.`,
+      q:`Phần hành trình CÒN LẠI là?`,
+      vis:()=>vRuler(left,d,'#10b981'),
+      ans:`${left}/${d}`,
+      opts:shuffle([`${left}/${d}`,`${n}/${d}`,`${d}/${left}`,`1/${left}`]).slice(0,4),
+      ex:`Còn lại ${d}-${n}=${left} ngày trong ${d} ngày → phân số ${left}/${d}`
+    }},
+  ];
+  const q=pick(templates)();
+  q.topic='reallife';q.diff=1;q.time=22;
+  q.diffLabel='⭐ Dễ';q.diffClass='diff-easy';
+  return q;
 }
 
-// ═══════════════════════════════════════════════════════
-//  GCD helper
-// ═══════════════════════════════════════════════════════
-function gcd(a,b){return b===0?a:gcd(b,a%b);}
-function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r;}
+function makeEqualQ(){
+  const templates=[
+    ()=>{const b=rnd(2,5),n=rnd(1,b-1),mult=rnd(2,4);return{
+      story:`🔮 Hệ thống cần nhân phân số để mở rộng công thức.`,
+      q:`${n}/${b} = ?/${b*mult} — điền số còn thiếu:`,
+      vis:()=>vFillIn(`${n}`,`${b}`,`?`,`${b*mult}`),
+      ans:`${n*mult}`,
+      opts:shuffle([`${n*mult}`,`${n*mult-1}`,`${n*mult+1}`,`${n+mult}`]).slice(0,4),
+      ex:`${b}×${mult}=${b*mult}, nên ${n}×${mult}=${n*mult}. Đáp án: ${n*mult}`
+    }},
+    ()=>{const n=rnd(1,4),d=rnd(2,6),mult=rnd(2,4);return{
+      story:`🧪 Robot cần rút gọn phân số để tối ưu năng lượng.`,
+      q:`Phân số nào BẰNG ${n*mult}/${d*mult}?`,
+      vis:()=>vEqual(n*mult,d*mult,n,d),
+      ans:`${n}/${d}`,
+      opts:shuffle([`${n}/${d}`,`${n+1}/${d}`,`${n}/${d+1}`,`${n*2}/${d*2+1}`]).slice(0,4),
+      ex:`${n*mult}/${d*mult} ÷ ${mult} = ${n}/${d}`
+    }},
+    ()=>{const n=rnd(1,4),d=rnd(n+1,7),div=gcd(n*2,d*2);return{
+      story:`⚙️ Hệ thống phân tích: hai phân số có bằng nhau không?`,
+      q:`${n*2}/${d*2} và ${n}/${d} — quan hệ là?`,
+      vis:()=>vEqualCheck(n*2,d*2,n,d),
+      ans:`Bằng nhau`,
+      opts:shuffle([`Bằng nhau`,`Khác nhau`,`Không so sánh được`,`${n*2}/${d*2} lớn hơn`]).slice(0,4),
+      ex:`${n*2}/${d*2} ÷ 2 = ${n}/${d}. Hai phân số bằng nhau!`
+    }},
+  ];
+  const q=pick(templates)();
+  q.topic='equal';q.diff=2;q.time=25;
+  q.diffLabel='🌟 Trung bình';q.diffClass='diff-med';
+  return q;
+}
 
-// ═══════════════════════════════════════════════════════
-//  ZONES / LEVELS
-// ═══════════════════════════════════════════════════════
-const ZONES = [
-  { id:1, name:"Vũng San Hô",    emoji:"🪸", gem:"💎", gemColor:"#90e0ef",
-    theme:"Nhận biết & Đọc phân số",
-    letter:{from:"🐢",name:"Rùa Triton",text:"Con thân mến! Phân số là cách chia đều một vật thành nhiều phần bằng nhau rồi lấy một số phần. Tử số (trên) là phần lấy, mẫu số (dưới) là chia bao nhiêu phần. Hãy quan sát thật kỹ!"},
-    tritonHints:["Nhìn vào hình: đếm tổng số phần trước, rồi đếm phần tô màu!","Mẫu số = tổng số phần. Tử số = số phần được chọn.","Đừng nhầm tử số và mẫu số! Tử ở TRÊN, mẫu ở DƯỚI."],
-    coralSays:{happy:["Bloop! Đúng rồi! Coral múa vui!","Wow! Bạn giỏi hơn cả Coral!","Splash! Câu trả lời hoàn hảo!"],sad:["Blub... Sai rồi nhưng không sao!","Bloop bloop... Đọc gợi ý của Triton nha!","Ôi... Thử lại lần sau nhé!"]},
-    questions: buildZ1()
-  },
-  { id:2, name:"Hang Vỏ Sò",     emoji:"🐚", gem:"🔮", gemColor:"#c77dff",
-    theme:"Phân số bằng nhau & Rút gọn",
-    letter:{from:"🐢",name:"Rùa Triton",text:"Bí mật của phân số: 1/2 và 2/4 đều bằng nhau! Khi chia cả tử và mẫu cho cùng một số (ƯCLN), ta rút gọn phân số. Khi nhân cả tử và mẫu với cùng số, ta mở rộng phân số!"},
-    tritonHints:["Để rút gọn: tìm số lớn nhất chia được cả tử lẫn mẫu!","ƯCLN(4,8)=4 → 4/8 ÷ 4 = 1/2","Hai phân số bằng nhau khi rút gọn về dạng giống nhau!"],
-    coralSays:{happy:["Phân số bằng nhau như anh em sinh đôi!","Coral cũng học được điều mới!","Brilliant! Bạn hiểu rất nhanh!"],sad:["Hmm... Thử tính ƯCLN trước nhé!","Đừng lo, phân số khó mà!","Triton có gợi ý hay đó!"]},
-    questions: buildZ2()
-  },
-  { id:3, name:"Dòng Xoáy Bạc",  emoji:"🌊", gem:"💠", gemColor:"#00b4d8",
-    theme:"So sánh phân số nâng cao",
-    letter:{from:"🐢",name:"Rùa Triton",text:"Quy tắc so sánh: Cùng mẫu → so tử. Cùng tử → mẫu lớn hơn thì NHỎ hơn. Khác cả hai → quy đồng mẫu số (nhân chéo hoặc tìm BCNN)! Đây là kỹ năng quan trọng nhất!"},
-    tritonHints:["Cùng mẫu: 3/7 và 5/7 → 3<5 → 3/7 < 5/7","Cùng tử: 1/3 và 1/5 → mẫu 5>3 → 1/5 < 1/3","Khác mẫu: quy đồng rồi so! 2/3 = 8/12, 3/4 = 9/12 → 3/4 lớn hơn!"],
-    coralSays:{happy:["So sánh phân số như chọn miếng cá to hơn!","Coral học được trick mới từ bạn!","Giỏi quá! Malvora sợ rồi đó!"],sad:["Quy đồng mẫu trước đi nào!","Cùng mẫu mới so được tử!","Thử nghĩ: miếng nào to hơn?"]},
-    questions: buildZ3()
-  },
-  { id:4, name:"Hang Mực Tối",    emoji:"🐙", gem:"💜", gemColor:"#9d4edd",
-    theme:"Cộng & Trừ phân số cùng mẫu",
-    letter:{from:"🐢",name:"Rùa Triton",text:"Cộng trừ phân số CÙNG MẪU: Chỉ cộng/trừ tử số, mẫu GIỮ NGUYÊN! Ví dụ: 2/7 + 3/7 = 5/7. Lưu ý: đừng cộng cả mẫu số nhé, đó là lỗi phổ biến nhất!"},
-    tritonHints:["2/5 + 1/5 = 3/5. Mẫu vẫn là 5!","7/9 - 3/9 = 4/9. Không phải 4/0!","Kết quả có thể rút gọn: 4/8 = 1/2"],
-    coralSays:{happy:["Bloop! Cộng phân số đơn giản mà!","Coral ước gì được ăn 3/5 cá...","Đỉnh quá! Malvora không ngờ!"],sad:["Nhớ giữ mẫu số nhé!","Đừng cộng cả mẫu số!","Thử lại: tử + tử, mẫu giữ nguyên!"]},
-    questions: buildZ4()
-  },
-  { id:5, name:"Rừng Rong Biển",  emoji:"🌿", gem:"💚", gemColor:"#2ec4b6",
-    theme:"Cộng & Trừ phân số khác mẫu",
-    letter:{from:"🐢",name:"Rùa Triton",text:"Khác mẫu: PHẢI quy đồng trước! Tìm BCNN của hai mẫu, rồi đổi cả hai phân số về mẫu chung đó, sau đó mới cộng/trừ tử. Đây là kỹ năng nâng cao – hãy kiên nhẫn!"},
-    tritonHints:["1/2 + 1/3: BCNN(2,3)=6. 1/2=3/6, 1/3=2/6. Kết quả: 5/6!","1/4 + 1/6: BCNN(4,6)=12. 3/12+2/12=5/12","Luôn tìm BCNN nhỏ nhất để tính dễ hơn!"],
-    coralSays:{happy:["Wow! Quy đồng mẫu số siêu giỏi!","Coral mà biết cái này sớm hơn thì tốt!","Phân số khác mẫu không làm khó bạn!"],sad:["Quy đồng mẫu trước! BCNN là gì nhỉ?","Thử tìm mẫu số chung đi!","Triton có gợi ý quan trọng đó!"]},
-    questions: buildZ5()
-  },
-  { id:6, name:"Cung Điện Ngọc",  emoji:"💎", gem:"⭐", gemColor:"#ffd60a",
-    theme:"Nhân & Chia phân số cơ bản",
-    letter:{from:"🐙",name:"Malvora (kẻ thù!)",text:"Hừm! Ngươi đã đến đây rồi à! Ta thách ngươi giải được các bài nhân chia phân số này! Nhân phân số: tử × tử, mẫu × mẫu. Chia: lật phân số thứ hai rồi nhân! Nếu ngươi giải được... ta sẽ trả lại 1 viên ngọc!"},
-    tritonHints:["Nhân: 2/3 × 3/4 = (2×3)/(3×4) = 6/12 = 1/2","Chia: 3/4 ÷ 2/3 = 3/4 × 3/2 = 9/8","Nhớ rút gọn kết quả sau khi tính!"],
-    coralSays:{happy:["Malvora tức lắm rồi! Bạn giỏi hơn nó!","Nhân chia như ăn cá – ngon và dễ!","Viên ngọc sắp lấy lại được rồi!"],sad:["Tử × tử, mẫu × mẫu nha!","Chia thì lật phân số thứ hai!","Đừng nản! Gần đến đích rồi!"]},
-    questions: buildZ6()
-  },
-  { id:7, name:"Sào Huyệt Malvora", emoji:"🐙", gem:"👑", gemColor:"#ff6b6b",
-    theme:"⚡ BOSS STAGE – Tổng hợp siêu khó!",
-    letter:{from:"🐙",name:"Malvora – Kẻ thù cuối!",text:"TA MALVORA THÁCH NGƯƠI! Đây là những câu đố khó nhất đại dương! Nếu ngươi vượt qua ta... ta sẽ trao trả tất cả viên ngọc và biến mất! Chuẩn bị đi!!!"},
-    tritonHints:["Đây là màn tổng hợp – dùng tất cả kiến thức đã học!","Nhớ: so sánh → quy đồng; cộng trừ → cùng mẫu; nhân chia → tử×tử/mẫu×mẫu","Bình tĩnh! Đọc kỹ từng câu!"],
-    coralSays:{happy:["MALVORA ĐÃ THUA! VINH QUANG CỦA MARINA!","Coral tự hào về bạn quá!!!","Đại dương được giải phóng!!!"],sad:["Đừng bỏ cuộc! Ôn lại hint của Triton!","Malvora vẫn chưa thắng được mình!","Cố lên! Sắp xong rồi!"]},
-    questions: buildZ7()
-  },
+function makeSimplifyQ(){
+  const pairs=[[2,4],[3,6],[4,8],[6,9],[6,12],[8,12],[10,15],[4,6],[6,8],[9,12],[10,20],[15,20],[12,16],[8,10]];
+  const [n,d]=pick(pairs);const g=gcd(n,d);
+  const q={
+    story:`🔬 Module tối ưu hoá yêu cầu rút gọn phân số về dạng đơn giản nhất.`,
+    q:`Rút gọn ${n}/${d} về dạng đơn giản nhất:`,
+    vis:()=>vSimplify(n,d),
+    ans:`${n/g}/${d/g}`,
+    opts:shuffle([`${n/g}/${d/g}`,`${n/g+1}/${d/g}`,`${n/g}/${d/g+1}`,`${n}/${d}`]).slice(0,4),
+    ex:`ƯCLN(${n},${d})=${g}. Chia cho ${g}: ${n}÷${g}=${n/g}, ${d}÷${g}=${d/g} → ${n/g}/${d/g}`,
+    topic:'simplify',diff:2,time:25,diffLabel:'🌟 Trung bình',diffClass:'diff-med'
+  };return q;
+}
+
+function makeCompareQ(){
+  // Same denominator
+  if(Math.random()<0.35){
+    const d=rnd(5,12),n1=rnd(1,d-1),n2tmp=rnd(1,d-1),n2=n2tmp===n1?(n2tmp>=d-1?n2tmp-1:n2tmp+1):n2tmp;
+    const sym=n1<n2?'<':n1>n2?'>':'=';
+    return{
+      story:`⚖️ Cảm biến so sánh hai phần năng lượng cùng loại.`,
+      q:`So sánh: ${n1}/${d} □ ${n2}/${d}`,
+      vis:()=>vCompare(`${n1}`,`${d}`,`${n2}`,`${d}`),
+      ans:`${n1}/${d} ${sym} ${n2}/${d}`,
+      opts:shuffle([`${n1}/${d} ${sym} ${n2}/${d}`,`${n1}/${d} ${sym==='<'?'>':'<'} ${n2}/${d}`,`${n1}/${d} = ${n2}/${d}`,`Không so sánh được`]).slice(0,4),
+      ex:`Cùng mẫu ${d}: so tử ${n1} ${sym} ${n2} → ${n1}/${d} ${sym} ${n2}/${d}`,
+      topic:'compare',diff:2,time:22,diffLabel:'🌟 Trung bình',diffClass:'diff-med'
+    };
+  }
+  // Same numerator
+  if(Math.random()<0.4){
+    const n=rnd(1,4),d1=rnd(2,8),d2=rnd(2,8);
+    const sym=d1>d2?'<':d1<d2?'>':'=';
+    return{
+      story:`🔭 Kính thiên văn đo hai góc nhìn với cùng tử số.`,
+      q:`So sánh: ${n}/${d1} □ ${n}/${d2}`,
+      vis:()=>vCompare(`${n}`,`${d1}`,`${n}`,`${d2}`),
+      ans:`${n}/${d1} ${sym} ${n}/${d2}`,
+      opts:shuffle([`${n}/${d1} ${sym} ${n}/${d2}`,`${n}/${d1} ${sym==='<'?'>':'<'} ${n}/${d2}`,`${n}/${d1} = ${n}/${d2}`,`Không biết`]).slice(0,4),
+      ex:`Cùng tử ${n}: mẫu ${d1} ${d1>d2?'>':'<'} ${d2} → chia nhiều phần hơn → ${n}/${d1} ${sym} ${n}/${d2}`,
+      topic:'compare',diff:3,time:28,diffLabel:'🔴 Khó',diffClass:'diff-hard'
+    };
+  }
+  // Cross multiply
+  const n1=rnd(1,5),d1=rnd(2,7),n2=rnd(1,5),d2=rnd(2,7);
+  const v1=n1*d2,v2=n2*d1;
+  const sym=v1<v2?'<':v1>v2?'>':'=';
+  return{
+    story:`🌌 Hệ thống điều hướng cần so sánh hai vector khác chiều.`,
+    q:`So sánh: ${n1}/${d1} □ ${n2}/${d2}`,
+    vis:()=>vComparePie(n1,d1,n2,d2),
+    ans:`${n1}/${d1} ${sym} ${n2}/${d2}`,
+    opts:shuffle([`${n1}/${d1} ${sym} ${n2}/${d2}`,`${n1}/${d1} ${sym==='<'?'>':sym==='>'?'<':'>'} ${n2}/${d2}`,`${n1}/${d1} = ${n2}/${d2}`,`Không biết`]).slice(0,4),
+    ex:`Nhân chéo: ${n1}×${d2}=${v1}, ${n2}×${d1}=${v2}. Vì ${v1} ${sym} ${v2} → ${n1}/${d1} ${sym} ${n2}/${d2}`,
+    topic:'compare',diff:3,time:30,diffLabel:'🔴 Khó',diffClass:'diff-hard'
+  };
+}
+
+function makeAddSameQ(){
+  const d=rnd(5,12),n1=rnd(1,Math.floor(d/2)),n2=rnd(1,d-n1-1);
+  const ans=n1+n2,g=gcd(ans,d);
+  return{
+    story:`➕ Hệ thống nạp năng lượng: lần 1 nạp ${n1}/${d}, lần 2 nạp ${n2}/${d}.`,
+    q:`Tổng năng lượng đã nạp là?`,
+    vis:()=>vArith(`${n1}`,`${d}`,`${n2}`,`${d}`,'+'),
+    ans:`${ans}/${d}`,
+    opts:shuffle([`${ans}/${d}`,`${ans}/${d*2}`,`${n1}/${d}`,`${ans+1}/${d}`]).slice(0,4),
+    ex:`Cùng mẫu ${d}: ${n1}+${n2}=${ans}, mẫu giữ nguyên → ${ans}/${d}`,
+    topic:'add_same',diff:2,time:22,diffLabel:'🌟 Trung bình',diffClass:'diff-med'
+  };
+}
+
+function makeSubSameQ(){
+  const d=rnd(5,12),n1=rnd(3,d-1),n2=rnd(1,n1-1);
+  const ans=n1-n2,g=gcd(ans,d);
+  return{
+    story:`➖ Tàu tiêu thụ ${n1}/${d} năng lượng, sau đó thu hồi ${n2}/${d}.`,
+    q:`Năng lượng tiêu thụ thực là?`,
+    vis:()=>vArith(`${n1}`,`${d}`,`${n2}`,`${d}`,'-'),
+    ans:`${ans}/${d}`,
+    opts:shuffle([`${ans}/${d}`,`${ans+1}/${d}`,`${n1}/${d}`,`${ans}/${d*2}`]).slice(0,4),
+    ex:`Cùng mẫu ${d}: ${n1}-${n2}=${ans}, mẫu giữ nguyên → ${ans}/${d}`,
+    topic:'sub_same',diff:2,time:22,diffLabel:'🌟 Trung bình',diffClass:'diff-med'
+  };
+}
+
+function makeAddDiffQ(){
+  const denPairs=[[2,3,6],[2,4,4],[2,6,6],[3,4,12],[3,6,6],[4,6,12],[4,8,8],[2,5,10],[3,5,15]];
+  const [d1,d2,L]=pick(denPairs);
+  const maxN1=Math.max(1,Math.floor(L/d1)-1),maxN2=Math.max(1,Math.floor(L/d2)-1);
+  const n1=rnd(1,maxN1),n2=rnd(1,maxN2);
+  const a1=n1*(L/d1),a2=n2*(L/d2),sum=a1+a2,g=gcd(sum,L);
+  const ansN=sum/g,ansD=L/g;
+  return{
+    story:`🧪 Pha chế hợp chất: ${n1}/${d1} phần A và ${n2}/${d2} phần B.`,
+    q:`Tổng hợp chất là?`,
+    vis:()=>vArithDiff(`${n1}`,`${d1}`,`${n2}`,`${d2}`,`${L}`,'+'),
+    ans:`${ansN}/${ansD}`,
+    opts:shuffle([`${ansN}/${ansD}`,`${ansN+1}/${ansD}`,`${a1+a2}/${L*2}`,`${n1+n2}/${d1+d2}`]).slice(0,4),
+    ex:`Mẫu ${L}: ${n1}/${d1}=${a1}/${L}, ${n2}/${d2}=${a2}/${L}. Tổng: ${a1+a2}/${L}${g>1?` = ${ansN}/${ansD}`:''}`,
+    topic:'add_diff',diff:3,time:32,diffLabel:'🔴 Khó',diffClass:'diff-hard'
+  };
+}
+
+function makeSubDiffQ(){
+  const denPairs=[[3,6,6],[2,4,4],[4,8,8],[2,6,6],[3,9,9]];
+  const [d1,d2,L]=pick(denPairs);
+  const mult1=L/d1,mult2=L/d2;
+  const maxN1sub=Math.max(3,Math.floor(L/mult1));const n1=rnd(2,maxN1sub);const maxN2sub=Math.max(1,Math.floor((n1*mult1-1)/mult2));const n2=rnd(1,maxN2sub);
+  const a1=n1*mult1,a2=n2*mult2,diff=a1-a2,g=gcd(diff,L);
+  const ansN=diff/g,ansD=L/g;
+  return{
+    story:`⚡ Năng lượng ban đầu ${n1}/${d1}, tiêu thụ ${n2}/${d2}.`,
+    q:`Năng lượng còn lại?`,
+    vis:()=>vArithDiff(`${n1}`,`${d1}`,`${n2}`,`${d2}`,`${L}`,'-'),
+    ans:`${ansN}/${ansD}`,
+    opts:shuffle([`${ansN}/${ansD}`,`${ansN+1}/${ansD}`,`${n1-n2}/${d1}`,`${diff}/${L*2}`]).slice(0,4),
+    ex:`Mẫu ${L}: ${n1}/${d1}=${a1}/${L}, ${n2}/${d2}=${a2}/${L}. Hiệu: ${diff}/${L}${g>1?` = ${ansN}/${ansD}`:''}`,
+    topic:'sub_diff',diff:3,time:32,diffLabel:'🔴 Khó',diffClass:'diff-hard'
+  };
+}
+
+function makeMulQ(){
+  const n1=rnd(1,4),d1=rnd(2,6),n2=rnd(1,4),d2=rnd(2,6);
+  const rn=n1*n2,rd=d1*d2,g=gcd(rn,rd);
+  const ansN=rn/g,ansD=rd/g;
+  return{
+    story:`✖️ Hệ thống nhân đôi phân số để tăng cường công suất.`,
+    q:`${n1}/${d1} × ${n2}/${d2} = ?`,
+    vis:()=>vMul(`${n1}`,`${d1}`,`${n2}`,`${d2}`),
+    ans:`${ansN}/${ansD}`,
+    opts:shuffle([`${ansN}/${ansD}`,`${n1+n2}/${d1+d2}`,`${ansN+1}/${ansD}`,`${n1}/${d2}`]).slice(0,4),
+    ex:`Tử×Tử: ${n1}×${n2}=${rn}. Mẫu×Mẫu: ${d1}×${d2}=${rd}. ${rn}/${rd}${g>1?` = ${ansN}/${ansD}`:''}`,
+    topic:'multiply',diff:3,time:30,diffLabel:'🔴 Khó',diffClass:'diff-hard'
+  };
+}
+
+function makeDivQ(){
+  const n1=rnd(1,4),d1=rnd(2,6),n2=rnd(1,4),d2=rnd(2,6);
+  const rn=n1*d2,rd=d1*n2,g=gcd(rn,rd);
+  const ansN=rn/g,ansD=rd/g;
+  return{
+    story:`➗ Robot tính toán tỉ lệ chia công suất giữa hai module.`,
+    q:`${n1}/${d1} ÷ ${n2}/${d2} = ?`,
+    vis:()=>vDiv(`${n1}`,`${d1}`,`${n2}`,`${d2}`),
+    ans:`${ansN}/${ansD}`,
+    opts:shuffle([`${ansN}/${ansD}`,`${n1*n2}/${d1*d2}`,`${ansN+1}/${ansD}`,`${ansN}/${ansD+1}`]).slice(0,4),
+    ex:`Lật ${n2}/${d2} = ${d2}/${n2}. Tính: ${n1}/${d1}×${d2}/${n2} = ${rn}/${rd}${g>1?` = ${ansN}/${ansD}`:''}`,
+    topic:'divide',diff:4,time:35,diffLabel:'⚡ Boss',diffClass:'diff-boss'
+  };
+}
+
+function makeMixedQ(){
+  // Mixed challenge: rút gọn rồi so sánh, hoặc cộng 3 phân số, hoặc tìm phân số giữa
+  const type=rnd(1,3);
+  if(type===1){
+    const d=rnd(6,12),n1=rnd(1,d-2),n2=rnd(n1+1,d-1),n3=rnd(1,d-1);
+    return{
+      story:`🌌 Sắp xếp tốc độ các thiên thạch từ nhỏ đến lớn.`,
+      q:`Sắp xếp từ NHỎ đến LỚN: ${n1}/${d}, ${n3}/${d}, ${n2}/${d}`,
+      vis:()=>vOrder([`${n1}/${d}`,`${n3}/${d}`,`${n2}/${d}`]),
+      ans:`${Math.min(n1,n2,n3)}/${d} < ${[n1,n2,n3].sort((a,b)=>a-b)[1]}/${d} < ${Math.max(n1,n2,n3)}/${d}`,
+      opts:(()=>{const s=[n1,n2,n3].sort((a,b)=>a-b);
+        return shuffle([
+          `${s[0]}/${d} < ${s[1]}/${d} < ${s[2]}/${d}`,
+          `${s[2]}/${d} < ${s[1]}/${d} < ${s[0]}/${d}`,
+          `${s[1]}/${d} < ${s[0]}/${d} < ${s[2]}/${d}`,
+          `${s[0]}/${d} < ${s[2]}/${d} < ${s[1]}/${d}`
+        ])})(),
+      ex:`Cùng mẫu ${d}: sắp tử ${[n1,n2,n3].sort((a,b)=>a-b).join('<')}`,
+      topic:'compare',diff:3,time:30,diffLabel:'🔴 Khó',diffClass:'diff-hard'
+    };
+  }
+  if(type===2){
+    const d=rnd(6,10),n1=rnd(1,2),n2=rnd(1,2),n3=rnd(1,2),sum=n1+n2+n3,g=gcd(sum,d);
+    return{
+      story:`🧪 Ba lần bổ sung năng lượng: ${n1}/${d} + ${n2}/${d} + ${n3}/${d}`,
+      q:`Tổng ba lần bổ sung là?`,
+      vis:()=>vAdd3(`${n1}`,`${d}`,`${n2}`,`${d}`,`${n3}`,`${d}`),
+      ans:`${sum/g}/${d/g}`,
+      opts:shuffle([`${sum/g}/${d/g}`,`${sum}/${d*3}`,`${sum+1}/${d}`,`${sum/g}/${d/g+1}`]).slice(0,4),
+      ex:`Cùng mẫu ${d}: ${n1}+${n2}+${n3}=${sum}. Kết quả: ${sum}/${d}${g>1?` = ${sum/g}/${d/g}`:''}`,
+      topic:'add_same',diff:3,time:28,diffLabel:'🔴 Khó',diffClass:'diff-hard'
+    };
+  }
+  // Phân số nằm giữa
+  const d=6,n1=rnd(1,2),n2=n1+2;
+  return{
+    story:`🎯 Cần điều chỉnh góc bay về một giá trị chính xác.`,
+    q:`Phân số nào nằm giữa ${n1}/${d} và ${n2}/${d}?`,
+    vis:()=>vBetween(`${n1}`,`${d}`,`${n2}`,`${d}`),
+    ans:`${n1+1}/${d}`,
+    opts:shuffle([`${n1+1}/${d}`,`${n2+1}/${d}`,`${n1-1>0?n1-1:n1+2}/${d}`,`${n2}/${d+1}`]).slice(0,4),
+    ex:`${n1}/${d} < ${n1+1}/${d} < ${n2}/${d}. Phân số nằm giữa là ${n1+1}/${d}`,
+    topic:'compare',diff:3,time:28,diffLabel:'🔴 Khó',diffClass:'diff-hard'
+  };
+}
+
+// ═══════════════════════════════════════════════════
+//  PLANET CONFIG — 7 planets with topic focus
+// ═══════════════════════════════════════════════════
+const PLANETS=[
+  {id:1,name:'Sao Đất',emoji:'🌍',col:'#10b981',
+   generators:[makeRecognizeQ,makeRealLifeQ,makeRecognizeQ],
+   story:['🌍 Lỗi module điều hướng! Cần phân tích phân số cơ bản.','🌍 Mảnh vỡ thiên thạch! Tính toán khẩn cấp.'],
+   bot:['Beep! Phân số = tử/mẫu. Tử ở TRÊN, mẫu ở DƯỚI!','Bloop! Mẫu số cho biết chia bao nhiêu phần!'],
+   pilot:['Hệ thống rời bến! Hãy sửa module nhận dạng!','Ổn định hàng trạm! Phân số cơ bản trước nhé!']},
+  {id:2,name:'Sao Hoả',emoji:'🔴',col:'#f97316',
+   generators:[makeRealLifeQ,makeEqualQ,makeSimplifyQ],
+   story:['🔴 Cánh đồng đất đỏ! Tính tỉ lệ tài nguyên.','🔴 Bão cát! Hệ thống cần tối ưu phân số.'],
+   bot:['Beep! Rút gọn = chia cả tử và mẫu cho ƯCLN!','Bloop! Phân số bằng nhau khi rút gọn về cùng dạng!'],
+   pilot:['Tiếp cận Sao Hoả! Tính toán tài nguyên chuẩn xác!','Bão từ trường! Tối ưu hệ thống ngay!']},
+  {id:3,name:'Vành Đai',emoji:'💫',col:'#fbbf24',
+   generators:[makeCompareQ,makeSimplifyQ,makeEqualQ],
+   story:['💫 Thiên thạch vành đai! So sánh kích thước để né.','💫 Lọc vật liệu! Chọn phân số lớn hơn.'],
+   bot:['Beep! Cùng mẫu: so tử. Cùng tử: mẫu lớn → nhỏ hơn!','Bloop! Nhân chéo để so phân số khác mẫu!'],
+   pilot:['Vào vành đai! Tính toán quỹ đạo né thiên thạch!','Cẩn thận! So sánh chính xác là sống còn!']},
+  {id:4,name:'Sao Mộc',emoji:'🪐',col:'#7c3aed',
+   generators:[makeAddSameQ,makeSubSameQ,makeCompareQ],
+   story:['🪐 Từ trường khổng lồ! Cộng trừ năng lượng.','🪐 Cơn bão Great Red! Tính toán thoát ra.'],
+   bot:['Beep! Cộng/trừ cùng mẫu: chỉ cộng/trừ TỬ, mẫu giữ nguyên!','Bloop! Đừng cộng mẫu số! Tử + Tử, mẫu không đổi!'],
+   pilot:['Sao Mộc đang hút! Tính ngay lực đẩy cần thiết!','Cộng thêm nhiên liệu! Tính nhanh đi!']},
+  {id:5,name:'Sao Thổ',emoji:'🌙',col:'#06b6d4',
+   generators:[makeAddDiffQ,makeSubDiffQ,makeAddSameQ],
+   story:['🌙 Vòng băng Sao Thổ! Pha trộn nhiên liệu phức tạp.','🌙 Đi qua vành đai! Tính toán khác mẫu số.'],
+   bot:['Beep! Khác mẫu: tìm BCNN trước rồi mới cộng/trừ!','Bloop! BCNN(2,3)=6. 1/2=3/6, 1/3=2/6. Giờ cộng được!'],
+   pilot:['Vành đai Sao Thổ đẹp lắm! Nhưng tính sai là va vào!','Mẫu khác nhau! Quy đồng ngay đi!']},
+  {id:6,name:'Hải Vương',emoji:'🔵',col:'#2563eb',
+   generators:[makeMulQ,makeDivQ,makeSubDiffQ],
+   story:['🔵 Gió siêu âm Hải Vương! Nhân chia công suất.','🔵 Xoáy nước khổng lồ! Tính tỉ lệ né tránh.'],
+   bot:['Beep! Nhân phân số: tử×tử, mẫu×mẫu!','Bloop! Chia = nhân với phân số lật ngược! a/b ÷ c/d = a/b × d/c'],
+   pilot:['Hải Vương uy hiếp! Nhân chia nhanh không là mất tàu!','Module chia hết! Áp dụng quy tắc ÷ ngay!']},
+  {id:7,name:'Vũ Trụ Xa',emoji:'⭐',col:'#f43f5e',
+   generators:[makeMulQ,makeDivQ,makeAddDiffQ,makeMixedQ],
+   story:['⭐ Chặng cuối! Tổng hợp mọi kiến thức phân số.','⭐ Cổng chiều không gian! Giải đủ để vượt qua!'],
+   bot:['Beep!! ĐÂY LÀ TRẬN QUYẾT ĐỊNH! Dùng tất cả những gì đã học!','Bloop BLOOP!! Robot-9 tin tưởng bạn 100%!!'],
+   pilot:['ĐƯỜNG VỀ TRÁI ĐẤT! Không được sai câu nào!','Toàn lực! Phân số hay nhất vũ trụ này là bạn!']}
 ];
 
-// ═══════════════════════════════════════════════════════
-//  QUESTION BUILDERS
-// ═══════════════════════════════════════════════════════
-function buildZ1(){
-  return shuffle([
-    {q:"🌊 San hô chia thành 5 nhánh bằng nhau. Nhánh màu hồng có 2. Phân số nhánh hồng là?",
-     vis:()=>vBlocks(2,5,"#ff9a9a"), ans:"2/5",
-     opts:["2/5","5/2","3/5","2/3"],
-     ex:"5 nhánh tổng → mẫu số 5. 2 nhánh hồng → tử số 2. Phân số: 2/5"},
-    {q:"🐠 Đàn cá 8 con bơi qua. 3 con màu cam. Phân số cá cam là bao nhiêu?",
-     vis:()=>vFish(3,8), ans:"3/8",
-     opts:["3/8","5/8","8/3","3/5"],
-     ex:"8 con tổng, 3 con cam → phân số 3/8"},
-    {q:"🪸 Chiếc vỏ sò chia 6 phần đều. Marina lấy 4 phần. Phân số Marina lấy?",
-     vis:()=>vPie(4,6,"#c77dff"), ans:"4/6",
-     opts:["4/6","2/6","6/4","4/2"],
-     ex:"Chia 6, lấy 4 → phân số 4/6"},
-    {q:"💎 Phân số nào có TỬ SỐ là 3 và MẪU SỐ là 7?",
-     vis:()=>vBlocks(3,7,"#ffd60a"), ans:"3/7",
-     opts:["3/7","7/3","4/7","3/4"],
-     ex:"Tử số (trên) = 3, mẫu số (dưới) = 7 → viết 3/7"},
-    {q:"🌿 Chuỗi rong biển 10 mắt. Mắt màu xanh có 7. Phần màu xanh là?",
-     vis:()=>vSegments(7,10,"#2ec4b6"), ans:"7/10",
-     opts:["7/10","3/10","7/3","1/7"],
-     ex:"10 mắt tổng, 7 xanh → phân số 7/10"},
-    {q:"⭐ Ngôi sao biển chia 5 cánh bằng nhau. Phân số mỗi cánh là?",
-     vis:()=>vPie(1,5,"#ffd60a"), ans:"1/5",
-     opts:["1/5","5/1","1/4","2/5"],
-     ex:"Chia đều 5 phần, mỗi phần = 1/5"},
-    {q:"🦐 Hàng tôm 12 con. 5 con đang nhảy. Phần tôm nhảy là?",
-     vis:()=>vFish(5,12), ans:"5/12",
-     opts:["5/12","7/12","5/7","1/5"],
-     ex:"12 tôm tổng, 5 tôm nhảy → phân số 5/12"},
-  ]);
-}
-function buildZ2(){
-  return shuffle([
-    {q:"🔍 Rút gọn 6/9 về dạng đơn giản nhất:",
-     vis:()=>vEqual(6,9,2,3), ans:"2/3",
-     opts:["2/3","3/4","6/9","1/2"],
-     ex:"ƯCLN(6,9)=3. Chia cho 3: 6÷3=2, 9÷3=3 → 2/3"},
-    {q:"✨ Phân số nào BẰNG với 3/4?",
-     vis:()=>vEqualQ(3,4), ans:"6/8",
-     opts:["6/8","3/8","4/6","5/8"],
-     ex:"3/4 × 2/2 = 6/8. Nhân cả tử và mẫu với 2"},
-    {q:"🌟 Điền số: 2/5 = ?/15",
-     vis:()=>vFillIn("2","5","?","15"), ans:"6",
-     opts:["6","3","10","5"],
-     ex:"5×3=15 → 2×3=6. Vậy 2/5 = 6/15"},
-    {q:"💫 Rút gọn 12/16 nhất là?",
-     vis:()=>vEqual(12,16,3,4), ans:"3/4",
-     opts:["3/4","6/8","2/3","4/5"],
-     ex:"ƯCLN(12,16)=4. 12÷4=3, 16÷4=4 → 3/4"},
-    {q:"🔮 Phân số nào KHÔNG bằng 4/6?",
-     vis:()=>vPie(4,6,"#c77dff"), ans:"3/5",
-     opts:["2/3","8/12","3/5","4/6"],
-     ex:"4/6=2/3. Kiểm: 2/3✓, 8/12=2/3✓. Chỉ 3/5 không bằng"},
-    {q:"🐚 Điền số: ?/8 = 3/4",
-     vis:()=>vFillIn("?","8","3","4"), ans:"6",
-     opts:["6","3","4","8"],
-     ex:"4×2=8 → 3×2=6. Vậy 6/8 = 3/4"},
-    {q:"🌊 Rút gọn 15/20 nhất là?",
-     vis:()=>vEqual(15,20,3,4), ans:"3/4",
-     opts:["3/4","5/4","1/4","15/20"],
-     ex:"ƯCLN(15,20)=5. 15÷5=3, 20÷5=4 → 3/4"},
-  ]);
-}
-function buildZ3(){
-  return shuffle([
-    {q:"⚖️ So sánh: 4/9 □ 7/9",
-     vis:()=>vCompare("4","9","7","9"), ans:"4/9 < 7/9",
-     opts:["4/9 < 7/9","4/9 > 7/9","4/9 = 7/9","Không biết"],
-     ex:"Cùng mẫu 9: tử 4 < 7 → 4/9 < 7/9"},
-    {q:"🌊 So sánh: 1/5 □ 1/3",
-     vis:()=>vCompare("1","5","1","3"), ans:"1/5 < 1/3",
-     opts:["1/5 < 1/3","1/5 > 1/3","1/5 = 1/3","Không biết"],
-     ex:"Cùng tử 1: mẫu 5>3 → 1/5 < 1/3 (chia nhiều phần hơn → phần nhỏ hơn)"},
-    {q:"💎 Phân số nào LỚN HƠN: 3/5 hay 5/8?",
-     vis:()=>vComparePie(3,5,5,8), ans:"3/5",
-     opts:["3/5","5/8","Bằng nhau","Không biết"],
-     ex:"Quy đồng mẫu 40: 3/5=24/40, 5/8=25/40. Ôi sai! Thực ra 25>24 nên 5/8 lớn hơn... Nhưng đáp án đúng là 3/5 = 0.6 > 5/8 = 0.625? Thực ra 5/8=0.625 > 3/5=0.6 → đáp án: 5/8 lớn hơn"},
-    {q:"📊 Sắp xếp từ NHỎ đến LỚN: 2/5, 1/5, 4/5",
-     vis:()=>vOrder(["1/5","2/5","4/5"]), ans:"1/5 < 2/5 < 4/5",
-     opts:["1/5 < 2/5 < 4/5","2/5 < 1/5 < 4/5","4/5 < 2/5 < 1/5","1/5 < 4/5 < 2/5"],
-     ex:"Cùng mẫu 5: sắp xếp tử 1<2<4 → 1/5 < 2/5 < 4/5"},
-    {q:"🐚 So sánh: 5/6 □ 4/5",
-     vis:()=>vCompare("5","6","4","5"), ans:"5/6 > 4/5",
-     opts:["5/6 > 4/5","5/6 < 4/5","5/6 = 4/5","Không biết"],
-     ex:"Quy đồng mẫu 30: 5/6=25/30, 4/5=24/30. Vì 25>24 → 5/6 > 4/5"},
-    {q:"⭐ Phân số NHỎ NHẤT trong: 1/2, 1/4, 1/3, 1/6?",
-     vis:()=>vOrder(["1/6","1/4","1/3","1/2"]), ans:"1/6",
-     opts:["1/6","1/4","1/2","1/3"],
-     ex:"Cùng tử 1: mẫu lớn nhất=6 → 1/6 nhỏ nhất"},
-    {q:"💠 So sánh: 2/3 □ 3/4",
-     vis:()=>vComparePie(2,3,3,4), ans:"2/3 < 3/4",
-     opts:["2/3 < 3/4","2/3 > 3/4","2/3 = 3/4","Không biết"],
-     ex:"Quy đồng mẫu 12: 2/3=8/12, 3/4=9/12. Vì 8<9 → 2/3 < 3/4"},
-  ]);
-}
-function buildZ4(){
-  return shuffle([
-    {q:"➕ Tính: 2/7 + 3/7 = ?",
-     vis:()=>vArith("2","7","3","7","+"), ans:"5/7",
-     opts:["5/7","5/14","2/7","6/7"],
-     ex:"Cùng mẫu 7: 2+3=5, mẫu giữ nguyên → 5/7"},
-    {q:"➖ Tính: 8/11 – 3/11 = ?",
-     vis:()=>vArith("8","11","3","11","−"), ans:"5/11",
-     opts:["5/11","5/22","11/11","4/11"],
-     ex:"Cùng mẫu 11: 8-3=5, mẫu giữ nguyên → 5/11"},
-    {q:"🐙 Marina bơi được 3/8 hang rồi tiếp 2/8 hang nữa. Tổng cộng?",
-     vis:()=>vArith("3","8","2","8","+"), ans:"5/8",
-     opts:["5/8","5/16","1/8","6/8"],
-     ex:"3/8 + 2/8 = 5/8 hang động"},
-    {q:"🌿 Rong biển dài 7/10 sải. Coral cắn mất 4/10 sải. Còn lại?",
-     vis:()=>vArith("7","10","4","10","−"), ans:"3/10",
-     opts:["3/10","3/20","11/10","4/10"],
-     ex:"7/10 - 4/10 = 3/10 sải rong"},
-    {q:"⭐ 4/9 + 4/9 = ?",
-     vis:()=>vArith("4","9","4","9","+"), ans:"8/9",
-     opts:["8/9","8/18","4/9","1"],
-     ex:"Cùng mẫu 9: 4+4=8, mẫu giữ → 8/9"},
-    {q:"💜 5/12 + 5/12 = ? (rút gọn nếu được)",
-     vis:()=>vArith("5","12","5","12","+"), ans:"10/12",
-     opts:["10/12","10/24","5/6","5/12"],
-     ex:"5+5=10, mẫu giữ → 10/12 (có thể rút gọn = 5/6)"},
-    {q:"💎 9/13 – 6/13 = ?",
-     vis:()=>vArith("9","13","6","13","−"), ans:"3/13",
-     opts:["3/13","3/26","15/13","4/13"],
-     ex:"Cùng mẫu 13: 9-6=3, mẫu giữ → 3/13"},
-  ]);
-}
-function buildZ5(){
-  return shuffle([
-    {q:"🌿 Tính: 1/2 + 1/4 = ? (quy đồng mẫu 4)",
-     vis:()=>vArithDiff("1","2","1","4","4","+"), ans:"3/4",
-     opts:["3/4","2/6","1/4","2/4"],
-     ex:"BCNN(2,4)=4. 1/2=2/4. Tính: 2/4+1/4=3/4"},
-    {q:"🐳 1/3 + 1/6 = ? (quy đồng mẫu 6)",
-     vis:()=>vArithDiff("1","3","1","6","6","+"), ans:"3/6",
-     opts:["3/6","2/9","2/6","1/2"],
-     ex:"BCNN(3,6)=6. 1/3=2/6. Tính: 2/6+1/6=3/6"},
-    {q:"⭐ 3/4 – 1/2 = ? (quy đồng mẫu 4)",
-     vis:()=>vArithDiff("3","4","1","2","4","−"), ans:"1/4",
-     opts:["1/4","2/2","1/2","3/8"],
-     ex:"BCNN(4,2)=4. 1/2=2/4. Tính: 3/4-2/4=1/4"},
-    {q:"💚 1/4 + 1/6 = ? (quy đồng mẫu 12)",
-     vis:()=>vArithDiff("1","4","1","6","12","+"), ans:"5/12",
-     opts:["5/12","2/10","1/6","3/12"],
-     ex:"BCNN(4,6)=12. 1/4=3/12, 1/6=2/12. Tính: 3/12+2/12=5/12"},
-    {q:"🌊 5/6 – 2/3 = ? (quy đồng mẫu 6)",
-     vis:()=>vArithDiff("5","6","2","3","6","−"), ans:"1/6",
-     opts:["1/6","3/3","1/2","2/6"],
-     ex:"BCNN(6,3)=6. 2/3=4/6. Tính: 5/6-4/6=1/6"},
-    {q:"🔮 2/5 + 3/10 = ? (quy đồng mẫu 10)",
-     vis:()=>vArithDiff("2","5","3","10","10","+"), ans:"7/10",
-     opts:["7/10","5/15","5/10","4/10"],
-     ex:"BCNN(5,10)=10. 2/5=4/10. Tính: 4/10+3/10=7/10"},
-    {q:"💎 1/2 + 1/3 + 1/6 = ? (quy đồng mẫu 6)",
-     vis:()=>vArithTriple("1","2","1","3","1","6","6"), ans:"1",
-     opts:["1","6/11","5/6","7/6"],
-     ex:"Mẫu 6: 3/6+2/6+1/6=6/6=1 (cả nguyên!)"},
-  ]);
-}
-function buildZ6(){
-  return shuffle([
-    {q:"✖️ Tính: 2/3 × 3/4 = ?",
-     vis:()=>vMul("2","3","3","4"), ans:"1/2",
-     opts:["1/2","6/12","5/7","2/4"],
-     ex:"Tử×Tử: 2×3=6. Mẫu×Mẫu: 3×4=12. 6/12 rút gọn = 1/2"},
-    {q:"➗ Tính: 3/4 ÷ 3/8 = ?",
-     vis:()=>vDiv("3","4","3","8"), ans:"2",
-     opts:["2","9/32","1/2","3"],
-     ex:"Lật 3/8 thành 8/3. Tính: 3/4 × 8/3 = 24/12 = 2"},
-    {q:"✖️ 1/5 × 5/6 = ?",
-     vis:()=>vMul("1","5","5","6"), ans:"1/6",
-     opts:["1/6","5/30","6/11","1/5"],
-     ex:"1×5=5, 5×6=30. 5/30 rút gọn ÷5 = 1/6"},
-    {q:"➗ 2/3 ÷ 4/9 = ?",
-     vis:()=>vDiv("2","3","4","9"), ans:"3/2",
-     opts:["3/2","8/27","2/3","1/2"],
-     ex:"Lật 4/9 = 9/4. Tính: 2/3 × 9/4 = 18/12 rút gọn = 3/2"},
-    {q:"⭐ Cung điện có 3/4 viên ngọc. Mỗi phần bằng 1/3. Tổng ngọc trong 1/3 cung là?",
-     vis:()=>vMul("3","4","1","3"), ans:"1/4",
-     opts:["1/4","3/12","1/3","2/3"],
-     ex:"3/4 × 1/3 = 3/12 = 1/4 viên ngọc"},
-    {q:"✖️ 4/7 × 7/8 = ?",
-     vis:()=>vMul("4","7","7","8"), ans:"1/2",
-     opts:["1/2","28/56","4/8","7/7"],
-     ex:"4×7=28, 7×8=56. 28/56 = 1/2"},
-    {q:"➗ 5/6 ÷ 5/12 = ?",
-     vis:()=>vDiv("5","6","5","12"), ans:"2",
-     opts:["2","25/72","1/2","10/18"],
-     ex:"Lật 5/12 = 12/5. Tính: 5/6 × 12/5 = 60/30 = 2"},
-  ]);
-}
-function buildZ7(){
-  return shuffle([
-    {q:"🐙 BOSS: Rút gọn 18/24 và so sánh với 2/3",
-     vis:()=>vBoss1(), ans:"3/4 > 2/3",
-     opts:["3/4 > 2/3","3/4 = 2/3","3/4 < 2/3","Không biết"],
-     ex:"18/24 ÷ 6 = 3/4. Quy đồng: 3/4=9/12, 2/3=8/12. Vì 9>8 → 3/4 > 2/3"},
-    {q:"⚡ 1/2 + 1/3 + 1/4 = ? (quy đồng mẫu 12)",
-     vis:()=>vArithTriple("1","2","1","3","1","4","12"), ans:"13/12",
-     opts:["13/12","3/9","1","7/12"],
-     ex:"Mẫu 12: 6/12+4/12+3/12=13/12 (lớn hơn 1!)"},
-    {q:"💀 Sắp xếp từ LỚN đến NHỎ: 3/4, 2/3, 5/6, 7/12",
-     vis:()=>vOrder4("5/6","3/4","2/3","7/12"), ans:"5/6 > 3/4 > 2/3 > 7/12",
-     opts:["5/6 > 3/4 > 2/3 > 7/12","3/4 > 5/6 > 2/3 > 7/12","5/6 > 2/3 > 3/4 > 7/12","3/4 > 2/3 > 5/6 > 7/12"],
-     ex:"Mẫu 12: 5/6=10/12, 3/4=9/12, 2/3=8/12, 7/12. Sắp: 10>9>8>7"},
-    {q:"🔥 Tính: 3/4 × 2/3 ÷ 1/2 = ?",
-     vis:()=>vBoss2(), ans:"1",
-     opts:["1","1/4","6/24","3/4"],
-     ex:"3/4 × 2/3 = 6/12 = 1/2. Rồi 1/2 ÷ 1/2 = 1/2 × 2/1 = 1"},
-    {q:"⭐ Điền số: 5/8 + ? = 1",
-     vis:()=>vFillIn("5","8","?","8"), ans:"3/8",
-     opts:["3/8","5/8","1/8","4/8"],
-     ex:"1 = 8/8. Vậy ? = 8/8 - 5/8 = 3/8"},
-    {q:"👑 BOSS CUỐI: 2/3 ÷ 4/9 + 1/6 = ?",
-     vis:()=>vBoss3(), ans:"5/3",
-     opts:["5/3","7/6","3/2","11/6"],
-     ex:"2/3 ÷ 4/9 = 2/3 × 9/4 = 18/12 = 3/2. Rồi 3/2 + 1/6: mẫu 6: 9/6+1/6=10/6=5/3"},
-    {q:"💎 Marina cần 5/6 kg ngọc. Đã có 7/12 kg. Còn thiếu bao nhiêu?",
-     vis:()=>vArithDiff("5","6","7","12","12","−"), ans:"3/12",
-     opts:["3/12","2/6","1/4","5/12"],
-     ex:"Mẫu 12: 5/6=10/12. 10/12-7/12=3/12 (=1/4 kg ngọc)"},
-  ]);
-}
-
-// ═══════════════════════════════════════════════════════
-//  VISUAL HELPERS
-// ═══════════════════════════════════════════════════════
-function fHTML(n,d,nc="#90e0ef",dc="#ffd60a",sz="1.7rem"){
-  const nS=String(n),dS=String(d);
-  const qStyle=v=>v==='?'?`background:rgba(199,125,255,0.2);border-radius:6px;padding:0 5px;color:#c77dff;`:'';
-  return `<div class="frac"><span class="frac-n" style="font-size:${sz};color:${nc};${qStyle(nS)}">${nS}</span><div class="frac-bar"></div><span class="frac-d" style="font-size:${sz};color:${dc};${qStyle(dS)}">${dS}</span></div>`;
-}
-
-function vPie(n,d,col="#90e0ef"){
-  const R=36,cx=40,cy=40;
-  const ang=360/d; let paths='';
-  for(let i=0;i<d;i++){
-    const a1=(i*ang-90)*Math.PI/180, a2=((i+1)*ang-90)*Math.PI/180;
-    const x1=cx+R*Math.cos(a1),y1=cy+R*Math.sin(a1),x2=cx+R*Math.cos(a2),y2=cy+R*Math.sin(a2);
-    paths+=`<path d="M${cx},${cy}L${x1.toFixed(1)},${y1.toFixed(1)}A${R},${R} 0 ${ang>180?1:0} 1 ${x2.toFixed(1)},${y2.toFixed(1)}Z" fill="${i<n?col:'rgba(144,224,239,0.07)'}" stroke="rgba(0,180,216,0.4)" stroke-width="1.5"/>`;
-  }
-  return `<svg width="80" height="80" viewBox="0 0 80 80" style="filter:drop-shadow(0 0 8px rgba(0,180,216,0.3))">${paths}</svg>${fHTML(n,d)}`;
-}
-
-function vBlocks(n,d,col="#90e0ef"){
-  let h='<div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:center">';
-  for(let i=0;i<d;i++) h+=`<div style="width:${Math.max(14,180/d-4)}px;height:26px;border-radius:5px;background:${i<n?col:'rgba(144,224,239,0.08)'};border:1.5px solid rgba(0,180,216,0.3)"></div>`;
-  h+=`</div>`;
-  return h+`<div style="font-size:0.75rem;color:rgba(144,224,239,0.6);margin-top:5px;font-weight:700">${n} ô màu / ${d} ô tổng</div>`;
-}
-
-function vSegments(n,d,col="#2ec4b6"){
-  let h='<div style="display:flex;gap:3px;align-items:center">';
-  for(let i=0;i<d;i++) h+=`<div style="width:${Math.max(12,220/d-4)}px;height:18px;border-radius:4px;background:${i<n?col:'rgba(144,224,239,0.07)'};border:1px solid rgba(0,180,216,0.25)"></div>`;
-  return h+'</div>';
-}
-
-function vFish(n,d){
-  const chars=['🐠','🐟','🐡'];
-  let h='<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center">';
-  for(let i=0;i<Math.min(d,16);i++) h+=`<span style="font-size:1.3rem;${i<n?'':'opacity:0.2 grayscale(1)'}">${chars[i%chars.length]}</span>`;
-  return h+`</div><div style="font-size:0.72rem;font-weight:700;color:rgba(144,224,239,0.5);margin-top:4px">${n} con / tổng ${d} con</div>`;
-}
-
-function vEqual(n1,d1,n2,d2){
-  return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center">
-    ${fHTML(n1,d1,"#ff9a9a","#ff6b6b")}
-    <span style="color:rgba(144,224,239,0.5);font-size:1.2rem">÷${gcd(n1,d1)}</span>
-    <span style="color:#2ec4b6;font-size:1.8rem">→</span>
-    ${fHTML(n2,d2,"#2ec4b6","#2ec4b6")}
-    <span style="font-size:0.8rem;color:#2ec4b6;font-weight:700">Rút gọn ✓</span>
-  </div>`;
-}
-
-function vEqualQ(n,d){
-  return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center">
-    ${fHTML(n,d,"#ffd60a","#ffd60a")}
-    <span style="color:#90e0ef;font-size:2rem;font-family:'Bubblegum Sans',cursive">=</span>
-    ${fHTML("?","?")}
-  </div>`;
-}
-
-function vFillIn(n1,d1,n2,d2){
-  return `<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center">
-    ${fHTML(n1,d1,"#90e0ef","#ffd60a")}
-    <span style="color:#2ec4b6;font-size:2rem;font-family:'Bubblegum Sans',cursive">=</span>
-    ${fHTML(n2,d2,"#c77dff","#c77dff")}
-  </div>`;
-}
-
-function vCompare(n1,d1,n2,d2){
-  return `<div style="display:flex;align-items:center;gap:10px;justify-content:center">
-    ${fHTML(n1,d1)}
-    <span style="font-family:'Bubblegum Sans',cursive;font-size:2.5rem;color:#c77dff">□</span>
-    ${fHTML(n2,d2,"#ffd60a","#90e0ef")}
-  </div>`;
-}
-
-function vComparePie(n1,d1,n2,d2){
-  return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center">
-    ${vPie(n1,d1,"#90e0ef")}
-    <span style="font-family:'Bubblegum Sans',cursive;font-size:1.6rem;color:#c77dff">vs</span>
-    ${vPie(n2,d2,"#ffd60a")}
-  </div>`;
-}
-
-function vOrder(fracs){
-  const cols=["#90e0ef","#ffd60a","#2ec4b6","#ff9a9a"];
-  return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center">
-    ${fracs.map((f,i)=>{const[n,d]=f.split('/');return fHTML(n,d,cols[i%cols.length],cols[(i+1)%cols.length])}).join('<span style="color:rgba(144,224,239,0.3);font-size:1.5rem">,</span>')}
-  </div>`;
-}
-
-function vOrder4(a,b,c,d){ return vOrder([a,b,c,d]); }
-
-function vArith(n1,d1,n2,d2,op){
-  return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
-    ${fHTML(n1,d1,"#90e0ef","#ffd60a")}
-    <span style="font-family:'Bubblegum Sans',cursive;font-size:2.2rem;color:${op==='+'?'#2ec4b6':'#ff6b6b'}">${op}</span>
-    ${fHTML(n2,d2,"#ffd60a","#90e0ef")}
-    <span style="font-family:'Bubblegum Sans',cursive;font-size:2.2rem;color:#c77dff">=</span>
-    ${fHTML("?",d1,"#c77dff","#c77dff")}
-  </div>`;
-}
-
-function vArithDiff(n1,d1,n2,d2,lcmD,op){
-  return `<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
-      ${fHTML(n1,d1,"#90e0ef","#ffd60a")}
-      <span style="font-family:'Bubblegum Sans',cursive;font-size:2.2rem;color:${op==='+'?'#2ec4b6':'#ff6b6b'}">${op}</span>
-      ${fHTML(n2,d2,"#ffd60a","#90e0ef")}
-      <span style="font-family:'Bubblegum Sans',cursive;font-size:2.2rem;color:#c77dff">=</span>
-      ${fHTML("?",lcmD,"#c77dff","#c77dff")}
-    </div>
-    <div style="font-size:0.75rem;color:rgba(46,196,182,0.7);font-weight:700">💡 Quy đồng mẫu số: ${lcmD}</div>
-  </div>`;
-}
-
-function vArithTriple(n1,d1,n2,d2,n3,d3,lcmD){
-  return `<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center">
-      ${fHTML(n1,d1,"#90e0ef","#ffd60a","1.4rem")}
-      <span style="color:#2ec4b6;font-size:1.8rem;font-family:'Bubblegum Sans',cursive">+</span>
-      ${fHTML(n2,d2,"#ffd60a","#90e0ef","1.4rem")}
-      <span style="color:#2ec4b6;font-size:1.8rem;font-family:'Bubblegum Sans',cursive">+</span>
-      ${fHTML(n3,d3,"#c77dff","#c77dff","1.4rem")}
-      <span style="color:#c77dff;font-size:1.8rem;font-family:'Bubblegum Sans',cursive">=</span>
-      ${fHTML("?",lcmD,"#ff9a9a","#ff9a9a","1.4rem")}
-    </div>
-    <div style="font-size:0.72rem;color:rgba(46,196,182,0.7);font-weight:700">💡 Mẫu chung: ${lcmD}</div>
-  </div>`;
-}
-
-function vMul(n1,d1,n2,d2){
-  return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
-    ${fHTML(n1,d1,"#90e0ef","#ffd60a")}
-    <span style="font-size:2.2rem;font-family:'Bubblegum Sans',cursive;color:#ffd60a">×</span>
-    ${fHTML(n2,d2,"#ffd60a","#90e0ef")}
-    <span style="font-size:2.2rem;font-family:'Bubblegum Sans',cursive;color:#c77dff">=</span>
-    ${fHTML("?","?","#c77dff","#c77dff")}
-    <div style="font-size:0.72rem;color:rgba(46,196,182,0.7);font-weight:700;width:100%;text-align:center">Tử × Tử / Mẫu × Mẫu</div>
-  </div>`;
-}
-
-function vDiv(n1,d1,n2,d2){
-  return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center">
-    ${fHTML(n1,d1,"#90e0ef","#ffd60a")}
-    <span style="font-size:2.2rem;font-family:'Bubblegum Sans',cursive;color:#ff9a9a">÷</span>
-    ${fHTML(n2,d2,"#ffd60a","#90e0ef")}
-    <span style="font-size:2.2rem;font-family:'Bubblegum Sans',cursive;color:#c77dff">=</span>
-    ${fHTML(n1,d1,"#90e0ef","#ffd60a")}
-    <span style="font-size:2.2rem;color:#2ec4b6">×</span>
-    ${fHTML(d2,n2,"#2ec4b6","#2ec4b6")}
-    <div style="font-size:0.7rem;color:rgba(46,196,182,0.7);font-weight:700;width:100%;text-align:center">💡 Lật phân số thứ hai rồi nhân!</div>
-  </div>`;
-}
-
-function vBoss1(){
-  return `<div style="text-align:center;font-size:0.88rem;font-weight:700;color:rgba(144,224,239,0.8)">
-    <div style="margin-bottom:8px">Bước 1: Rút gọn ${fHTML(18,24,"#ff9a9a","#ff6b6b","1.4rem")}</div>
-    <div>Bước 2: So sánh kết quả với ${fHTML(2,3,"#ffd60a","#ffd60a","1.4rem")}</div>
-  </div>`;
-}
-
-function vBoss2(){
-  return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;font-size:0.88rem">
-    ${fHTML(3,4,"#90e0ef","#ffd60a","1.3rem")}
-    <span style="color:#ffd60a;font-size:1.5rem">×</span>
-    ${fHTML(2,3,"#ffd60a","#90e0ef","1.3rem")}
-    <span style="color:#ff6b6b;font-size:1.5rem">÷</span>
-    ${fHTML(1,2,"#c77dff","#c77dff","1.3rem")}
-    <span style="color:#c77dff;font-size:1.5rem">=</span>
-    ${fHTML("?","?","#ff9a9a","#ff9a9a","1.3rem")}
-  </div>`;
-}
-
-function vBoss3(){
-  return `<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;font-size:0.88rem">
-    ${fHTML(2,3,"#90e0ef","#ffd60a","1.3rem")}
-    <span style="color:#ff6b6b;font-size:1.4rem">÷</span>
-    ${fHTML(4,9,"#ffd60a","#90e0ef","1.3rem")}
-    <span style="color:#2ec4b6;font-size:1.4rem">+</span>
-    ${fHTML(1,6,"#c77dff","#c77dff","1.3rem")}
-    <span style="color:#c77dff;font-size:1.4rem">=</span>
-    ${fHTML("?","?","#ff9a9a","#ff9a9a","1.3rem")}
-  </div>`;
-}
-
-// ═══════════════════════════════════════════════════════
-//  MARINA SVG RENDERER – 5 tiers
-// ═══════════════════════════════════════════════════════
-const MARINA_TIERS = [
-  {rank:"🌱 Tiên cá nhỏ",tailCol:"#2ec4b6",hairCol:"#1a6b5e",crownShow:false,scale:1,sparkle:false,wings:false},
-  {rank:"🌊 Tiên cá sơ cấp",tailCol:"#0077b6",hairCol:"#005f8a",crownShow:false,scale:1,sparkle:true,wings:false},
-  {rank:"💎 Công nương đại dương",tailCol:"#c77dff",hairCol:"#7b2d8b",crownShow:true,scale:1,sparkle:true,wings:false},
-  {rank:"🌟 Công chúa Marina",tailCol:"#ffd60a",hairCol:"#b08800",crownShow:true,scale:1,sparkle:true,wings:true},
-  {rank:"👑 Nữ hoàng đại dương",tailCol:"#ffd60a",hairCol:"#b08800",crownShow:true,scale:1,sparkle:true,wings:true,divine:true},
+// ═══════════════════════════════════════════════════
+//  CHARACTERS
+// ═══════════════════════════════════════════════════
+const CHARS=[
+  {id:0,emoji:'👩‍🚀',name:'NOVA',label:'NOVA – PHI HÀNH GIA',aura:'rgba(167,139,250,0.2)'},
+  {id:1,emoji:'🧑‍🚀',name:'ATLAS',label:'ATLAS – PHI HÀNH GIA',aura:'rgba(6,182,212,0.2)'},
+  {id:2,emoji:'👸',name:'STELLA',label:'STELLA – PHI HÀNH GIA',aura:'rgba(251,191,36,0.2)'},
+  {id:3,emoji:'🦸‍♀️',name:'LUNA',label:'LUNA – PHI HÀNH GIA',aura:'rgba(244,63,94,0.2)'},
 ];
+const RANKS=['🌱 Tập sự vũ trụ','🌟 Phi hành gia','💎 Chuyên gia phân số','🔥 Huyền thoại vũ trụ','👑 Nữ hoàng Ngân Hà'];
+const SUITS=['rgba(167,139,250,0.25)','rgba(6,182,212,0.25)','rgba(251,191,36,0.25)','rgba(244,63,94,0.25)'];
+const SUIT_STROKES=['#a78bfa','#67e8f9','#fbbf24','#fda4af'];
 
-function drawMarina(tier){
-  tier = Math.max(0,Math.min(4,tier));
-  const t = MARINA_TIERS[tier];
-  const s = document.getElementById('marinaSvg');
-  const aura = document.getElementById('marinaAura');
+function drawCharSVG(charId,rankLevel){
+  const svg=document.getElementById('charSvg');
+  const charEmoji=CHARS[charId].emoji;
+  const sc=SUIT_STROKES[charId];
+  const sf=SUITS[charId];
+  const r=Math.min(4,rankLevel);
 
-  // Aura color
-  const auraColors=["rgba(46,196,182,0.1)","rgba(0,119,182,0.15)","rgba(199,125,255,0.2)","rgba(255,214,10,0.25)","rgba(255,214,10,0.35)"];
-  aura.style.background=`radial-gradient(circle,${auraColors[tier]} 0%,transparent 70%)`;
-
-  document.getElementById('marinaRank').textContent = t.rank;
-
-  // Sparkle points
-  let sparkSVG='';
-  if(t.sparkle){
-    const pts=[[-18,30],[165,45],[-15,90],[168,85],[75,-15]];
-    pts.forEach(([x,y])=>{
-      sparkSVG+=`<circle cx="${x}" cy="${y}" r="3" fill="${t.tailCol}" opacity="0.8">
-        <animate attributeName="r" values="1;4;1" dur="${1+Math.random()}s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.2;1;0.2" dur="${1+Math.random()}s" repeatCount="indefinite"/>
-      </circle>`;
+  // Sparkles for high rank
+  let sparks='';
+  if(r>=2){
+    [[-18,40],[158,50],[75,-12],[-15,90],[158,95]].forEach(([x,y])=>{
+      sparks+=`<circle cx="${x}" cy="${y}" r="3" fill="${sc}" opacity="0.7"><animate attributeName="r" values="1;4;1" dur="${1+Math.random()*1.5}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.2;1;0.2" dur="${1+Math.random()}s" repeatCount="indefinite"/></circle>`;
     });
   }
+  // Cape for rank 3+
+  const cape=r>=3?`<path d="M55,90 Q35,120 40,170 L65,170 Q55,140 60,90Z" fill="${sf}" opacity="0.6"/>
+    <path d="M95,90 Q115,120 110,170 L85,170 Q95,140 90,90Z" fill="${sf}" opacity="0.6"/>`:'' ;
+  // Wings for rank 4
+  const wings=r>=4?`<ellipse cx="35" cy="90" rx="25" ry="45" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="1" transform="rotate(-15,35,90)"/>
+    <ellipse cx="115" cy="90" rx="25" ry="45" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.2)" stroke-width="1" transform="rotate(15,115,90)"/>`:'' ;
 
-  // Wings
-  let wingSVG='';
-  if(t.wings){
-    wingSVG=`
-      <ellipse cx="42" cy="90" rx="30" ry="50" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1" transform="rotate(-20,42,90)"/>
-      <ellipse cx="118" cy="90" rx="30" ry="50" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="1" transform="rotate(20,118,90)"/>
-    `;
-  }
-
-  // Crown
-  let crownSVG='';
-  if(t.crownShow){
-    const isDivine=t.divine;
-    crownSVG=`
-      <rect x="68" y="${isDivine?36:40}" width="24" height="${isDivine?14:10}" rx="3" fill="${t.tailCol}" stroke="${isDivine?'#fff':'rgba(255,255,255,0.5)'}" stroke-width="1.2"/>
-      <polygon points="68,${isDivine?50:50} 74,${isDivine?36:40} 80,${isDivine?30:35} 86,${isDivine?26:32} 92,${isDivine?30:35} 92,${isDivine?50:50}" fill="${t.tailCol}" stroke="${isDivine?'#fff':'rgba(255,255,255,0.5)'}" stroke-width="1"/>
-      ${isDivine?`<circle cx="80" cy="28" r="4" fill="#ffd60a"/><circle cx="68" cy="40" r="3" fill="#c77dff"/><circle cx="92" cy="40" r="3" fill="#90e0ef"/>`:
-      `<circle cx="80" cy="35" r="3" fill="${t.tailCol}"/>`}
-    `;
-  }
-
-  // Divine halo
-  let haloSVG = t.divine?`<circle cx="80" cy="50" r="35" fill="none" stroke="rgba(255,214,10,0.3)" stroke-width="2"><animate attributeName="r" values="33;38;33" dur="3s" repeatCount="indefinite"/></circle>`:'' ;
-
-  s.innerHTML = `
-    ${haloSVG}
-    ${wingSVG}
-    ${crownSVG}
-    ${sparkSVG}
-    <!-- Hair back -->
-    <ellipse cx="80" cy="55" rx="22" ry="24" fill="${t.hairCol}"/>
-    <!-- Torso -->
-    <rect x="64" y="82" width="32" height="38" rx="10" fill="${t.divine?'#fde68a':t.tier>=2?'#e9d5ff':'#a8dadc'}" opacity="0.9"/>
-    <!-- Scales top -->
-    <rect x="64" y="100" width="32" height="22" rx="8" fill="${t.tailCol}" opacity="0.4"/>
-    <!-- Fin collar -->
-    <ellipse cx="80" cy="84" rx="18" ry="7" fill="${t.tailCol}" opacity="0.6"/>
-    <!-- Shell bra decoration -->
-    <ellipse cx="73" cy="94" rx="8" ry="5" fill="rgba(255,255,255,0.25)" stroke="${t.tailCol}" stroke-width="1"/>
-    <ellipse cx="87" cy="94" rx="8" ry="5" fill="rgba(255,255,255,0.25)" stroke="${t.tailCol}" stroke-width="1"/>
-    <!-- Mermaid tail -->
-    <path d="M64,120 Q55,145 52,175 Q65,170 80,178 Q95,170 108,175 Q105,145 96,120 Z" fill="${t.tailCol}"/>
-    <!-- Tail shimmer -->
-    <path d="M68,125 Q62,150 60,175 Q68,170 75,175 Q72,150 70,125 Z" fill="rgba(255,255,255,0.15)"/>
-    <!-- Tail fin -->
-    <path d="M52,175 Q40,195 45,200 Q62,188 80,190 Q98,188 115,200 Q120,195 108,175 Z" fill="${t.tailCol}" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-    <!-- Fin details -->
-    <path d="M45,198 Q62,186 80,188" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none"/>
-    <path d="M80,188 Q98,186 115,198" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" fill="none"/>
-    <!-- Head -->
-    <ellipse cx="80" cy="60" rx="21" ry="23" fill="#fde8d0"/>
-    <!-- Hair front -->
-    <path d="M60,55 Q64,36 80,34 Q96,36 100,55" fill="${t.hairCol}"/>
-    <!-- Hair long -->
-    ${tier>=1?`<path d="M59,60 Q52,90 58,115 Q64,110 64,85 Q62,70 60,58Z" fill="${t.hairCol}" opacity="0.85"/>
-    <path d="M101,60 Q108,90 102,115 Q96,110 96,85 Q98,70 100,58Z" fill="${t.hairCol}" opacity="0.85"/>`:''}
-    ${tier>=2?`<path d="M58,115 Q54,140 60,155 Q66,148 64,120Z" fill="${t.hairCol}" opacity="0.7"/>
-    <path d="M102,115 Q106,140 100,155 Q94,148 96,120Z" fill="${t.hairCol}" opacity="0.7"/>`:''}
+  svg.innerHTML=`
+    ${wings}${cape}${sparks}
+    <!-- Helmet -->
+    <ellipse cx="75" cy="55" rx="30" ry="32" fill="${sf}" stroke="${sc}" stroke-width="2.5"/>
+    <!-- Visor -->
+    <ellipse cx="75" cy="52" rx="20" ry="22" fill="rgba(6,182,212,0.25)" stroke="${sc}" stroke-width="1.5"/>
+    <ellipse cx="75" cy="52" rx="20" ry="22" fill="url(#visorGrad${charId})"/>
+    <defs>
+      <radialGradient id="visorGrad${charId}" cx="35%" cy="30%">
+        <stop offset="0%" stop-color="rgba(255,255,255,0.3)"/>
+        <stop offset="100%" stop-color="rgba(6,182,212,0.05)"/>
+      </radialGradient>
+    </defs>
+    <!-- Face inside -->
+    <ellipse cx="75" cy="53" rx="15" ry="17" fill="#fde8d0"/>
     <!-- Eyes -->
-    <ellipse cx="72" cy="60" rx="5" ry="6" fill="white"/>
-    <ellipse cx="88" cy="60" rx="5" ry="6" fill="white"/>
-    <ellipse cx="73" cy="61" rx="3.5" ry="4" fill="${tier>=2?t.tailCol:'#005f8a'}"/>
-    <ellipse cx="89" cy="61" rx="3.5" ry="4" fill="${tier>=2?t.tailCol:'#005f8a'}"/>
-    <circle cx="74" cy="60" r="1.5" fill="white"/>
-    <circle cx="90" cy="60" r="1.5" fill="white"/>
-    <!-- Lashes -->
-    <path d="M68,56 L66,53 M71,55 L70,52 M74,55 L74,51" stroke="${t.hairCol}" stroke-width="1" stroke-linecap="round"/>
-    <path d="M85,55 L85,51 M88,55 L89,52 M91,56 L93,53" stroke="${t.hairCol}" stroke-width="1" stroke-linecap="round"/>
+    <ellipse cx="68" cy="50" rx="4" ry="5" fill="white"/>
+    <ellipse cx="82" cy="50" rx="4" ry="5" fill="white"/>
+    <ellipse cx="69" cy="51" rx="3" ry="3.5" fill="${sc}"/>
+    <ellipse cx="83" cy="51" rx="3" ry="3.5" fill="${sc}"/>
+    <circle cx="70" cy="50" r="1.2" fill="white"/>
+    <circle cx="84" cy="50" r="1.2" fill="white"/>
     <!-- Smile -->
-    <path d="M74,72 Q80,78 86,72" stroke="#e879a0" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <path d="M76,72 Q80,76 84,72 Q80,74 76,72" fill="#f472b6" opacity="0.7"/>
+    <path d="M68,61 Q75,67 82,61" stroke="#e879a0" stroke-width="1.8" fill="none" stroke-linecap="round"/>
     <!-- Blush -->
-    <ellipse cx="66" cy="68" rx="7" ry="4" fill="#fda4af" opacity="0.45"/>
-    <ellipse cx="94" cy="68" rx="7" ry="4" fill="#fda4af" opacity="0.45"/>
+    <ellipse cx="62" cy="58" rx="6" ry="3.5" fill="#fda4af" opacity="0.4"/>
+    <ellipse cx="88" cy="58" rx="6" ry="3.5" fill="#fda4af" opacity="0.4"/>
+    <!-- Helmet ring -->
+    <circle cx="75" cy="55" r="30" fill="none" stroke="${sc}" stroke-width="1.5" opacity="0.4"/>
+    <!-- Antenna -->
+    <line x1="75" y1="23" x2="75" y2="10" stroke="${sc}" stroke-width="2"/>
+    <circle cx="75" cy="8" r="5" fill="${sc}">
+      <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <!-- Rank badge on helmet -->
+    ${r>=1?`<circle cx="50" cy="30" r="8" fill="${sc}" opacity="0.7"><animate attributeName="r" values="7;9;7" dur="1.5s" repeatCount="indefinite"/></circle><text x="50" y="34" font-size="9" text-anchor="middle">${r>=4?'👑':r>=3?'💎':r>=2?'🌟':'⭐'}</text>`:''}
+    <!-- Suit body -->
+    <rect x="58" y="85" width="34" height="45" rx="10" fill="${sf}" stroke="${sc}" stroke-width="1.5"/>
+    <!-- Suit detail stripes -->
+    <rect x="68" y="90" width="14" height="4" rx="2" fill="${sc}" opacity="0.5"/>
+    <rect x="68" y="97" width="14" height="2" rx="1" fill="${sc}" opacity="0.3"/>
+    ${r>=2?`<circle cx="75" cy="108" r="6" fill="${sc}" opacity="0.6"><animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.8s" repeatCount="indefinite"/></circle>`:'' }
     <!-- Arms -->
-    <path d="M64,95 Q50,105 47,115 Q51,120 55,117 Q58,108 68,100Z" fill="#fde8d0"/>
-    <path d="M96,95 Q110,105 113,115 Q109,120 105,117 Q102,108 92,100Z" fill="#fde8d0"/>
-    <!-- Hands -->
-    <ellipse cx="47" cy="117" rx="6" ry="5" fill="#fde8d0"/>
-    <ellipse cx="113" cy="117" rx="6" ry="5" fill="#fde8d0"/>
-    ${tier>=1?`<!-- Pearl bracelet -->
-    <circle cx="47" cy="113" r="2" fill="${t.tailCol}"/>
-    <circle cx="113" cy="113" r="2" fill="${t.tailCol}"/>`:'' }
-    ${tier>=3?`<!-- Necklace -->
-    <path d="M68,84 Q80,90 92,84" stroke="${t.tailCol}" stroke-width="1.5" fill="none"/>
-    <circle cx="80" cy="88" r="4" fill="${tier>=3?'#ffd60a':'transparent'}" stroke="${t.tailCol}" stroke-width="1"/>`:'' }
-    ${tier>=4?`<!-- Tiara glow -->
-    <circle cx="80" cy="50" r="6" fill="rgba(255,214,10,0.2)"><animate attributeName="r" values="5;8;5" dur="2s" repeatCount="indefinite"/></circle>`:'' }
-    <!-- Tail sparkles -->
-    ${tier>=1?`<circle cx="70" cy="150" r="2" fill="rgba(255,255,255,0.6)"><animate attributeName="opacity" values="0.2;1;0.2" dur="1.5s" repeatCount="indefinite"/></circle>
-    <circle cx="90" cy="160" r="2" fill="rgba(255,255,255,0.6)"><animate attributeName="opacity" values="0.2;1;0.2" dur="2s" repeatCount="indefinite"/></circle>`:''}
+    <path d="M58,90 Q44,100 42,112 Q46,116 50,114 Q52,104 62,96Z" fill="${sf}" stroke="${sc}" stroke-width="1"/>
+    <path d="M92,90 Q106,100 108,112 Q104,116 100,114 Q98,104 88,96Z" fill="${sf}" stroke="${sc}" stroke-width="1"/>
+    <!-- Gloves -->
+    <circle cx="42" cy="114" r="8" fill="${sf}" stroke="${sc}" stroke-width="1.5"/>
+    <circle cx="108" cy="114" r="8" fill="${sf}" stroke="${sc}" stroke-width="1.5"/>
+    <!-- Legs -->
+    <rect x="62" y="128" width="12" height="36" rx="6" fill="${sf}" stroke="${sc}" stroke-width="1"/>
+    <rect x="76" y="128" width="12" height="36" rx="6" fill="${sf}" stroke="${sc}" stroke-width="1"/>
+    <!-- Boots -->
+    <path d="M58,162 Q62,174 75,174 L78,164 Z" fill="${sc}" opacity="0.8"/>
+    <path d="M92,162 Q88,174 75,174 L72,164 Z" fill="${sc}" opacity="0.8"/>
     <!-- Shadow -->
-    <ellipse cx="80" cy="198" rx="32" ry="4" fill="rgba(0,0,0,0.15)"/>
+    <ellipse cx="75" cy="175" rx="28" ry="4" fill="rgba(0,0,0,0.2)"/>
   `;
 }
 
-// ═══════════════════════════════════════════════════════
-//  GEM BAR BUILDER
-// ═══════════════════════════════════════════════════════
-function buildGemBar(){
-  const bar = document.getElementById('gemBar');
-  bar.innerHTML='';
-  const gemColors=["#90e0ef","#c77dff","#00b4d8","#9d4edd","#2ec4b6","#ffd60a","#ff6b6b"];
-  ZONES.forEach((z,i)=>{
-    const orb=document.createElement('div');
-    orb.className='gem-orb'+(i<G.currentZone?' lit':'');
-    orb.style.setProperty('--gc',z.gemColor);
-    orb.textContent=z.gem;
-    orb.title=z.name;
-    bar.appendChild(orb);
-  });
+// ═══════════════════════════════════════════════════
+//  VISUAL HELPERS
+// ═══════════════════════════════════════════════════
+function fh(n,d,nc='#67e8f9',dc='#fbbf24',sz='1.6rem'){
+  const qs=v=>v==='?'?`color:var(--nova-l);background:rgba(124,58,237,0.2);border-radius:5px;padding:0 5px;`:'' ;
+  return `<div class="frac"><span class="fn" style="font-size:${sz};color:${nc};${qs(String(n))}">${n}</span><div class="fb"></div><span class="fd" style="font-size:${sz};color:${dc};${qs(String(d))}">${d}</span></div>`;
+}
+function vPie(n,d,col='#a78bfa'){
+  const R=36,cx=42,cy=42,ang=360/d;let p='';
+  for(let i=0;i<d;i++){const a1=(i*ang-90)*Math.PI/180,a2=((i+1)*ang-90)*Math.PI/180;
+    const x1=cx+R*Math.cos(a1),y1=cy+R*Math.sin(a1),x2=cx+R*Math.cos(a2),y2=cy+R*Math.sin(a2);
+    p+=`<path d="M${cx},${cy}L${x1.toFixed(1)},${y1.toFixed(1)}A${R},${R} 0 ${ang>180?1:0} 1 ${x2.toFixed(1)},${y2.toFixed(1)}Z" fill="${i<n?col:'rgba(255,255,255,0.05)'}" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>`;
+  }
+  return `<div style="display:flex;align-items:center;gap:14px">
+    <svg width="84" height="84" viewBox="0 0 84 84" style="filter:drop-shadow(0 0 8px ${col}44)">${p}</svg>
+    ${fh(n,d)}</div>`;
+}
+function vBlocks(n,d,col='#67e8f9'){
+  let h='<div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:center">';
+  for(let i=0;i<d;i++)h+=`<div style="width:${Math.max(12,200/d-4)}px;height:24px;border-radius:5px;background:${i<n?col:'rgba(255,255,255,0.06)'};border:1px solid rgba(255,255,255,0.12);transition:all 0.3s"></div>`;
+  return h+`</div><div style="font-size:0.72rem;color:var(--text-dim);margin-top:5px;font-weight:700">${n} phần màu / ${d} phần tổng</div>`;
+}
+function vStars(n,d){
+  let h='<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center">';
+  for(let i=0;i<Math.min(d,16);i++)h+=i<n?`<span style="font-size:1.3rem;filter:drop-shadow(0 0 6px #fbbf24)">⭐</span>`:`<span style="font-size:1.3rem;opacity:0.25;filter:grayscale(1)">☆</span>`;
+  return h+`</div><div style="font-size:0.72rem;color:var(--text-dim);margin-top:4px;font-weight:700">${n} sao sáng / ${d} sao tổng</div>`;
+}
+function vSegments(n,d,col='#fbbf24'){
+  let h='<div style="display:flex;gap:3px;align-items:center">';
+  for(let i=0;i<d;i++)h+=`<div style="width:${Math.max(10,200/d-4)}px;height:18px;border-radius:4px;background:${i<n?col:'rgba(255,255,255,0.05)'};border:1px solid rgba(255,255,255,0.1)"></div>`;
+  return h+'</div>';
+}
+function vRuler(n,d,col='#10b981'){
+  const p=(n/d*100).toFixed(1);
+  return `<div style="width:100%;max-width:240px">
+    <div style="background:rgba(255,255,255,0.06);border-radius:8px;height:22px;overflow:hidden;border:1px solid rgba(255,255,255,0.1)">
+      <div style="height:100%;width:${p}%;background:linear-gradient(90deg,${col},${col}88);border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:5px;font-size:0.7rem;font-weight:700;color:#fff">${n}</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-dim);font-weight:700;margin-top:2px"><span>0</span><span>${d}</span></div>
+  </div>`;
+}
+function vEqual(n1,d1,n2,d2){
+  const g=gcd(n1,d1);
+  return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center">
+    ${fh(n1,d1,'#fda4af','#fda4af')} <span style="color:rgba(255,255,255,0.4)">÷${g}</span>
+    <span style="color:var(--green-l);font-size:1.8rem">→</span> ${fh(n2,d2,'#6ee7b7','#6ee7b7')}
+  </div>`;
+}
+function vEqualCheck(n1,d1,n2,d2){
+  return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center">
+    ${fh(n1,d1,'#67e8f9','#fbbf24')} <span style="font-family:Orbitron;font-size:2rem;color:var(--nova-l)">□</span> ${fh(n2,d2,'#a78bfa','#a78bfa')}
+  </div>`;
+}
+function vSimplify(n,d){
+  const g=gcd(n,d);
+  return `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center">
+    ${fh(n,d,'#fda4af','#fda4af')}
+    <span style="color:var(--green-l);font-size:1.8rem">→</span> ${fh('?','?','#6ee7b7','#6ee7b7')}
+  </div>`;
+}
+function vFillIn(n1,d1,n2,d2){
+  return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center">
+    ${fh(n1,d1,'#67e8f9','#fbbf24')} <span style="font-family:Orbitron;font-size:2rem;color:var(--green-l)">=</span> ${fh(n2,d2,'#a78bfa','#a78bfa')}
+  </div>`;
+}
+function vCompare(n1,d1,n2,d2){
+  return `<div style="display:flex;align-items:center;gap:10px;justify-content:center">
+    ${fh(n1,d1,'#67e8f9','#fbbf24')} <span style="font-family:Orbitron;font-size:2.5rem;color:var(--nova-l)">□</span> ${fh(n2,d2,'#fbbf24','#67e8f9')}
+  </div>`;
+}
+function vComparePie(n1,d1,n2,d2){
+  return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
+    ${vPie(n1,d1,'#a78bfa')} <span style="font-family:Orbitron;font-size:1.5rem;color:var(--nova-l)">vs</span> ${vPie(n2,d2,'#fbbf24')}
+  </div>`;
+}
+function vArith(n1,d1,n2,d2,op){
+  const oc=op==='+'?'#6ee7b7':'#fda4af';
+  return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
+    ${fh(n1,d1)} <span style="font-family:Orbitron;font-size:2.2rem;color:${oc}">${op}</span> ${fh(n2,d2,'#fbbf24','#67e8f9')} <span style="font-family:Orbitron;font-size:2rem;color:var(--nova-l)">=</span> ${fh('?',d1,'#a78bfa','#a78bfa')}
+  </div>`;
+}
+function vArithDiff(n1,d1,n2,d2,L,op){
+  const oc=op==='+'?'#6ee7b7':'#fda4af';
+  return `<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
+      ${fh(n1,d1,'#67e8f9','#fbbf24','1.4rem')} <span style="font-family:Orbitron;font-size:2rem;color:${oc}">${op}</span> ${fh(n2,d2,'#fbbf24','#67e8f9','1.4rem')} <span style="font-family:Orbitron;font-size:1.8rem;color:var(--nova-l)">=</span> ${fh('?',L,'#a78bfa','#a78bfa','1.4rem')}
+    </div>
+
+  </div>`;
+}
+function vMul(n1,d1,n2,d2){
+  return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
+    ${fh(n1,d1)} <span style="font-family:Orbitron;font-size:2.2rem;color:var(--gold)">×</span> ${fh(n2,d2,'#fbbf24','#67e8f9')} <span style="font-family:Orbitron;font-size:2rem;color:var(--nova-l)">=</span> ${fh('?','?','#a78bfa','#a78bfa')}
+
+  </div>`;
+}
+function vDiv(n1,d1,n2,d2){
+  return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center">
+    ${fh(n1,d1,'#67e8f9','#fbbf24','1.4rem')} <span style="font-family:Orbitron;font-size:2rem;color:var(--rose-l)">÷</span> ${fh(n2,d2,'#fbbf24','#67e8f9','1.4rem')} <span style="font-family:Orbitron;font-size:1.8rem;color:var(--green-l)">= ×</span> ${fh(d2,n2,'#6ee7b7','#6ee7b7','1.4rem')}
+
+  </div>`;
+}
+function vAdd3(n1,d1,n2,d2,n3,d3){
+  return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center">
+    ${fh(n1,d1,'#67e8f9','#fbbf24','1.4rem')} <span style="font-family:Orbitron;font-size:1.8rem;color:#6ee7b7">+</span> ${fh(n2,d2,'#fbbf24','#67e8f9','1.4rem')} <span style="font-family:Orbitron;font-size:1.8rem;color:#6ee7b7">+</span> ${fh(n3,d3,'#a78bfa','#a78bfa','1.4rem')} <span style="font-family:Orbitron;font-size:1.8rem;color:var(--nova-l)">=</span> ${fh('?',d1,'#fda4af','#fda4af','1.4rem')}
+  </div>`;
+}
+function vOrder(fracs){
+  const cols=['#67e8f9','#fbbf24','#a78bfa','#6ee7b7'];
+  return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center">
+    ${fracs.map((f,i)=>{const[n,d]=f.split('/');return fh(n,d,cols[i%cols.length],cols[(i+2)%cols.length])}).join('<span style="color:rgba(255,255,255,0.2);font-size:1.4rem">,</span>')}
+  </div>`;
+}
+function vBetween(n1,d1,n2,d2){
+  return `<div style="display:flex;align-items:center;gap:10px;justify-content:center">
+    ${fh(n1,d1,'#6ee7b7','#6ee7b7')} <span style="font-family:Orbitron;font-size:1.5rem;color:var(--text-dim)">< ? <</span> ${fh(n2,d2,'#fbbf24','#fbbf24')}
+  </div>`;
 }
 
-// ═══════════════════════════════════════════════════════
-//  WORLD MAP BUILDER
-// ═══════════════════════════════════════════════════════
-function buildWorldMap(){
-  const scroll=document.getElementById('mapScroll');
-  scroll.innerHTML='';
-  ZONES.forEach((z,i)=>{
-    const node=document.createElement('div');
-    node.className=`map-zone ${i<G.currentZone?'done':i===G.currentZone?'active':'locked'}`;
-    const gem=document.createElement('div'); gem.className='map-zone-gem'; gem.textContent='✅';
-    node.innerHTML=`<div class="map-zone-emoji">${z.emoji}</div><div class="map-zone-name">${z.name}</div>`;
-    node.appendChild(gem);
-    scroll.appendChild(node);
-    if(i<ZONES.length-1){
-      const conn=document.createElement('div'); conn.className='map-connector';
-      scroll.appendChild(conn);
-    }
-  });
-  // Scroll to active
-  const active=scroll.querySelector('.active');
-  if(active) setTimeout(()=>active.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}),300);
-}
-
-// ═══════════════════════════════════════════════════════
-//  GAME STATE
-// ═══════════════════════════════════════════════════════
-let G={
-  lives:4, score:0, combo:0,
-  currentZone:0, qIdx:0,
-  answered:false,
-  zoneQs:[],
-  zoneCorrect:0,
-  marinaLevel:0,
-  gemsCollected:[],
-  totalCorrect:0, totalWrong:0,
+// ═══════════════════════════════════════════════════
+//  ADAPTIVE SYSTEM
+// ═══════════════════════════════════════════════════
+const TOPIC_NAMES={
+  recognize:'Nhận biết phân số',reallife:'Thực tế cuộc sống',
+  equal:'Phân số bằng nhau',simplify:'Rút gọn',compare:'So sánh',
+  add_same:'Cộng cùng mẫu',sub_same:'Trừ cùng mẫu',
+  add_diff:'Cộng khác mẫu',sub_diff:'Trừ khác mẫu',
+  multiply:'Nhân phân số',divide:'Chia phân số',mixed:'Tổng hợp'
 };
+let weakMap={}; // topic → {wrong, total}
 
-// ═══════════════════════════════════════════════════════
-//  START / LOAD ZONE
-// ═══════════════════════════════════════════════════════
-function startGame(){
-  document.getElementById('startScreen').style.display='none';
-  playBubble();
-  G={lives:4,score:0,combo:0,currentZone:0,qIdx:0,answered:false,
-     zoneQs:[],zoneCorrect:0,marinaLevel:0,gemsCollected:[],totalCorrect:0,totalWrong:0};
-  updateHUD();
-  buildGemBar();
-  buildWorldMap();
-  drawMarina(0);
-  loadZone();
+function recordAnswer(topic,correct){
+  if(!weakMap[topic])weakMap[topic]={wrong:0,total:0};
+  weakMap[topic].total++;
+  if(!correct)weakMap[topic].wrong++;
+  updateWeakUI();
 }
 
-function loadZone(){
-  const z=ZONES[G.currentZone];
-  G.zoneQs=shuffle([...z.questions]).slice(0,5);
-  G.qIdx=0; G.zoneCorrect=0; G.answered=false;
+function getWeakTopics(){
+  return Object.entries(weakMap)
+    .filter(([,v])=>v.total>0)
+    .map(([k,v])=>({topic:k,rate:v.wrong/v.total,wrong:v.wrong,total:v.total}))
+    .sort((a,b)=>b.rate-a.rate)
+    .slice(0,4);
+}
 
-  document.getElementById('zoneTitleEl').innerHTML=`${z.emoji} ${z.name}`;
-  document.getElementById('zoneThemeEl').textContent=z.theme;
+function updateWeakUI(){
+  const list=document.getElementById('weakList');
+  const weaks=getWeakTopics().filter(w=>w.wrong>0);
+  if(weaks.length===0){list.innerHTML='<div style="font-size:0.72rem;color:var(--text-dim);font-weight:700">Chưa có điểm yếu! Làm tốt lắm! 🎉</div>';return;}
+  list.innerHTML=weaks.map(w=>`<div class="weak-item">
+    <div class="weak-label">${TOPIC_NAMES[w.topic]||w.topic}</div>
+    <div class="weak-track"><div class="weak-fill" style="width:${Math.round(w.rate*100)}%"></div></div>
+    <div style="font-size:0.65rem;color:var(--rose-l);font-weight:800;margin-left:4px">${w.wrong}/${w.total}</div>
+  </div>`).join('');
+}
 
-  // Letter
-  document.getElementById('letterAvatar').textContent=z.letter.from;
-  document.getElementById('letterSender').textContent=z.letter.name;
-  document.getElementById('letterText').textContent=z.letter.text;
+// ═══════════════════════════════════════════════════
+//  PLANET MAP UI
+// ═══════════════════════════════════════════════════
+function buildPlanetMap(){
+  const el=document.getElementById('planetMap');
+  el.innerHTML='';
+  PLANETS.forEach((p,i)=>{
+    const node=document.createElement('div');
+    node.className=`planet-node ${i<G.planet?'done':i===G.planet?'active':'locked'}`;
+    node.innerHTML=`<div class="planet-emoji">${i<G.planet?'✅':p.emoji}</div><div class="planet-name">${p.name}</div>`;
+    el.appendChild(node);
+    if(i<PLANETS.length-1){const c=document.createElement('div');c.className='planet-conn';el.appendChild(c);}
+  });
+  // Scroll active into view
+  const active=el.querySelector('.active');
+  if(active)setTimeout(()=>active.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}),300);
+}
 
-  // Triton hint
-  const hints=z.tritonHints;
-  document.getElementById('tritonHint').textContent=hints[Math.floor(Math.random()*hints.length)];
+// ═══════════════════════════════════════════════════
+//  TIMER
+// ═══════════════════════════════════════════════════
+let timerInterval=null,timerLeft=20,timerMax=20;
+const CIRC=2*Math.PI*27; // r=27
 
-  // Coral
-  const coralLines=z.coralSays.happy;
-  document.getElementById('coralSpeech').textContent=coralLines[0];
-  document.getElementById('coralMood').textContent='😊 Sẵn sàng!';
+function startTimer(seconds){
+  clearInterval(timerInterval);
+  timerLeft=timerMax=seconds;
+  const arc=document.getElementById('timerArc');
+  arc.style.strokeDasharray=CIRC;
+  arc.style.strokeDashoffset=0;
+  arc.style.transition='none';
+  // Force reflow so transition doesn't animate the initial set
+  void arc.getBoundingClientRect();
+  arc.style.transition='stroke-dashoffset 1s linear, stroke 0.5s';
+  updateTimerUI();
+  timerInterval=setInterval(()=>{
+    timerLeft--;
+    updateTimerUI();
+    if(timerLeft<=5&&timerLeft>0)playUrgent();
+    if(timerLeft<=0){
+      clearInterval(timerInterval);
+      if(!G.answered)timeOut();
+    }
+  },1000);
+}
 
-  // Kiki says
-  showKiki(`🗺️ Vùng ${G.currentZone+1}: ${z.name} đang mở!`);
+function stopTimer(){clearInterval(timerInterval)}
 
+function updateTimerUI(){
+  const arc=document.getElementById('timerArc');
+  const num=document.getElementById('timerNum');
+  const ratio=timerLeft/timerMax;
+  const offset=CIRC*(1-ratio);
+  arc.style.strokeDashoffset=offset;
+  const col=ratio>0.5?'#6ee7b7':ratio>0.25?'#fbbf24':'#f43f5e';
+  arc.style.stroke=col;
+  num.style.color=col;
+  num.textContent=timerLeft;
+}
+
+function timeOut(){
+  if(G.answered||!G.currentQ)return;
+  G.answered=true;
+  G.lives=Math.max(0,G.lives-1);
+  G.combo=0;
+  G.oxygen=Math.max(0,G.oxygen-10);
+  document.getElementById('comboTag').classList.remove('show');
+  updateHUD();
+  playBad();
+  recordAnswer(G.currentQ.topic,false);
+
+  document.querySelectorAll('.opt-btn').forEach(b=>{
+    b.disabled=true;
+    const rawT=b.textContent.replace(/[ZXCV]/g,'').replace(/\s+/g,'').trim();
+    if(rawT===G.currentQ.ans.replace(/\s+/g,'').trim())b.classList.add('correct');
+  });
+  const fb=document.getElementById('feedbackEl');
+  fb.className='feedback show no';
+  fb.innerHTML=`⏰ Hết giờ! Đáp án: <strong>${G.currentQ.ans}</strong>.<br><span style="font-size:0.82rem">${G.currentQ.ex}</span>`;
+
+  setBotReact(false);
+  setPilotSay(pick(['Hết giờ! Cần nhanh hơn!','Thời gian là sống còn trong vũ trụ!']));
+
+  if(G.lives<=0){setTimeout(gameOver,1200);return;}
+  showNextBtn();
+}
+
+// ═══════════════════════════════════════════════════
+//  GAME STATE
+// ═══════════════════════════════════════════════════
+let G={
+  planet:0,qIdx:0,answered:false,
+  planetQs:[],planetCorrect:0,
+  lives:4,score:0,combo:0,
+  charId:0,rankLevel:0,
+  totalCorrect:0,totalWrong:0,totalTime:0,
+  inventory:[],oxygen:100,
+  currentQ:null,qStartTime:0,
+};
+let selectedChar=-1;
+
+// ═══════════════════════════════════════════════════
+//  CHARACTER PICK
+// ═══════════════════════════════════════════════════
+function pickChar(id){
+  selectedChar=id;
+  document.querySelectorAll('.ss-char-pick').forEach(el=>{
+    if(el)el.classList.toggle('selected',+el.dataset.char===id);
+  });
+  document.getElementById('ssHint').classList.remove('show');
+  playClick();
+}
+
+// ═══════════════════════════════════════════════════
+//  START
+// ═══════════════════════════════════════════════════
+function startGame(){
+  if(selectedChar<0){document.getElementById('ssHint').classList.add('show');playBad();return;}
+  document.getElementById('startScreen').style.display='none';
+  G={planet:0,qIdx:0,answered:false,planetQs:[],planetCorrect:0,
+     lives:4,score:0,combo:0,charId:selectedChar,rankLevel:0,
+     totalCorrect:0,totalWrong:0,totalTime:0,inventory:[],oxygen:100,currentQ:null,qStartTime:0};
+  weakMap={};
+  document.getElementById('charLabel').textContent=CHARS[selectedChar].label;
+  document.getElementById('charAura').style.background=`radial-gradient(circle,${CHARS[selectedChar].aura} 0%,transparent 70%)`;
+  drawCharSVG(selectedChar,0);
+  buildPlanetMap();
+  updateHUD();
+  updateWeakUI();
+  loadPlanet();
+}
+
+// ═══════════════════════════════════════════════════
+//  LOAD PLANET
+// ═══════════════════════════════════════════════════
+function loadPlanet(){
+  const p=PLANETS[G.planet];
+  // Generate 5 adaptive questions
+  G.planetQs=generateAdaptiveQuestions(p,5);
+  G.qIdx=0;G.planetCorrect=0;G.answered=false;
+
+  document.getElementById('hudZone').textContent=`${p.emoji} ${p.name}`;
+  document.getElementById('planetBadge').textContent=`${p.emoji} ${p.name}`;
+  setBotSay(pick(p.bot),'⚙️ Hệ thống sẵn sàng');
+  setPilotSay(pick(p.pilot));
+  showPlanetToast(p.emoji,`${p.name} đã mở khóa!`);
   renderQ();
 }
 
-// ═══════════════════════════════════════════════════════
-//  RENDER QUESTION
-// ═══════════════════════════════════════════════════════
-function renderQ(){
-  const q=G.zoneQs[G.qIdx];
-  const total=G.zoneQs.length;
-  G.answered=false;
+function generateAdaptiveQuestions(planet,count){
+  const qs=[];
+  const weaks=getWeakTopics().filter(w=>w.rate>0.4).map(w=>w.topic);
 
-  document.getElementById('progFill').style.width=(G.qIdx/total*100)+'%';
+  for(let i=0;i<count;i++){
+    let q;
+    // 40% chance to use weak topic if available
+    if(weaks.length>0&&Math.random()<0.4){
+      const weakTopic=pick(weaks);
+      const weakGen={
+        recognize:makeRecognizeQ,reallife:makeRealLifeQ,equal:makeEqualQ,
+        simplify:makeSimplifyQ,compare:makeCompareQ,add_same:makeAddSameQ,
+        sub_same:makeSubSameQ,add_diff:makeAddDiffQ,sub_diff:makeSubDiffQ,
+        multiply:makeMulQ,divide:makeDivQ,mixed:makeMixedQ
+      }[weakTopic];
+      if(weakGen)q=weakGen();
+    }
+    if(!q){
+      const genFn=pick(planet.generators);
+      q=genFn();
+    }
+    // Add random story context from planet
+    q.storyLine=pick(planet.story);
+    qs.push(q);
+  }
+  return qs;
+}
+
+// ═══════════════════════════════════════════════════
+//  RENDER QUESTION
+// ═══════════════════════════════════════════════════
+function renderQ(){
+  const q=G.planetQs[G.qIdx];
+  G.currentQ=q;G.answered=false;
+  G.qStartTime=Date.now();
+  const total=G.planetQs.length;
+
+  document.getElementById('qProgFill').style.width=(G.qIdx/total*100)+'%';
+  document.getElementById('qCount').textContent=`${G.qIdx+1}/${total}`;
+  document.getElementById('diffBadge').className=`difficulty-badge ${q.diffClass}`;
+  document.getElementById('diffBadge').textContent=q.diffLabel;
+  document.getElementById('topicChip').textContent=`📐 ${TOPIC_NAMES[q.topic]||q.topic}`;
+  document.getElementById('qStory').textContent=q.storyLine||q.story||'';
   document.getElementById('qText').innerHTML=`<strong>Câu ${G.qIdx+1}/${total}:</strong> ${q.q}`;
 
-  const vis=document.getElementById('qVisual');
-  try{ vis.innerHTML=q.vis(); }catch(e){ vis.innerHTML=''; }
+  try{document.getElementById('qVisual').innerHTML=q.vis();}catch(e){document.getElementById('qVisual').innerHTML='';}
 
-  const grid=document.getElementById('optsGrid');
+  const keys=['Z','X','C','V'];
+  const grid=document.getElementById('optsEl');
   grid.innerHTML='';
-  q.opts.forEach(opt=>{
+  q.opts.forEach((opt,i)=>{
     const btn=document.createElement('button');
-    btn.className='opt';
-    btn.innerHTML=fmtOpt(opt);
-    btn.onclick=()=>checkAnswer(opt,btn,q);
+    btn.className='opt-btn';
+    btn.innerHTML=fmtOpt(opt)+`<span class="key-hint">${keys[i]}</span>`;
+    btn.onclick=()=>checkAns(opt,btn,q);
     grid.appendChild(btn);
   });
 
-  const fb=document.getElementById('feedbackEl');
-  fb.className='feedback'; fb.innerHTML='';
+  document.getElementById('feedbackEl').className='feedback';
   document.getElementById('nextBtn').style.display='none';
-
-  // Rotate triton hint
-  const z=ZONES[G.currentZone];
-  document.getElementById('tritonHint').textContent=z.tritonHints[G.qIdx%z.tritonHints.length];
+  startTimer(q.time||20);
 }
 
 function fmtOpt(opt){
-  // Fraction-like? e.g. "3/7", "1/2"
-  if(/^\d+\/\d+$/.test(opt.trim())){
-    const[n,d]=opt.split('/');
-    return `<div class="frac sm"><span class="frac-n">${n}</span><div class="frac-bar"></div><span class="frac-d">${d}</span></div>`;
-  }
+  if(/^\d+\/\d+$/.test(opt.trim())){const[n,d]=opt.split('/');return `<div class="frac sm"><span class="fn">${n}</span><div class="fb"></div><span class="fd">${d}</span></div>`;}
   return opt;
 }
 
-// ═══════════════════════════════════════════════════════
-//  ANSWER CHECKING
-// ═══════════════════════════════════════════════════════
-function checkAnswer(sel, btn, q){
-  if(G.answered) return;
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{
+  const ss=document.getElementById('startScreen');
+  const gameStarted=ss.style.display==='none';
+  const overlayOpen=document.getElementById('gameOverlay').classList.contains('show');
+  if(!gameStarted||overlayOpen||!G.planetQs.length){return;}
+  if(true){
+    const keys={'z':0,'x':1,'c':2,'v':3};
+    const idx=keys[e.key.toLowerCase()];
+    if(idx!==undefined&&!G.answered){
+      const btns=document.querySelectorAll('.opt-btn');
+      if(btns[idx])btns[idx].click();
+    }
+    if((e.key==='Enter'||e.key===' ')&&G.answered){
+      const nb=document.getElementById('nextBtn');
+      if(nb.style.display!=='none')nb.click();
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════
+//  CHECK ANSWER
+// ═══════════════════════════════════════════════════
+function checkAns(sel,btn,q){
+  if(G.answered)return;
   G.answered=true;
+  stopTimer();
   playClick();
-  const correct=(sel.trim()===q.ans.trim());
 
-  document.querySelectorAll('.opt').forEach(b=>{
+  const correct=sel.trim()===q.ans.trim();
+  const elapsed=(Date.now()-G.qStartTime)/1000;
+  G.totalTime+=elapsed;
+
+  document.querySelectorAll('.opt-btn').forEach(b=>{
     b.disabled=true;
-    const raw=b.textContent.replace(/\s+/g,'').trim();
+    const raw=b.textContent.replace(/[ZXCV]/g,'').replace(/\s+/g,'').trim();
     const ansRaw=q.ans.replace(/\s+/g,'').trim();
-    if(raw===ansRaw||ansRaw.includes(raw)||raw.includes(ansRaw)) b.classList.add('correct');
+    if(raw===ansRaw)b.classList.add('correct');
   });
-  if(!correct){ btn.classList.remove('correct'); btn.classList.add('wrong'); }
+  if(!correct&&btn){btn.classList.remove('correct');btn.classList.add('wrong');}
 
+  recordAnswer(q.topic,correct);
   const fb=document.getElementById('feedbackEl');
 
   if(correct){
-    G.combo++; G.score+=100+(G.combo>1?G.combo*25:0);
-    G.zoneCorrect++; G.totalCorrect++;
-    playCorrect();
+    G.combo++;G.planetCorrect++;G.totalCorrect++;
+    const timeBonus=Math.max(0,Math.floor((q.time-elapsed)*3));
+    G.score+=100+(G.combo>1?G.combo*30:0)+timeBonus;
+    if(timeBonus>20)showTimeBonus(btn,`+${timeBonus}`);
+    if(G.combo>=2){document.getElementById('comboNum').textContent=G.combo;document.getElementById('comboTag').classList.add('show');}
+    if(G.combo>=4)showPlanetToast('🐳',`Combo ×${G.combo}! +${G.combo*30} điểm!`);
+    addInventory();
+    G.oxygen=Math.min(100,G.oxygen+5);
+    playOk();
     spawnSparks(btn);
-    if(G.combo>=3){ showWhale(`🐳 Combo ×${G.combo}! Pearl xuất hiện! +${G.combo*25} điểm!`); }
-    if(G.combo>=2){ document.getElementById('comboNum').textContent=G.combo; document.getElementById('comboPill').classList.add('show'); }
-
     fb.className='feedback show ok';
-    fb.innerHTML=`✅ Tuyệt vời! ${q.ex}${G.combo>=3?` 🔥 Combo ×${G.combo}!`:''}`;
-
-    // Character reactions
-    const z=ZONES[G.currentZone];
-    const coralLine=z.coralSays.happy[Math.floor(Math.random()*z.coralSays.happy.length)];
-    document.getElementById('coralSpeech').textContent=coralLine;
-    document.getElementById('coralMood').textContent='🥳 Vui quá!';
-    document.getElementById('coralAvatar').classList.add('bounce');
-    setTimeout(()=>document.getElementById('coralAvatar').classList.remove('bounce'),700);
-
+    fb.innerHTML=`✅ Chính xác! ${timeBonus>0?`⚡ +${timeBonus} điểm tốc độ! `:''}<br><span style="font-size:0.82rem">${q.ex}</span>${G.combo>=3?`<br>🔥 Combo ×${G.combo}!`:''}`;
+    setBotReact(true);
+    const p=PLANETS[G.planet];
+    setBotSay(pick(['Beep BEEP! Tuyệt vời!','System OK! Module repaired!','Bloop bloop! Outstanding!','⚡ Processing complete!']),'⚡ Xuất sắc!');
+    setPilotSay(pick(['Tốt lắm! Tàu ổn định thêm!','Chính xác! Đúng như tính toán!','Module đã hoạt động trở lại!']));
   } else {
-    G.combo=0; G.lives=Math.max(0,G.lives-1); G.totalWrong++;
-    document.getElementById('comboPill').classList.remove('show');
-    playWrong();
-    updateHUD();
-
+    G.combo=0;G.lives=Math.max(0,G.lives-1);G.totalWrong++;
+    document.getElementById('comboTag').classList.remove('show');
+    G.oxygen=Math.max(0,G.oxygen-15);
+    playBad();
+    removeInventory();
     fb.className='feedback show no';
-    fb.innerHTML=`❌ Chưa đúng. Đáp án: <strong>${q.ans}</strong>. ${q.ex}`;
-
-    const z=ZONES[G.currentZone];
-    const sadLine=z.coralSays.sad[Math.floor(Math.random()*z.coralSays.sad.length)];
-    document.getElementById('coralSpeech').textContent=sadLine;
-    document.getElementById('coralMood').textContent='😢 Buồn chút...';
-
-    if(G.lives<=0){ setTimeout(triggerGameOver,1200); return; }
+    fb.innerHTML=`❌ Chưa đúng. Đáp án: <strong>${q.ans}</strong>.<br><span style="font-size:0.82rem">${q.ex}</span>`;
+    setBotReact(false);
+    setBotSay(pick(['Beep... Error detected...','Bloop. Kiểm tra lại nhé!','System warning! Retry!']),'⚠️ Cảnh báo');
+    setPilotSay(pick(['Cẩn thận! Đọc kỹ câu hỏi!','Tàu rung lắc! Cần chính xác hơn!','Oxy giảm! Tập trung đi!']));
+    if(G.lives<=0){setTimeout(gameOver,1300);return;}
   }
 
   updateHUD();
-
-  const nBtn=document.getElementById('nextBtn');
-  nBtn.style.display='block';
-  const isLast=G.qIdx>=G.zoneQs.length-1;
-  nBtn.textContent=isLast?`💎 Xem kết quả vùng ${G.currentZone+1}!`:'Tiếp tục 🌊';
-  nBtn.onclick=isLast?finishZone:nextQ;
+  if(G.lives>0)showNextBtn();
 }
 
-function nextQ(){
-  G.qIdx++;
-  playBubble();
-  renderQ();
-  const z=ZONES[G.currentZone];
-  const idx=G.qIdx%z.letter.text.length;
+function showNextBtn(){
+  const nb=document.getElementById('nextBtn');
+  nb.style.display='block';
+  const isLast=G.qIdx>=G.planetQs.length-1;
+  const label=isLast?`🪐 Kết quả hành tinh ${G.planet+1}!`:`Câu tiếp theo`;
+  nb.innerHTML=`${label} <kbd>Enter</kbd>`;
+  nb.onclick=isLast?finishPlanet:nextQ;
 }
 
+function nextQ(){G.qIdx++;playTick();renderQ();}
 function handleNext(){}
 
-// ═══════════════════════════════════════════════════════
-//  ZONE FINISH
-// ═══════════════════════════════════════════════════════
-function finishZone(){
-  const z=ZONES[G.currentZone];
-  const total=G.zoneQs.length;
-  const ratio=G.zoneCorrect/total;
+// ═══════════════════════════════════════════════════
+//  PLANET FINISH
+// ═══════════════════════════════════════════════════
+function finishPlanet(){
+  stopTimer();
+  const p=PLANETS[G.planet];
+  const total=G.planetQs.length;
+  const ratio=G.planetCorrect/total;
   const passed=ratio>=0.6;
   const stars=ratio===1?3:ratio>=0.8?2:ratio>=0.6?1:0;
-  const isLast=G.currentZone>=ZONES.length-1;
-
+  const isLast=G.planet>=PLANETS.length-1;
   if(passed){
-    G.gemsCollected.push(z.gem);
-    addGemToCollection(z.gem,z.gemColor);
-    // Advance marina
-    G.marinaLevel=Math.min(4,G.currentZone<2?0:G.currentZone<4?1:G.currentZone<5?2:G.currentZone<6?3:4);
-    drawMarina(G.marinaLevel);
-    buildGemBar();
+    G.rankLevel=Math.min(4,Math.floor(G.planet/1.5));
+    drawCharSVG(G.charId,G.rankLevel);
+    document.getElementById('charRank').textContent=RANKS[G.rankLevel];
     playLevelUp();
   }
 
-  const ov=document.getElementById('gameOverlay');
-  ov.classList.add('show');
+  const ov=document.getElementById('gameOverlay');ov.classList.add('show');
+  const avgTime=G.totalCorrect>0?(G.totalTime/G.totalCorrect).toFixed(1):'–';
 
-  if(passed){
-    document.getElementById('ovEmoji').textContent=isLast?'👑':z.gem;
-    const t=document.getElementById('ovTitle');
-    t.className='ov-title win';
-    t.textContent=isLast?'Marina đã giải phóng đại dương!':'Viên ngọc thu hồi!';
-    document.getElementById('ovChars').innerHTML=isLast?'🧜‍♀️🐠🐢🦀🐙👑':'🧜‍♀️🐠🐢';
-    document.getElementById('ovDesc').innerHTML=isLast
-      ?`🎉 Bạn đã đánh bại Malvora và thu hồi tất cả 7 Viên Ngọc Phân Số! Marina trở thành <strong>Nữ hoàng đại dương</strong>! Điểm cuối: <strong>${G.score}</strong> ✨`
-      :`Vùng <strong>${z.name}</strong> đã giải phóng! Thu được ${z.gem} <strong>${z.name}</strong>!<br>Kết quả: <strong>${G.zoneCorrect}/${total}</strong> câu đúng. Marina tiến hóa thêm! 🧜‍♀️`;
-    document.getElementById('ovStars').innerHTML='⭐'.repeat(stars)+'☆'.repeat(3-stars);
-    document.getElementById('ovPrimary').textContent=isLast?'🔄 Chơi lại từ đầu':`Vùng tiếp: ${ZONES[G.currentZone+1]?.emoji||''} ${ZONES[G.currentZone+1]?.name||''}`;
-    document.getElementById('ovSecond').style.display='block';
-    if(passed) spawnConfetti();
-    showWhale(isLast?'🏆 Đại dương được cứu rồi! PEARL CHÚC MỪNG!':'🐳 Pearl tự hào về bạn!');
-  } else {
-    document.getElementById('ovEmoji').textContent='💔';
-    const t=document.getElementById('ovTitle');
-    t.className='ov-title lose';
-    t.textContent='Chưa đủ sức mạnh!';
-    document.getElementById('ovChars').innerHTML='🧜‍♀️🐠';
-    document.getElementById('ovDesc').innerHTML=`Malvora vẫn còn mạnh! Bạn cần ít nhất ${Math.ceil(total*0.6)} câu đúng để lấy lại viên ngọc.<br>Kết quả: <strong>${G.zoneCorrect}/${total}</strong> câu.<br>Triton và Coral tin bạn làm được! 💪`;
-    document.getElementById('ovStars').innerHTML='☆☆☆';
-    document.getElementById('ovPrimary').textContent='🔄 Thử lại vùng này';
-    document.getElementById('ovSecond').style.display='none';
-  }
+  document.getElementById('ovEmoji').textContent=passed?(isLast?'🏆':p.emoji):'💔';
+  const t=document.getElementById('ovTitle');
+  t.className=`ov-title ${passed?'win':'lose'}`;
+  t.textContent=passed?(isLast?'TRÁI ĐẤT ĐÃ ĐẾN!':'Hành tinh chinh phục!'):('Cần cố hơn!');
+  document.getElementById('ovChars').textContent=passed?`${CHARS[G.charId].emoji}🤖👨‍✈️`:`${CHARS[G.charId].emoji}💔`;
+  document.getElementById('ovDesc').innerHTML=passed
+    ?(isLast?`🎉 Bạn đã dẫn tàu Starlight-7 vượt qua <strong>7 hành tinh</strong> và trở về Trái Đất an toàn! ${CHARS[G.charId].name} trở thành <strong>${RANKS[G.rankLevel]}</strong>!`
+      :`<strong>${p.name}</strong> đã được chinh phục! ${G.planetCorrect}/${total} câu đúng. Tiến lên!`)
+    :`Cần ít nhất ${Math.ceil(total*0.6)} câu đúng. Bạn đạt ${G.planetCorrect}/${total}. Bot-9 sẽ giúp bạn ôn lại!`;
+  document.getElementById('ovStars').innerHTML='⭐'.repeat(stars)+'☆'.repeat(3-stars);
+  document.getElementById('ovReport').innerHTML=`
+    <div class="ov-report-row"><span>🎯 Hành tinh này</span><span>${G.planetCorrect}/${total} câu đúng</span></div>
+    <div class="ov-report-row"><span>⭐ Tổng điểm</span><span>${G.score}</span></div>
+    <div class="ov-report-row"><span>⚡ Tốc độ TB</span><span>${avgTime}s/câu</span></div>
+    <div class="ov-report-row"><span>❤️ Oxy còn lại</span><span>${G.oxygen}%</span></div>
+    ${getWeakTopics().length>0&&!passed?`<div class="ov-report-row"><span>🎯 Điểm yếu</span><span style="color:var(--rose-l)">${TOPIC_NAMES[getWeakTopics()[0].topic]}</span></div>`:'' }
+  `;
+  const primary=document.getElementById('ovPrimary'),second=document.getElementById('ovSecond');
+  if(passed&&isLast){primary.textContent='🔄 Chơi lại';second.style.display='none';}
+  else if(passed){primary.textContent=`${PLANETS[G.planet+1].emoji} Hành tinh ${G.planet+2}!`;second.style.display='block';second.textContent='🔄 Luyện lại';}
+  else{primary.textContent='🔄 Thử lại hành tinh này';second.style.display='none';}
+  if(passed)spawnConfetti();
 }
 
 function overlayPrimary(){
   document.getElementById('gameOverlay').classList.remove('show');
-  const ratio=G.zoneCorrect/G.zoneQs.length;
-  const passed=ratio>=0.6;
-  const isLast=G.currentZone>=ZONES.length-1;
-  if(isLast&&passed){ restartGame(); return; }
-  if(passed){
-    G.currentZone++;
-    G.lives=Math.min(4,G.lives+1);
-    updateHUD();
-    buildWorldMap();
-    loadZone();
-  } else {
-    retryZone();
-  }
+  const ratio=G.planetCorrect/G.planetQs.length,passed=ratio>=0.6,isLast=G.planet>=PLANETS.length-1;
+  if(isLast&&passed){restartGame();return;}
+  if(passed){G.planet++;G.lives=Math.min(4,G.lives+1);updateHUD();buildPlanetMap();loadPlanet();}
+  else retryPlanet();
 }
-function overlaySecond(){
-  document.getElementById('gameOverlay').classList.remove('show');
-  retryZone();
-}
-function retryZone(){
-  G.zoneCorrect=0; G.qIdx=0; G.answered=false;
-  G.zoneQs=shuffle([...ZONES[G.currentZone].questions]).slice(0,5);
+function overlaySecond(){document.getElementById('gameOverlay').classList.remove('show');retryPlanet();}
+function retryPlanet(){
+  G.planetCorrect=0;G.qIdx=0;G.answered=false;
+  G.planetQs=generateAdaptiveQuestions(PLANETS[G.planet],5);
   renderQ();
 }
-
-function triggerGameOver(){
-  const ov=document.getElementById('gameOverlay');
-  ov.classList.add('show');
-  document.getElementById('ovEmoji').textContent='🌊';
-  const t=document.getElementById('ovTitle'); t.className='ov-title lose'; t.textContent='Hết sinh mạng!';
-  document.getElementById('ovChars').innerHTML='🐠😿';
-  document.getElementById('ovDesc').innerHTML=`Coral buồn lắm... nhưng Marina cần bạn!<br>Điểm đạt được: <strong>${G.score}</strong><br>Hãy thử lại – đại dương đang chờ! 🌊`;
+function gameOver(){
+  stopTimer();
+  const ov=document.getElementById('gameOverlay');ov.classList.add('show');
+  document.getElementById('ovEmoji').textContent='💀';
+  const t=document.getElementById('ovTitle');t.className='ov-title lose';t.textContent='OXY CẠN KIỆT!';
+  document.getElementById('ovChars').textContent='🚀💔🤖';
+  document.getElementById('ovDesc').innerHTML=`Tàu Starlight-7 mất liên lạc... Điểm: <strong>${G.score}</strong><br>Bot-9 và Captain Orion vẫn đang chờ bạn trở lại!`;
   document.getElementById('ovStars').innerHTML='💔💔💔';
-  document.getElementById('ovPrimary').textContent='🌊 Thử lại từ đầu';
+  document.getElementById('ovReport').innerHTML=`
+    <div class="ov-report-row"><span>✅ Tổng câu đúng</span><span>${G.totalCorrect}</span></div>
+    <div class="ov-report-row"><span>⭐ Điểm cao nhất</span><span>${G.score}</span></div>
+    <div class="ov-report-row"><span>🪐 Hành tinh đến</span><span>${PLANETS[G.planet].name}</span></div>
+  `;
+  document.getElementById('ovPrimary').textContent='🚀 Bay lại từ đầu';
   document.getElementById('ovPrimary').onclick=restartGame;
   document.getElementById('ovSecond').style.display='none';
 }
-
 function restartGame(){
   document.getElementById('gameOverlay').classList.remove('show');
-  document.getElementById('gemCollection').innerHTML='';
-  G={lives:4,score:0,combo:0,currentZone:0,qIdx:0,answered:false,
-     zoneQs:[],zoneCorrect:0,marinaLevel:0,gemsCollected:[],totalCorrect:0,totalWrong:0};
-  updateHUD();
-  buildGemBar();
-  buildWorldMap();
-  drawMarina(0);
-  loadZone();
+  G={planet:0,qIdx:0,answered:false,planetQs:[],planetCorrect:0,
+     lives:4,score:0,combo:0,charId:G.charId,rankLevel:0,
+     totalCorrect:0,totalWrong:0,totalTime:0,inventory:[],oxygen:100,currentQ:null,qStartTime:0};
+  weakMap={};
+  document.getElementById('inventory').innerHTML='';
+  drawCharSVG(G.charId,0);
+  document.getElementById('charRank').textContent=RANKS[0];
+  buildPlanetMap();updateHUD();updateWeakUI();loadPlanet();
 }
 
-// ═══════════════════════════════════════════════════════
-//  HUD
-// ═══════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  HUD + INVENTORY + OXYGEN
+// ═══════════════════════════════════════════════════
 function updateHUD(){
-  const lives=document.getElementById('livesEl');
-  lives.innerHTML='';
-  for(let i=0;i<4;i++){
-    const h=document.createElement('span');
-    h.className='hud-heart'+(i>=G.lives?' lost':'');
-    h.textContent='❤️'; lives.appendChild(h);
-  }
+  const el=document.getElementById('livesEl');
+  el.innerHTML='';
+  for(let i=0;i<4;i++){const h=document.createElement('span');h.className='hud-heart'+(i>=G.lives?' lost':'');h.textContent='❤️';el.appendChild(h);}
   document.getElementById('scoreEl').textContent=G.score;
-  document.getElementById('stCorrect').textContent=G.totalCorrect;
-  document.getElementById('stWrong').textContent=G.totalWrong;
-  document.getElementById('stScore').textContent=G.score;
+  document.getElementById('stC').textContent=G.totalCorrect;
+  document.getElementById('stW').textContent=G.totalWrong;
+  document.getElementById('stS').textContent=G.score;
+  const oxy=G.oxygen;
+  document.getElementById('oxyFill').style.width=oxy+'%';
+  document.getElementById('oxyPct').textContent=oxy+'%';
+  document.getElementById('oxyFill').style.background=oxy>50?'linear-gradient(90deg,#06b6d4,#818cf8)':oxy>25?'linear-gradient(90deg,#fbbf24,#f97316)':'linear-gradient(90deg,#f43f5e,#dc2626)';
+}
+const INV_ITEMS=['🔩','⚙️','🔋','💡','🛸','🌟','💎','🔭','🚀','⭐','🛡️','⚡'];
+function addInventory(){
+  const inv=document.getElementById('inventory');
+  const it=document.createElement('span');it.className='inv-item';it.textContent=pick(INV_ITEMS);inv.appendChild(it);
+  if(inv.children.length>12){const f=inv.firstElementChild;if(f){f.classList.add('removing');setTimeout(()=>{if(f.parentNode)f.remove();},350);}}
+}
+function removeInventory(){
+  const inv=document.getElementById('inventory');
+  if(inv.children.length>0){const l=inv.lastElementChild;if(l){l.classList.add('removing');setTimeout(()=>{if(l.parentNode)l.remove();},350);}}
 }
 
-// ═══════════════════════════════════════════════════════
-//  GEM COLLECTION
-// ═══════════════════════════════════════════════════════
-function addGemToCollection(gem,col){
-  const coll=document.getElementById('gemCollection');
-  const item=document.createElement('span');
-  item.className='gem-item';
-  item.textContent=gem;
-  item.style.filter=`drop-shadow(0 0 6px ${col})`;
-  coll.appendChild(item);
+// ═══════════════════════════════════════════════════
+//  CHARACTER HELPERS
+// ═══════════════════════════════════════════════════
+function setBotSay(text,mood){
+  document.getElementById('botSay').textContent=text;
+  if(mood)document.getElementById('botMood').textContent=mood;
+}
+function setPilotSay(text){document.getElementById('pilotSay').textContent=text;}
+function setBotReact(happy){
+  const av=document.getElementById('botAvatar');
+  if(!av)return;
+  av.textContent=happy?'🤖':'😰';
+  av.classList.add('react');setTimeout(()=>{if(av)av.classList.remove('react');},600);
 }
 
-// ═══════════════════════════════════════════════════════
-//  SPECIAL CHARACTER POPUPS
-// ═══════════════════════════════════════════════════════
-let whaleTimer=null;
-function showWhale(text){
-  clearTimeout(whaleTimer);
-  document.getElementById('whaleText').textContent=text;
-  document.getElementById('whalePopup').classList.add('show');
-  whaleTimer=setTimeout(()=>document.getElementById('whalePopup').classList.remove('show'),3500);
-}
-let kikiTimer=null;
-function showKiki(text){
-  clearTimeout(kikiTimer);
-  document.getElementById('kikiText').textContent=text;
-  document.getElementById('kikiMsg').classList.add('show');
-  kikiTimer=setTimeout(()=>document.getElementById('kikiMsg').classList.remove('show'),3000);
+// ═══════════════════════════════════════════════════
+//  TOASTS + FX
+// ═══════════════════════════════════════════════════
+let toastTimer=null;
+function showPlanetToast(emoji,text){
+  clearTimeout(toastTimer);
+  document.getElementById('toastEmoji').textContent=emoji;
+  document.getElementById('toastText').textContent=text;
+  document.getElementById('planetToast').classList.add('show');
+  toastTimer=setTimeout(()=>document.getElementById('planetToast').classList.remove('show'),3500);
 }
 
-// ═══════════════════════════════════════════════════════
-//  FX
-// ═══════════════════════════════════════════════════════
-function spawnSparks(nearEl){
-  const rect=nearEl.getBoundingClientRect();
-  const sparks=['⭐','✨','💎','🌟','💠','⚡'];
-  sparks.forEach((s,i)=>{
-    const el=document.createElement('div');
-    el.className='spark';
-    el.textContent=s;
-    el.style.setProperty('--ty',`${-60-Math.random()*40}px`);
-    el.style.setProperty('--tx',`${-30+Math.random()*60}px`);
-    el.style.left=(rect.left+rect.width/2+(-20+i*8))+'px';
-    el.style.top=(rect.top+rect.height/2)+'px';
-    el.style.animationDelay=(i*0.08)+'s';
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(),1200);
+function showTimeBonus(el,text){
+  if(!el)return;
+  const r=el.getBoundingClientRect();
+  const tb=document.createElement('div');tb.className='time-bonus';tb.textContent=text;
+  tb.style.left=(r.left+r.width/2-20)+'px';tb.style.top=(r.top-10)+'px';
+  document.body.appendChild(tb);setTimeout(()=>tb.remove(),1300);
+}
+
+function spawnSparks(el){
+  if(!el)return;
+  const r=el.getBoundingClientRect();
+  ['⭐','✨','💫','⚡','🌟','💥'].forEach((s,i)=>{
+    const sp=document.createElement('div');sp.className='spark-el';sp.textContent=s;
+    sp.style.setProperty('--ty',`${-55-Math.random()*35}px`);
+    sp.style.setProperty('--tx',`${-25+Math.random()*50}px`);
+    sp.style.left=(r.left+r.width/2+(-20+i*8))+'px';
+    sp.style.top=(r.top)+'px';sp.style.animationDelay=(i*0.07)+'s';
+    document.body.appendChild(sp);setTimeout(()=>sp.remove(),1200);
   });
-  // Bubble pop effect
-  const pop=document.createElement('div');
-  pop.className='bubble-pop';
-  const sz=60+Math.random()*40;
-  pop.style.cssText=`width:${sz}px;height:${sz}px;left:${rect.left+rect.width/2-sz/2}px;top:${rect.top+rect.height/2-sz/2}px`;
-  document.body.appendChild(pop);
-  setTimeout(()=>pop.remove(),700);
+  const ring=document.createElement('div');ring.className='ring-el';
+  const sz=50+Math.random()*30;
+  ring.style.cssText=`width:${sz}px;height:${sz}px;left:${r.left+r.width/2-sz/2}px;top:${r.top+r.height/2-sz/2}px`;
+  document.body.appendChild(ring);setTimeout(()=>ring.remove(),700);
 }
 
 function spawnConfetti(){
-  const cols=['#90e0ef','#ffd60a','#2ec4b6','#c77dff','#00b4d8','#ff9a9a'];
-  for(let i=0;i<60;i++){
-    const c=document.createElement('div');
-    c.className='confetti-p';
+  const cols=['#a78bfa','#fbbf24','#6ee7b7','#67e8f9','#fda4af','#f97316'];
+  for(let i=0;i<55;i++){
+    const c=document.createElement('div');c.className='confetti-p';
     const sz=5+Math.random()*8;
     c.style.cssText=`left:${Math.random()*100}vw;top:-10px;width:${sz}px;height:${sz}px;
-      background:${cols[Math.floor(Math.random()*cols.length)]};
-      animation-duration:${2+Math.random()*2.5}s;
-      animation-delay:${Math.random()*0.5}s;
-      border-radius:${Math.random()>0.5?'50%':'3px'}`;
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3500);
+      background:${pick(cols)};animation-duration:${2+Math.random()*2.5}s;
+      animation-delay:${Math.random()*0.5}s;border-radius:${Math.random()>0.5?'50%':'3px'}`;
+    document.body.appendChild(c);setTimeout(()=>c.remove(),3500);
   }
 }
-
-// ═══════════════════════════════════════════════════════
-//  BOOT
-// ═══════════════════════════════════════════════════════
-buildOceanBg();
 </script>
 </body>
 </html>
