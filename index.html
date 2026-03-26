@@ -190,12 +190,12 @@ body{
 .frac.q-mark .fn,.frac.q-mark .fd{color:var(--nova-l)}
 
 /* OPTIONS */
-.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
 .opt-btn{
   background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.12);
   border-radius:14px;padding:13px 10px;
-  font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;
-  color:var(--text);cursor:pointer;transition:all 0.18s;min-height:58px;
+  font-family:'Nunito',sans-serif;font-size:0.85rem;font-weight:800;
+  color:var(--text);cursor:pointer;transition:all 0.18s;min-height:52px;
   display:flex;align-items:center;justify-content:center;gap:6px;
   box-shadow:0 3px 12px rgba(0,0,0,0.25);position:relative;overflow:hidden;
 }
@@ -455,6 +455,7 @@ body{
 
 /* ═══════════════ RESPONSIVE ═══════════════ */
 @media(max-width:700px){
+  .opts{grid-template-columns:1fr 1fr}
   .main-grid{grid-template-columns:1fr}
   .right-panel{flex-direction:row;flex-wrap:wrap}
   .char-card{flex:1;min-width:230px}
@@ -697,6 +698,39 @@ function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
 // Difficulty: 1=easy, 2=medium, 3=hard, 4=boss
 // Each question is generated dynamically via factory functions for infinite variety
 
+
+// ═══════════════════════════════════════════════════
+//  OPTION GENERATORS — tạo 8 đáp án ngẫu nhiên, không trùng, không giống đáp án đúng
+// ═══════════════════════════════════════════════════
+function rFrac(den){
+  // Random fraction with same denominator (wrong answer)
+  const n=rnd(1,den-1);
+  return `${n}/${den}`;
+}
+function rFracSimple(){
+  const dens=[2,3,4,5,6,7,8,9,10];
+  const d=pick(dens),n=rnd(1,d-1);
+  return `${n}/${d}`;
+}
+function rFracSameDen(d){
+  return `${rnd(1,d)}/${d}`;
+}
+function gen8Opts(correct, wrongFn){
+  const set=new Set([correct]);
+  let tries=0;
+  while(set.size<8 && tries<80){
+    tries++;
+    const w=wrongFn();
+    if(w!==correct && !set.has(w)) set.add(w);
+  }
+  // If still not 8, add simple number strings
+  while(set.size<8){
+    const fallback=`${rnd(1,12)}/${rnd(2,12)}`;
+    if(!set.has(fallback)) set.add(fallback);
+  }
+  return shuffle([...set]);
+}
+
 function makeRecognizeQ(){
   const templates=[
     ()=>{const d=rnd(3,10),n=rnd(1,d-1);return{
@@ -704,7 +738,7 @@ function makeRecognizeQ(){
       q:`Phần khoang màu xanh chiếm bao nhiêu?`,
       vis:()=>vBlocks(n,d,'#67e8f9'),
       ans:`${n}/${d}`,
-      opts:shuffle([`${n}/${d}`,`${d}/${n}`,`${d-n}/${d}`,`${n}/${d-n}`]).slice(0,4),
+      opts:gen8Opts(`${n}/${d}`,()=>rFrac(d)),
       ex:`${d} khoang tổng → mẫu số ${d}. ${n} khoang xanh → tử số ${n}. Phân số: ${n}/${d}`
     }},
     ()=>{const d=rnd(4,12),n=rnd(1,d-1);return{
@@ -712,7 +746,7 @@ function makeRecognizeQ(){
       q:`Phần sao đang sáng là?`,
       vis:()=>vStars(n,d),
       ans:`${n}/${d}`,
-      opts:shuffle([`${n}/${d}`,`${d-n}/${d}`,`${d}/${n}`,`1/${d}`]).slice(0,4),
+      opts:shuffle([`${n}/${d}`,`${d-n}/${d}`,`${d}/${n}`,`1/${d}`,...Array.from({length:4},()=>rFrac(d))]),
       ex:`Tổng ${d} sao, ${n} sao sáng → phân số ${n}/${d}`
     }},
     ()=>{const d=rnd(3,8),n=rnd(1,d-1);return{
@@ -720,7 +754,7 @@ function makeRecognizeQ(){
       q:`Phần module đã sửa là?`,
       vis:()=>vPie(n,d,'#a78bfa'),
       ans:`${n}/${d}`,
-      opts:shuffle([`${n}/${d}`,`${d-n}/${d}`,`${n}/${d-n}`,`${d}/${n}`]).slice(0,4),
+      opts:shuffle([`${n}/${d}`,`${d-n}/${d}`,`${n}/${d-n}`,`${d}/${n}`,...Array.from({length:4},()=>rFrac(d))]),
       ex:`Sửa ${n} trong ${d} module → phân số ${n}/${d}`
     }},
     ()=>{const n=rnd(1,4),d=rnd(n+1,8);return{
@@ -728,7 +762,7 @@ function makeRecognizeQ(){
       q:`Phần năng lượng đã nạp là?`,
       vis:()=>vSegments(n,d,'#fbbf24'),
       ans:`${n}/${d}`,
-      opts:shuffle([`${n}/${d}`,`${d}/${n}`,`${d-n}/${d}`,`${n+1}/${d}`]).slice(0,4),
+      opts:shuffle([`${n}/${d}`,`${d}/${n}`,`${d-n}/${d}`,`${n+1}/${d}`,...Array.from({length:4},()=>rFrac(d))]),
       ex:`Nạp ${n} trong ${d} viên → phân số ${n}/${d}`
     }},
   ];
@@ -737,7 +771,6 @@ function makeRecognizeQ(){
   q.diffLabel='⭐ Dễ';q.diffClass='diff-easy';
   return q;
 }
-
 function makeRealLifeQ(){
   const templates=[
     ()=>{const total=rnd(8,20),used=rnd(1,total-1);return{
@@ -745,7 +778,7 @@ function makeRealLifeQ(){
       q:`Phần nhiên liệu đã dùng là?`,
       vis:()=>vRuler(used,total,'#f97316'),
       ans:`${used}/${total}`,
-      opts:shuffle([`${used}/${total}`,`${total-used}/${total}`,`${used}/${total-used}`,`1/${used}`]).slice(0,4),
+      opts:shuffle([`${used}/${total}`,`${total-used}/${total}`,`${used}/${total-used}`,`1/${used}`,...Array.from({length:4},()=>rFrac(total))]),
       ex:`Dùng ${used} lít trong ${total} lít → phân số ${used}/${total}`
     }},
     ()=>{const total=rnd(10,24),eaten=rnd(1,total-1);return{
@@ -753,15 +786,55 @@ function makeRealLifeQ(){
       q:`Phần pizza đã ăn là?`,
       vis:()=>vPie(eaten,total,'#f43f5e'),
       ans:`${eaten}/${total}`,
-      opts:shuffle([`${eaten}/${total}`,`${total-eaten}/${total}`,`${eaten}/${total+eaten}`,`${total}/${eaten}`]).slice(0,4),
+      opts:shuffle([`${eaten}/${total}`,`${total-eaten}/${total}`,`${eaten}/${total+eaten}`,`${total}/${eaten}`,...Array.from({length:4},()=>rFrac(total))]),
       ex:`Ăn ${eaten} trong ${total} miếng → phân số ${eaten}/${total}`
+    }},
+    ()=>{const d=rnd(5,12),n=rnd(1,d-1);return{
+      story:`🛸 Đĩa bay có ${d} cửa sổ bằng nhau. ${n} cửa đang mở.`,
+      q:`Phần cửa sổ đang mở là?`,
+      vis:()=>vBlocks(n,d,'#a78bfa'),
+      ans:`${n}/${d}`,
+      opts:gen8Opts(`${n}/${d}`,()=>rFrac(d)),
+      ex:`${d} cửa tổng, ${n} cửa mở → phân số ${n}/${d}`
+    }},
+    ()=>{const d=rnd(3,10),n=rnd(1,d-1);return{
+      story:`🔵 Hành tinh có ${d} vùng lãnh thổ. Vùng xanh có ${n} vùng.`,
+      q:`Phần vùng xanh là?`,
+      vis:()=>vPie(n,d,'#06b6d4'),
+      ans:`${n}/${d}`,
+      opts:gen8Opts(`${n}/${d}`,()=>rFrac(d)),
+      ex:`Tổng ${d} vùng, ${n} vùng xanh → ${n}/${d}`
+    }},
+    ()=>{const d=rnd(4,10),n=rnd(1,d-1);return{
+      story:`⚡ Pin tàu có ${d} ô. Đã sạc được ${n} ô.`,
+      q:`Phần pin đã sạc là?`,
+      vis:()=>vSegments(n,d,'#fbbf24'),
+      ans:`${n}/${d}`,
+      opts:gen8Opts(`${n}/${d}`,()=>rFrac(d)),
+      ex:`${n} ô sạc / ${d} ô tổng → ${n}/${d}`
+    }},
+    ()=>{const d=rnd(6,14),n=rnd(1,d-1);return{
+      story:`🌌 Thiên hà có ${d} ngôi sao lùn. ${n} ngôi đang hoạt động.`,
+      q:`Phần ngôi sao đang hoạt động là?`,
+      vis:()=>vStars(n,d),
+      ans:`${n}/${d}`,
+      opts:gen8Opts(`${n}/${d}`,()=>rFrac(d)),
+      ex:`${n} sao hoạt động / ${d} sao tổng → ${n}/${d}`
+    }},
+    ()=>{const d=rnd(2,6),n=1;return{
+      story:`🎯 Chia đều ${d} phần bằng nhau. Lấy một phần.`,
+      q:`Mỗi phần bằng bao nhiêu?`,
+      vis:()=>vPie(n,d,'#f43f5e'),
+      ans:`${n}/${d}`,
+      opts:gen8Opts(`${n}/${d}`,()=>rFrac(d)),
+      ex:`Chia ${d} phần đều nhau, lấy 1 → phân số 1/${d}`
     }},
     ()=>{const d=rnd(6,15),n=rnd(1,d-1);const left=d-n;return{
       story:`🌍 Hành trình ${d} ngày. Tàu đã bay được ${n} ngày.`,
       q:`Phần hành trình CÒN LẠI là?`,
       vis:()=>vRuler(left,d,'#10b981'),
       ans:`${left}/${d}`,
-      opts:shuffle([`${left}/${d}`,`${n}/${d}`,`${d}/${left}`,`1/${left}`]).slice(0,4),
+      opts:shuffle([`${left}/${d}`,`${n}/${d}`,`${d}/${left}`,`1/${left}`,...Array.from({length:4},()=>rFrac(d))]),
       ex:`Còn lại ${d}-${n}=${left} ngày trong ${d} ngày → phân số ${left}/${d}`
     }},
   ];
@@ -770,7 +843,6 @@ function makeRealLifeQ(){
   q.diffLabel='⭐ Dễ';q.diffClass='diff-easy';
   return q;
 }
-
 function makeEqualQ(){
   const templates=[
     ()=>{const b=rnd(2,5),n=rnd(1,b-1),mult=rnd(2,4);return{
@@ -778,7 +850,7 @@ function makeEqualQ(){
       q:`${n}/${b} = ?/${b*mult} — điền số còn thiếu:`,
       vis:()=>vFillIn(`${n}`,`${b}`,`?`,`${b*mult}`),
       ans:`${n*mult}`,
-      opts:shuffle([`${n*mult}`,`${n*mult-1}`,`${n*mult+1}`,`${n+mult}`]).slice(0,4),
+      opts:shuffle([`${n*mult}`,`${n*mult-1}`,`${n*mult+1}`,`${n+mult}`,...Array.from({length:4},()=>String(rnd(1,20)))]),
       ex:`${b}×${mult}=${b*mult}, nên ${n}×${mult}=${n*mult}. Đáp án: ${n*mult}`
     }},
     ()=>{const n=rnd(1,4),d=rnd(2,6),mult=rnd(2,4);return{
@@ -786,16 +858,89 @@ function makeEqualQ(){
       q:`Phân số nào BẰNG ${n*mult}/${d*mult}?`,
       vis:()=>vEqual(n*mult,d*mult,n,d),
       ans:`${n}/${d}`,
-      opts:shuffle([`${n}/${d}`,`${n+1}/${d}`,`${n}/${d+1}`,`${n*2}/${d*2+1}`]).slice(0,4),
+      opts:shuffle([`${n}/${d}`,`${n+1}/${d}`,`${n}/${d+1}`,`${n*2}/${d*2+1}`,...Array.from({length:4},()=>rFrac(d))]),
       ex:`${n*mult}/${d*mult} ÷ ${mult} = ${n}/${d}`
+    }},
+    ()=>{const d=rnd(6,16),n=rnd(1,d-1);return{
+      story:`🌡️ Nhiệt kế tàu chia ${d} vạch. Kim đang ở vạch thứ ${n}.`,
+      q:`Kim nhiệt kế chỉ bao nhiêu phần?`,
+      vis:()=>vRuler(n,d,'#f97316'),
+      ans:`${n}/${d}`,
+      opts:gen8Opts(`${n}/${d}`,()=>rFrac(d)),
+      ex:`Kim ở vạch ${n} trên tổng ${d} vạch → ${n}/${d}`
+    }},
+    ()=>{const d=rnd(8,20),n=rnd(1,d-1);return{
+      story:`🗺️ Hành trình ${d} chặng. Tàu đã vượt ${n} chặng.`,
+      q:`Phần hành trình đã qua là?`,
+      vis:()=>vRuler(n,d,'#a78bfa'),
+      ans:`${n}/${d}`,
+      opts:gen8Opts(`${n}/${d}`,()=>rFrac(d)),
+      ex:`${n} chặng đã qua / ${d} chặng tổng → ${n}/${d}`
+    }},
+    ()=>{const d=rnd(4,12),n=rnd(1,d-1),left=d-n;return{
+      story:`🧪 Bình hoá chất chia ${d} phần. Đã dùng ${n} phần.`,
+      q:`Phần hoá chất CÒN LẠI là?`,
+      vis:()=>vSegments(left,d,'#10b981'),
+      ans:`${left}/${d}`,
+      opts:gen8Opts(`${left}/${d}`,()=>rFrac(d)),
+      ex:`Còn lại ${d}-${n}=${left} phần → ${left}/${d}`
+    }},
+    ()=>{const d=rnd(6,18),n=rnd(1,d-1);return{
+      story:`🎮 Game có ${d} màn. Bé đã phá được ${n} màn.`,
+      q:`Phần màn chơi đã hoàn thành là?`,
+      vis:()=>vBlocks(n,d,'#06b6d4'),
+      ans:`${n}/${d}`,
+      opts:gen8Opts(`${n}/${d}`,()=>rFrac(d)),
+      ex:`${n} màn xong / ${d} màn tổng → ${n}/${d}`
+    }},
+    ()=>{const d=rnd(5,15),n=rnd(2,d-2);return{
+      story:`🍎 Giỏ trái cây ${d} quả. ${n} quả màu đỏ, còn lại màu xanh.`,
+      q:`Phần quả màu xanh là?`,
+      vis:()=>vBlocks(d-n,d,'#10b981'),
+      ans:`${d-n}/${d}`,
+      opts:gen8Opts(`${d-n}/${d}`,()=>rFrac(d)),
+      ex:`Quả xanh: ${d}-${n}=${d-n}, tổng ${d} → ${d-n}/${d}`
     }},
     ()=>{const n=rnd(1,4),d=rnd(n+1,7),div=gcd(n*2,d*2);return{
       story:`⚙️ Hệ thống phân tích: hai phân số có bằng nhau không?`,
       q:`${n*2}/${d*2} và ${n}/${d} — quan hệ là?`,
       vis:()=>vEqualCheck(n*2,d*2,n,d),
       ans:`Bằng nhau`,
-      opts:shuffle([`Bằng nhau`,`Khác nhau`,`Không so sánh được`,`${n*2}/${d*2} lớn hơn`]).slice(0,4),
+      opts:shuffle([`Bằng nhau`,`Khác nhau`,`Không so sánh được`,`${n*2}/${d*2} lớn hơn`,`Không biết`,`Cả hai đều sai`,`Nhỏ hơn`,`Lớn hơn`]),
       ex:`${n*2}/${d*2} ÷ 2 = ${n}/${d}. Hai phân số bằng nhau!`
+    }},
+    ()=>{const n=rnd(1,5),d=rnd(2,7),div=rnd(2,4);return{
+      story:`🔭 Kính thiên văn cần quy đổi phân số.`,
+      q:`${n*div}/${d*div} rút gọn bằng phân số nào?`,
+      vis:()=>vEqual(n*div,d*div,n,d),
+      ans:`${n}/${d}`,
+      opts:gen8Opts(`${n}/${d}`,()=>rFracSimple()),
+      ex:`${n*div}/${d*div} ÷ ${div} = ${n}/${d}`
+    }},
+    ()=>{const n=rnd(1,4),d=rnd(2,6),m=rnd(2,5);return{
+      story:`⚙️ Robot mở rộng phân số cho hệ thống.`,
+      q:`${n}/${d} = ?/${d*m}`,
+      vis:()=>vFillIn(`${n}`,`${d}`,`?`,`${d*m}`),
+      ans:`${n*m}`,
+      opts:gen8Opts(`${n*m}`,()=>String(rnd(1,20))),
+      ex:`${d}×${m}=${d*m}, nên ${n}×${m}=${n*m}`
+    }},
+    ()=>{const pairs=[['1/2','2/4'],['1/3','2/6'],['2/3','4/6'],['3/4','6/8'],['1/4','2/8'],['2/5','4/10'],['3/9','1/3'],['4/12','1/3'],['5/10','1/2'],['6/9','2/3']];
+      const [a,b]=pick(pairs);const ap=a.split('/'),bp=b.split('/');return{
+      story:`🔬 Máy phân tích so sánh hai mẫu vật.`,
+      q:`${a} và ${b} có quan hệ thế nào?`,
+      vis:()=>vEqualCheck(ap[0],ap[1],bp[0],bp[1]),
+      ans:`Bằng nhau`,
+      opts:shuffle([`Bằng nhau`,`Khác nhau`,`Không xác định`,`${a} lớn hơn`,`${b} lớn hơn`,`Không so sánh được`,`Bằng 1`,`Nhỏ hơn 1/2`]),
+      ex:`${a} và ${b} đều rút gọn về cùng dạng → bằng nhau`
+    }},
+    ()=>{const n=rnd(1,4),d=rnd(2,8),m=rnd(2,4);return{
+      story:`💡 Sensor kiểm tra: điền mẫu số còn thiếu.`,
+      q:`${n*m}/${d*m} = ${n}/?`,
+      vis:()=>vFillIn(`${n*m}`,`${d*m}`,`${n}`,`?`),
+      ans:`${d}`,
+      opts:gen8Opts(`${d}`,()=>String(rnd(2,15))),
+      ex:`${n*m}÷${m}=${n}, nên ${d*m}÷${m}=${d}`
     }},
   ];
   const q=pick(templates)();
@@ -803,16 +948,21 @@ function makeEqualQ(){
   q.diffLabel='🌟 Trung bình';q.diffClass='diff-med';
   return q;
 }
-
 function makeSimplifyQ(){
-  const pairs=[[2,4],[3,6],[4,8],[6,9],[6,12],[8,12],[10,15],[4,6],[6,8],[9,12],[10,20],[15,20],[12,16],[8,10]];
+  const pairs=[
+    [2,4],[3,6],[4,8],[6,9],[6,12],[8,12],[10,15],[4,6],[6,8],[9,12],[10,20],[15,20],[12,16],[8,10],
+    [2,6],[3,9],[4,12],[5,10],[5,15],[5,20],[6,10],[6,14],[6,15],[6,18],[6,20],[6,24],
+    [7,14],[7,21],[8,16],[8,20],[8,24],[9,18],[9,27],[10,25],[10,30],[12,18],[12,20],[12,24],
+    [14,21],[15,25],[16,20],[16,24],[18,24],[20,25],[20,30],[21,28],[24,32],[25,30],[27,36],[28,35],
+    [3,12],[4,10],[4,16],[5,25],[6,16],[7,28],[8,28],[9,15],[10,16],[12,28],[15,18],[16,28]
+  ];
   const [n,d]=pick(pairs);const g=gcd(n,d);
   const q={
-    story:`🔬 Module tối ưu hoá yêu cầu rút gọn phân số về dạng đơn giản nhất.`,
+    story:pick(['🔬 Module tối ưu hoá yêu cầu rút gọn phân số.','⚙️ Hệ thống cần tối giản hoá phân số.','🛸 Máy tính tàu: rút gọn phân số này.','🔭 Sensor: đơn giản hoá kết quả đo.','🧪 Thí nghiệm: rút gọn tỉ lệ hoá chất.']),
     q:`Rút gọn ${n}/${d} về dạng đơn giản nhất:`,
     vis:()=>vSimplify(n,d),
     ans:`${n/g}/${d/g}`,
-    opts:shuffle([`${n/g}/${d/g}`,`${n/g+1}/${d/g}`,`${n/g}/${d/g+1}`,`${n}/${d}`]).slice(0,4),
+    opts:shuffle([`${n/g}/${d/g}`,`${n/g+1}/${d/g}`,`${n/g}/${d/g+1}`,`${n}/${d}`,...Array.from({length:4},()=>rFrac(d))]),
     ex:`ƯCLN(${n},${d})=${g}. Chia cho ${g}: ${n}÷${g}=${n/g}, ${d}÷${g}=${d/g} → ${n/g}/${d/g}`,
     topic:'simplify',diff:2,time:25,diffLabel:'🌟 Trung bình',diffClass:'diff-med'
   };return q;
@@ -828,7 +978,7 @@ function makeCompareQ(){
       q:`So sánh: ${n1}/${d} □ ${n2}/${d}`,
       vis:()=>vCompare(`${n1}`,`${d}`,`${n2}`,`${d}`),
       ans:`${n1}/${d} ${sym} ${n2}/${d}`,
-      opts:shuffle([`${n1}/${d} ${sym} ${n2}/${d}`,`${n1}/${d} ${sym==='<'?'>':'<'} ${n2}/${d}`,`${n1}/${d} = ${n2}/${d}`,`Không so sánh được`]).slice(0,4),
+      opts:shuffle([`${n1}/${d} ${sym} ${n2}/${d}`,`${n1}/${d} ${sym==='<'?'>':'<'} ${n2}/${d}`,`${n1}/${d} = ${n2}/${d}`,`Không so sánh được`,...Array.from({length:4},()=>rFrac(d))]),
       ex:`Cùng mẫu ${d}: so tử ${n1} ${sym} ${n2} → ${n1}/${d} ${sym} ${n2}/${d}`,
       topic:'compare',diff:2,time:22,diffLabel:'🌟 Trung bình',diffClass:'diff-med'
     };
@@ -842,7 +992,7 @@ function makeCompareQ(){
       q:`So sánh: ${n}/${d1} □ ${n}/${d2}`,
       vis:()=>vCompare(`${n}`,`${d1}`,`${n}`,`${d2}`),
       ans:`${n}/${d1} ${sym} ${n}/${d2}`,
-      opts:shuffle([`${n}/${d1} ${sym} ${n}/${d2}`,`${n}/${d1} ${sym==='<'?'>':'<'} ${n}/${d2}`,`${n}/${d1} = ${n}/${d2}`,`Không biết`]).slice(0,4),
+      opts:shuffle([`${n}/${d1} ${sym} ${n}/${d2}`,`${n}/${d1} ${sym==='<'?'>':'<'} ${n}/${d2}`,`${n}/${d1} = ${n}/${d2}`,`Không biết`]),
       ex:`Cùng tử ${n}: mẫu ${d1} ${d1>d2?'>':'<'} ${d2} → chia nhiều phần hơn → ${n}/${d1} ${sym} ${n}/${d2}`,
       topic:'compare',diff:3,time:28,diffLabel:'🔴 Khó',diffClass:'diff-hard'
     };
@@ -856,9 +1006,33 @@ function makeCompareQ(){
     q:`So sánh: ${n1}/${d1} □ ${n2}/${d2}`,
     vis:()=>vComparePie(n1,d1,n2,d2),
     ans:`${n1}/${d1} ${sym} ${n2}/${d2}`,
-    opts:shuffle([`${n1}/${d1} ${sym} ${n2}/${d2}`,`${n1}/${d1} ${sym==='<'?'>':sym==='>'?'<':'>'} ${n2}/${d2}`,`${n1}/${d1} = ${n2}/${d2}`,`Không biết`]).slice(0,4),
+    opts:shuffle([`${n1}/${d1} ${sym} ${n2}/${d2}`,`${n1}/${d1} ${sym==='<'?'>':sym==='>'?'<':'>'} ${n2}/${d2}`,`${n1}/${d1} = ${n2}/${d2}`,`Không biết`]),
     ex:`Nhân chéo: ${n1}×${d2}=${v1}, ${n2}×${d1}=${v2}. Vì ${v1} ${sym} ${v2} → ${n1}/${d1} ${sym} ${n2}/${d2}`,
     topic:'compare',diff:3,time:30,diffLabel:'🔴 Khó',diffClass:'diff-hard'
+  };
+}
+
+// Extra compare templates injected into makeCompareQ via PLANETS generators
+function makeCompareOrderQ(){
+  const d=rnd(5,12),nums=[];
+  while(nums.length<4){const n=rnd(1,d-1);if(!nums.includes(n))nums.push(n);}
+  const sorted=[...nums].sort((a,b)=>a-b);
+  const fracs=nums.map(n=>`${n}/${d}`);
+  const ans=sorted.map(n=>`${n}/${d}`).join(' < ');
+  return{
+    story:`📊 Sắp xếp tốc độ 4 thiên thạch từ nhỏ đến lớn.`,
+    q:`Sắp xếp từ NHỎ đến LỚN: ${fracs.join(', ')}`,
+    vis:()=>vOrder(fracs),
+    ans,
+    opts:(()=>{
+      const o=[ans];
+      const rev=sorted.slice().reverse().map(n=>`${n}/${d}`).join(' < ');
+      if(rev!==ans)o.push(rev);
+      while(o.length<8){const s=shuffle([...sorted]).map(n=>`${n}/${d}`).join(' < ');if(!o.includes(s))o.push(s);}
+      return o.slice(0,8);
+    })(),
+    ex:`Cùng mẫu ${d}: sắp tử ${sorted.join('<')}`,
+    topic:'compare',diff:3,time:32,diffLabel:'🔴 Khó',diffClass:'diff-hard'
   };
 }
 
@@ -866,13 +1040,28 @@ function makeAddSameQ(){
   const d=rnd(5,12),n1=rnd(1,Math.floor(d/2)),n2=rnd(1,d-n1-1);
   const ans=n1+n2,g=gcd(ans,d);
   return{
-    story:`➕ Hệ thống nạp năng lượng: lần 1 nạp ${n1}/${d}, lần 2 nạp ${n2}/${d}.`,
+    story:pick([`➕ Nạp năng lượng lần 1: ${n1}/${d}, lần 2: ${n2}/${d}.`,`🔋 Pin lần 1 nạp ${n1}/${d}, lần 2 nạp ${n2}/${d}.`,`⚡ Module A dùng ${n1}/${d}, module B dùng ${n2}/${d}. Tổng?`,`🚀 Lần phóng 1 dùng ${n1}/${d} nhiên liệu, lần 2 dùng ${n2}/${d}.`]),
     q:`Tổng năng lượng đã nạp là?`,
     vis:()=>vArith(`${n1}`,`${d}`,`${n2}`,`${d}`,'+'),
     ans:`${ans}/${d}`,
-    opts:shuffle([`${ans}/${d}`,`${ans}/${d*2}`,`${n1}/${d}`,`${ans+1}/${d}`]).slice(0,4),
+    opts:shuffle([`${ans}/${d}`,`${ans}/${d*2}`,`${n1}/${d}`,`${ans+1}/${d}`,...Array.from({length:4},()=>rFrac(d))]),
     ex:`Cùng mẫu ${d}: ${n1}+${n2}=${ans}, mẫu giữ nguyên → ${ans}/${d}`,
     topic:'add_same',diff:2,time:22,diffLabel:'🌟 Trung bình',diffClass:'diff-med'
+  };
+}
+
+function makeAddSameQ2(){
+  const denOptions=[5,6,7,8,9,10,11,12];
+  const d=pick(denOptions),n1=rnd(1,Math.floor(d/3)),n2=rnd(1,Math.floor(d/3)),n3=rnd(1,d-n1-n2-1);
+  const sum=n1+n2+n3,g=gcd(sum,d);
+  return{
+    story:`🔋 Ba lần sạc pin: ${n1}/${d}, ${n2}/${d}, ${n3}/${d}.`,
+    q:`Tổng pin đã sạc ba lần là?`,
+    vis:()=>vAdd3(`${n1}`,`${d}`,`${n2}`,`${d}`,`${n3}`,`${d}`),
+    ans:`${sum/g}/${d/g}`,
+    opts:gen8Opts(`${sum/g}/${d/g}`,()=>rFracSameDen(d)),
+    ex:`${n1}+${n2}+${n3}=${sum}, mẫu ${d} → ${sum}/${d}${g>1?` = ${sum/g}/${d/g}`:''}`,
+    topic:'add_same',diff:2,time:25,diffLabel:'🌟 Trung bình',diffClass:'diff-med'
   };
 }
 
@@ -880,11 +1069,11 @@ function makeSubSameQ(){
   const d=rnd(5,12),n1=rnd(3,d-1),n2=rnd(1,n1-1);
   const ans=n1-n2,g=gcd(ans,d);
   return{
-    story:`➖ Tàu tiêu thụ ${n1}/${d} năng lượng, sau đó thu hồi ${n2}/${d}.`,
+    story:pick([`➖ Tàu dùng ${n1}/${d} năng lượng, thu hồi ${n2}/${d}.`,`⚡ Bắt đầu có ${n1}/${d}, dùng đi ${n2}/${d}. Còn lại?`,`🔋 Pin ban đầu ${n1}/${d}, xả ${n2}/${d}. Còn bao nhiêu?`,`🛸 Nhiên liệu ${n1}/${d}, đốt ${n2}/${d}. Còn lại?`]),
     q:`Năng lượng tiêu thụ thực là?`,
     vis:()=>vArith(`${n1}`,`${d}`,`${n2}`,`${d}`,'-'),
     ans:`${ans}/${d}`,
-    opts:shuffle([`${ans}/${d}`,`${ans+1}/${d}`,`${n1}/${d}`,`${ans}/${d*2}`]).slice(0,4),
+    opts:shuffle([`${ans}/${d}`,`${ans+1}/${d}`,`${n1}/${d}`,`${ans}/${d*2}`,...Array.from({length:4},()=>rFrac(d))]),
     ex:`Cùng mẫu ${d}: ${n1}-${n2}=${ans}, mẫu giữ nguyên → ${ans}/${d}`,
     topic:'sub_same',diff:2,time:22,diffLabel:'🌟 Trung bình',diffClass:'diff-med'
   };
@@ -902,7 +1091,7 @@ function makeAddDiffQ(){
     q:`Tổng hợp chất là?`,
     vis:()=>vArithDiff(`${n1}`,`${d1}`,`${n2}`,`${d2}`,`${L}`,'+'),
     ans:`${ansN}/${ansD}`,
-    opts:shuffle([`${ansN}/${ansD}`,`${ansN+1}/${ansD}`,`${a1+a2}/${L*2}`,`${n1+n2}/${d1+d2}`]).slice(0,4),
+    opts:shuffle([`${ansN}/${ansD}`,`${ansN+1}/${ansD}`,`${a1+a2}/${L*2}`,`${n1+n2}/${d1+d2}`,...Array.from({length:4},()=>rFracSimple())]),
     ex:`Mẫu ${L}: ${n1}/${d1}=${a1}/${L}, ${n2}/${d2}=${a2}/${L}. Tổng: ${a1+a2}/${L}${g>1?` = ${ansN}/${ansD}`:''}`,
     topic:'add_diff',diff:3,time:32,diffLabel:'🔴 Khó',diffClass:'diff-hard'
   };
@@ -920,7 +1109,7 @@ function makeSubDiffQ(){
     q:`Năng lượng còn lại?`,
     vis:()=>vArithDiff(`${n1}`,`${d1}`,`${n2}`,`${d2}`,`${L}`,'-'),
     ans:`${ansN}/${ansD}`,
-    opts:shuffle([`${ansN}/${ansD}`,`${ansN+1}/${ansD}`,`${n1-n2}/${d1}`,`${diff}/${L*2}`]).slice(0,4),
+    opts:shuffle([`${ansN}/${ansD}`,`${ansN+1}/${ansD}`,`${n1-n2}/${d1}`,`${diff}/${L*2}`,...Array.from({length:4},()=>rFracSimple())]),
     ex:`Mẫu ${L}: ${n1}/${d1}=${a1}/${L}, ${n2}/${d2}=${a2}/${L}. Hiệu: ${diff}/${L}${g>1?` = ${ansN}/${ansD}`:''}`,
     topic:'sub_diff',diff:3,time:32,diffLabel:'🔴 Khó',diffClass:'diff-hard'
   };
@@ -935,7 +1124,7 @@ function makeMulQ(){
     q:`${n1}/${d1} × ${n2}/${d2} = ?`,
     vis:()=>vMul(`${n1}`,`${d1}`,`${n2}`,`${d2}`),
     ans:`${ansN}/${ansD}`,
-    opts:shuffle([`${ansN}/${ansD}`,`${n1+n2}/${d1+d2}`,`${ansN+1}/${ansD}`,`${n1}/${d2}`]).slice(0,4),
+    opts:shuffle([`${ansN}/${ansD}`,`${n1+n2}/${d1+d2}`,`${ansN+1}/${ansD}`,`${n1}/${d2}`,...Array.from({length:4},()=>rFracSimple())]),
     ex:`Tử×Tử: ${n1}×${n2}=${rn}. Mẫu×Mẫu: ${d1}×${d2}=${rd}. ${rn}/${rd}${g>1?` = ${ansN}/${ansD}`:''}`,
     topic:'multiply',diff:3,time:30,diffLabel:'🔴 Khó',diffClass:'diff-hard'
   };
@@ -950,7 +1139,7 @@ function makeDivQ(){
     q:`${n1}/${d1} ÷ ${n2}/${d2} = ?`,
     vis:()=>vDiv(`${n1}`,`${d1}`,`${n2}`,`${d2}`),
     ans:`${ansN}/${ansD}`,
-    opts:shuffle([`${ansN}/${ansD}`,`${n1*n2}/${d1*d2}`,`${ansN+1}/${ansD}`,`${ansN}/${ansD+1}`]).slice(0,4),
+    opts:shuffle([`${ansN}/${ansD}`,`${n1*n2}/${d1*d2}`,`${ansN+1}/${ansD}`,`${ansN}/${ansD+1}`,...Array.from({length:4},()=>rFracSimple())]),
     ex:`Lật ${n2}/${d2} = ${d2}/${n2}. Tính: ${n1}/${d1}×${d2}/${n2} = ${rn}/${rd}${g>1?` = ${ansN}/${ansD}`:''}`,
     topic:'divide',diff:4,time:35,diffLabel:'⚡ Boss',diffClass:'diff-boss'
   };
@@ -984,7 +1173,7 @@ function makeMixedQ(){
       q:`Tổng ba lần bổ sung là?`,
       vis:()=>vAdd3(`${n1}`,`${d}`,`${n2}`,`${d}`,`${n3}`,`${d}`),
       ans:`${sum/g}/${d/g}`,
-      opts:shuffle([`${sum/g}/${d/g}`,`${sum}/${d*3}`,`${sum+1}/${d}`,`${sum/g}/${d/g+1}`]).slice(0,4),
+      opts:shuffle([`${sum/g}/${d/g}`,`${sum}/${d*3}`,`${sum+1}/${d}`,`${sum/g}/${d/g+1}`,...Array.from({length:4},()=>rFrac(d))]),
       ex:`Cùng mẫu ${d}: ${n1}+${n2}+${n3}=${sum}. Kết quả: ${sum}/${d}${g>1?` = ${sum/g}/${d/g}`:''}`,
       topic:'add_same',diff:3,time:28,diffLabel:'🔴 Khó',diffClass:'diff-hard'
     };
@@ -996,7 +1185,7 @@ function makeMixedQ(){
     q:`Phân số nào nằm giữa ${n1}/${d} và ${n2}/${d}?`,
     vis:()=>vBetween(`${n1}`,`${d}`,`${n2}`,`${d}`),
     ans:`${n1+1}/${d}`,
-    opts:shuffle([`${n1+1}/${d}`,`${n2+1}/${d}`,`${n1-1>0?n1-1:n1+2}/${d}`,`${n2}/${d+1}`]).slice(0,4),
+    opts:shuffle([`${n1+1}/${d}`,`${n2+1}/${d}`,`${n1-1>0?n1-1:n1+2}/${d}`,`${n2}/${d+1}`,...Array.from({length:4},()=>rFrac(d))]),
     ex:`${n1}/${d} < ${n1+1}/${d} < ${n2}/${d}. Phân số nằm giữa là ${n1+1}/${d}`,
     topic:'compare',diff:3,time:28,diffLabel:'🔴 Khó',diffClass:'diff-hard'
   };
@@ -1017,17 +1206,17 @@ const PLANETS=[
    bot:['Beep! Rút gọn = chia cả tử và mẫu cho ƯCLN!','Bloop! Phân số bằng nhau khi rút gọn về cùng dạng!'],
    pilot:['Tiếp cận Sao Hoả! Tính toán tài nguyên chuẩn xác!','Bão từ trường! Tối ưu hệ thống ngay!']},
   {id:3,name:'Vành Đai',emoji:'💫',col:'#fbbf24',
-   generators:[makeCompareQ,makeSimplifyQ,makeEqualQ],
+   generators:[makeCompareQ,makeSimplifyQ,makeEqualQ,makeCompareOrderQ],
    story:['💫 Thiên thạch vành đai! So sánh kích thước để né.','💫 Lọc vật liệu! Chọn phân số lớn hơn.'],
    bot:['Beep! Cùng mẫu: so tử. Cùng tử: mẫu lớn → nhỏ hơn!','Bloop! Nhân chéo để so phân số khác mẫu!'],
    pilot:['Vào vành đai! Tính toán quỹ đạo né thiên thạch!','Cẩn thận! So sánh chính xác là sống còn!']},
   {id:4,name:'Sao Mộc',emoji:'🪐',col:'#7c3aed',
-   generators:[makeAddSameQ,makeSubSameQ,makeCompareQ],
+   generators:[makeAddSameQ,makeAddSameQ2,makeSubSameQ,makeCompareQ,makeCompareOrderQ],
    story:['🪐 Từ trường khổng lồ! Cộng trừ năng lượng.','🪐 Cơn bão Great Red! Tính toán thoát ra.'],
    bot:['Beep! Cộng/trừ cùng mẫu: chỉ cộng/trừ TỬ, mẫu giữ nguyên!','Bloop! Đừng cộng mẫu số! Tử + Tử, mẫu không đổi!'],
    pilot:['Sao Mộc đang hút! Tính ngay lực đẩy cần thiết!','Cộng thêm nhiên liệu! Tính nhanh đi!']},
   {id:5,name:'Sao Thổ',emoji:'🌙',col:'#06b6d4',
-   generators:[makeAddDiffQ,makeSubDiffQ,makeAddSameQ],
+   generators:[makeAddDiffQ,makeSubDiffQ,makeAddSameQ,makeAddSameQ2],
    story:['🌙 Vòng băng Sao Thổ! Pha trộn nhiên liệu phức tạp.','🌙 Đi qua vành đai! Tính toán khác mẫu số.'],
    bot:['Beep! Khác mẫu: tìm BCNN trước rồi mới cộng/trừ!','Bloop! BCNN(2,3)=6. 1/2=3/6, 1/3=2/6. Giờ cộng được!'],
    pilot:['Vành đai Sao Thổ đẹp lắm! Nhưng tính sai là va vào!','Mẫu khác nhau! Quy đồng ngay đi!']},
@@ -1150,19 +1339,17 @@ function vPie(n,d,col='#a78bfa'){
     const x1=cx+R*Math.cos(a1),y1=cy+R*Math.sin(a1),x2=cx+R*Math.cos(a2),y2=cy+R*Math.sin(a2);
     p+=`<path d="M${cx},${cy}L${x1.toFixed(1)},${y1.toFixed(1)}A${R},${R} 0 ${ang>180?1:0} 1 ${x2.toFixed(1)},${y2.toFixed(1)}Z" fill="${i<n?col:'rgba(255,255,255,0.05)'}" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>`;
   }
-  return `<div style="display:flex;align-items:center;gap:14px">
-    <svg width="84" height="84" viewBox="0 0 84 84" style="filter:drop-shadow(0 0 8px ${col}44)">${p}</svg>
-    ${fh(n,d)}</div>`;
+  return `<svg width="84" height="84" viewBox="0 0 84 84" style="filter:drop-shadow(0 0 8px ${col}44)">${p}</svg>`;
 }
 function vBlocks(n,d,col='#67e8f9'){
   let h='<div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:center">';
   for(let i=0;i<d;i++)h+=`<div style="width:${Math.max(12,200/d-4)}px;height:24px;border-radius:5px;background:${i<n?col:'rgba(255,255,255,0.06)'};border:1px solid rgba(255,255,255,0.12);transition:all 0.3s"></div>`;
-  return h+`</div><div style="font-size:0.72rem;color:var(--text-dim);margin-top:5px;font-weight:700">${n} phần màu / ${d} phần tổng</div>`;
+  return h+`</div>`;
 }
 function vStars(n,d){
   let h='<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center">';
   for(let i=0;i<Math.min(d,16);i++)h+=i<n?`<span style="font-size:1.3rem;filter:drop-shadow(0 0 6px #fbbf24)">⭐</span>`:`<span style="font-size:1.3rem;opacity:0.25;filter:grayscale(1)">☆</span>`;
-  return h+`</div><div style="font-size:0.72rem;color:var(--text-dim);margin-top:4px;font-weight:700">${n} sao sáng / ${d} sao tổng</div>`;
+  return h+`</div>`;
 }
 function vSegments(n,d,col='#fbbf24'){
   let h='<div style="display:flex;gap:3px;align-items:center">';
@@ -1173,15 +1360,15 @@ function vRuler(n,d,col='#10b981'){
   const p=(n/d*100).toFixed(1);
   return `<div style="width:100%;max-width:240px">
     <div style="background:rgba(255,255,255,0.06);border-radius:8px;height:22px;overflow:hidden;border:1px solid rgba(255,255,255,0.1)">
-      <div style="height:100%;width:${p}%;background:linear-gradient(90deg,${col},${col}88);border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:5px;font-size:0.7rem;font-weight:700;color:#fff">${n}</div>
+      <div style="height:100%;width:${p}%;background:linear-gradient(90deg,${col},${col}88);border-radius:6px;"></div>
     </div>
-    <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-dim);font-weight:700;margin-top:2px"><span>0</span><span>${d}</span></div>
+
   </div>`;
 }
 function vEqual(n1,d1,n2,d2){
   const g=gcd(n1,d1);
   return `<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center">
-    ${fh(n1,d1,'#fda4af','#fda4af')} <span style="color:rgba(255,255,255,0.4)">÷${g}</span>
+    ${fh(n1,d1,'#fda4af','#fda4af')}
     <span style="color:var(--green-l);font-size:1.8rem">→</span> ${fh(n2,d2,'#6ee7b7','#6ee7b7')}
   </div>`;
 }
@@ -1235,7 +1422,7 @@ function vMul(n1,d1,n2,d2){
 }
 function vDiv(n1,d1,n2,d2){
   return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center">
-    ${fh(n1,d1,'#67e8f9','#fbbf24','1.4rem')} <span style="font-family:Orbitron;font-size:2rem;color:var(--rose-l)">÷</span> ${fh(n2,d2,'#fbbf24','#67e8f9','1.4rem')} <span style="font-family:Orbitron;font-size:1.8rem;color:var(--green-l)">= ×</span> ${fh(d2,n2,'#6ee7b7','#6ee7b7','1.4rem')}
+    ${fh(n1,d1,'#67e8f9','#fbbf24','1.4rem')} <span style="font-family:Orbitron;font-size:2rem;color:var(--rose-l)">÷</span> ${fh(n2,d2,'#fbbf24','#67e8f9','1.4rem')} <span style="font-family:Orbitron;font-size:1.8rem;color:var(--nova-l)">=</span> ${fh('?','?','#a78bfa','#a78bfa','1.4rem')}
 
   </div>`;
 }
@@ -1280,7 +1467,7 @@ function getWeakTopics(){
     .filter(([,v])=>v.total>0)
     .map(([k,v])=>({topic:k,rate:v.wrong/v.total,wrong:v.wrong,total:v.total}))
     .sort((a,b)=>b.rate-a.rate)
-    .slice(0,4);
+    ;
 }
 
 function updateWeakUI(){
@@ -1490,7 +1677,7 @@ function renderQ(){
 
   try{document.getElementById('qVisual').innerHTML=q.vis();}catch(e){document.getElementById('qVisual').innerHTML='';}
 
-  const keys=['Z','X','C','V'];
+  const keys=['Z','X','C','V','A','S','D','F'];
   const grid=document.getElementById('optsEl');
   grid.innerHTML='';
   q.opts.forEach((opt,i)=>{
@@ -1518,7 +1705,7 @@ document.addEventListener('keydown',e=>{
   const overlayOpen=document.getElementById('gameOverlay').classList.contains('show');
   if(!gameStarted||overlayOpen||!G.planetQs.length){return;}
   if(true){
-    const keys={'z':0,'x':1,'c':2,'v':3};
+    const keys={'z':0,'x':1,'c':2,'v':3,'a':4,'s':5,'d':6,'f':7};
     const idx=keys[e.key.toLowerCase()];
     if(idx!==undefined&&!G.answered){
       const btns=document.querySelectorAll('.opt-btn');
